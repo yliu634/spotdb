@@ -23,34 +23,32 @@ On Ubuntu 14.04 LTS or above, install
 * Snappy: libsnappy-dev
 
 `$ sudo apt-get update`  
-`$ sudo apt-get install g++ libsnappy-dev libtbb-dev libleveldb-dev libhiredis-dev librocksdb-dev`
+`$ sudo apt-get install g++ cmake clang libboost-all-dev libsnappy-dev libtbb-dev libhiredis-dev`
 
-Getting the source code of UniKV  
-`$ git clone https://github.com/yliu634/unikv.git`
+Getting the source code of SpotKV  
+`$ git clone https://github.com/yliu634/spotdb.git`
 
 Compile UniKV  
-`$ cd UniKV`  
+`$ cd spotdb`  
 `$ mkdir -p temp/`  
-`$ chmod +x build_detect_platform`  
 `$ make clean & make`
 
 Install UniKV  
-`$ chmod +x buildLink.sh`  
 `$ ./buildLink.sh` 
+
+Run benchmark
+`$ ./out-shared/db_bench --db spotkv > result.txt`  
 
 ### Testing the Prototype  
 Getting the source code of YCSB-C modified by Qiang Zhang @USTC  
 `$ git clone https://github.com/zhangqiangUSTC/YCSB-C.git`  
 
 Build YCSB-C on Ubuntu  
-`$ sudo apt-get install libtbb-dev`   
-`$ cd YCSB-C`  
+`$ cd ycsb`  
 `$ make clean & make`  
+`$ ./run_KVTest.sh`  
 
 As the driver for Redis is linked by default, change the runtime library path to include the hiredis library by:  
-`$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib`   
-
-Run test script  
-`$ ./run_KVTest.sh`  
+`$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib`    
 
 ** This project is released by the ADSLab in USTC.
