@@ -36,7 +36,7 @@ Compile UniKV
 Install UniKV  
 `$ ./buildLink.sh` 
 
-Run benchmark
+Run benchmark  
 `$ ./out-shared/db_bench --db spotkv > result.txt`  
 
 ### Testing the Prototype  
