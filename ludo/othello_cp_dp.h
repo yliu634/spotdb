@@ -748,7 +748,7 @@ public:
   /// all the values and disjoint set are properly set
   bool tryBuild() {
     #ifdef PROFILE
-    if(full_debug) Clocker rebuild("Othello try rebuild");
+    // if(full_debug) Clocker rebuild("Othello try rebuild");
     #else
     cout << "rebuild" << endl;
     #endif
@@ -1002,7 +1002,7 @@ public:
     stack.push(make_pair(keyId, startNode));
     
     do {
-      if(full_debug) Clocker::count("Othello fixHalfTreeDFS step");
+      // if(full_debug) Clocker::count("Othello fixHalfTreeDFS step");
       uint32_t prev = stack.top().first;
       uint32_t nid = stack.top().second;
       stack.pop();
@@ -1094,7 +1094,7 @@ public:
     stack.push(make_pair(uint32_t(-1), root));
     
     do {
-      if(full_debug) Clocker::count("Othello fillTreeDFS step");
+      // if(full_debug) Clocker::count("Othello fillTreeDFS step");
       uint32_t prev = stack.top().first;
       uint32_t nid = stack.top().second;
       stack.pop();

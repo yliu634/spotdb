@@ -169,14 +169,14 @@ public:
     }
     
     if (target_slot != -1) {
-      Clocker::count("Cuckoo direct insert");
+      //Clocker::count("Cuckoo direct insert");
       InsertInternal(k, v, target_bucket, target_slot);
       return &k;
     }
     
     // No space, perform cuckooInsert
     if (CuckooInsert(k, v)) {
-      Clocker::count("Cuckoo cuckoo insert");
+      //Clocker::count("Cuckoo cuckoo insert");
       return &k;
     } else {
       entryCount--;
@@ -436,7 +436,7 @@ public:
   }
   
   inline void CopyItem(uint32_t src_bucket, int src_slot, uint32_t dst_bucket, int dst_slot) {
-    Clocker::count("Cuckoo copy item");
+    //Clocker::count("Cuckoo copy item");
     Bucket &src_ref = buckets_[src_bucket];
     Bucket &dst_ref = buckets_[dst_bucket];
     dst_ref.keys[dst_slot] = src_ref.keys[src_slot];

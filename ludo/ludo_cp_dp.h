@@ -15,9 +15,10 @@
 
 #pragma once
 
-#include "cuckoo_ht.h"
+
 #include "hash2.h"
 #include "common.h"
+#include "cuckoo_ht.h"
 #include "othello_cp_dp.h"
 
 // Class for efficiently storing key->value mappings when the size is
@@ -367,11 +368,11 @@ public:
       }
       
       if (target_slot != -1) {
-        if(full_debug) Clocker::count("direct insert");
+        // if(full_debug) Clocker::count("direct insert");
         bool succ = putItem(k, v, target_bucket, target_slot, target_bucket == buckets[0], online ? &result.path : nullptr);
         if (!succ) result.status = -1;  // must be due to Othello
       } else {
-        if(full_debug) Clocker::count("cuckoo insert");
+        // if(full_debug) Clocker::count("cuckoo insert");
         result = CuckooInsert(k, v, online);  // if fail, may be othello or cuckoo fail
       }
       
@@ -641,7 +642,7 @@ public:
   }
   
   inline void moveItem(uint32_t sBkt, uint8_t sSlot, uint32_t dBkt, uint8_t dSlot, vector<PathEntry> *const path = 0) {
-    if(full_debug) Clocker::count("Cuckoo copy item");
+    // if(full_debug) Clocker::count("Cuckoo copy item");
     Bucket &dst_bucket = buckets_[dBkt];
     Bucket &src_bucket = buckets_[sBkt];
     
@@ -727,7 +728,7 @@ public:
           }
         }
         
-        if(full_debug) Clocker::countMax("Ludo max seed", seed);
+        // if(full_debug) Clocker::countMax("Ludo max seed", seed);
         bucket.seed = seed;
         
         return seed;
@@ -771,17 +772,17 @@ public:
       
       for (uint32_t b : buckets) {
         cpq_.push_back({b, 1, -1, -1}); // Note depth starts at 1.
-        if(full_debug) Clocker::count("Cuckoo see bucket");
+        // if(full_debug) Clocker::count("Cuckoo see bucket");
       }
     }
     
     while (!cpq_.empty()) {
       CuckooPathEntry entry = cpq_.pop_front();
-      if(full_debug) Clocker::count("Cuckoo visit bucket");
+      // if(full_debug) Clocker::count("Cuckoo visit bucket");
       char free_slot = FindFreeSlot(entry.bucket);
       if (free_slot != -1) {
-        if(full_debug) Clocker::count("Cuckoo total depth", entry.depth);
-        if(full_debug) Clocker::countMax("Cuckoo max depth", entry.depth);
+        // if(full_debug) Clocker::count("Cuckoo total depth", entry.depth);
+        // if(full_debug) Clocker::countMax("Cuckoo max depth", entry.depth);
         
         // found a free slot in this path. just insert and follow this path
         buckets_[entry.bucket].occupiedMask |= 1U << free_slot;
@@ -820,7 +821,7 @@ public:
             if (buckets[j] == entry.bucket) continue;
             
             cpq_.push_back({buckets[j], entry.depth + 1, parent_index, slot});
-            if(full_debug) Clocker::count("Cuckoo reach bucket");
+            // if(full_debug) Clocker::count("Cuckoo reach bucket");
           }
         }
       }
@@ -867,7 +868,7 @@ public:
   /// all the values and disjoint set are properly set
   bool tryBuild() {
     #ifdef PROFILE
-    if(full_debug) Clocker rebuild("Ludo try rebuild");
+    // if(full_debug) Clocker rebuild("Ludo try rebuild");
     #else
     cout << "Ludo try rebuild" << endl;
     #endif

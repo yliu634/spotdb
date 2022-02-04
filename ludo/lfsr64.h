@@ -105,7 +105,7 @@ private:
               taps = (1ULL << 55) + (1ULL << 53) + (1ULL << 51) + (1ULL << 48);
               break;
             default:
-              throw runtime_error("impossible");
+              throw std::runtime_error("impossible");
           }
           
           regArray[i] ^= taps;

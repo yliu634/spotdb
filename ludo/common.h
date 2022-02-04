@@ -38,8 +38,6 @@
 
 #include <queue>
 #include <stack>
-#include <unordered_set>
-#include <unordered_map>
 #include <map>
 #include <tuple>
 #include <vector>
@@ -48,15 +46,15 @@
 #include <set>
 #include <list>
 #include <forward_list>
+#include <unordered_set>
+#include <unordered_map>
 
-#include "utils/disjointset.h"
-#include "utils/hash.h"
-#include "utils/lfsr64.h"
-#include "utils/debugbreak.h"
-//#include "utils/json.hpp"
-#include "utils/hashutil.h"
+#include "hash2.h"
+#include "lfsr64.h"
+#include "hashutil.h"
+#include "debugbreak.h"
+#include "disjointset.h"
 
-//using json = nlohmann::json;
 
 #ifndef NDEBUG
 static const bool debugging = true;
@@ -382,7 +380,7 @@ public:
     lap();
     stopped = true;
     
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     Clocker::clockers[id].pop_back();
     currentLevel[id]--;
   }
@@ -393,14 +391,14 @@ public:
     }
     
     if (level == 0) {
-      lock_guard lg(lock);
+      //lock_guard lg(lock);
       Clocker::clockers.erase(id);
       currentLevel.erase(id);
     }
   }
   
   void output() {
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     ostringstream oss;
 #ifdef PROFILE
     for (auto it = mem.begin(); it != mem.end(); ++it) {
@@ -433,7 +431,7 @@ public:
   
   static inline void count_(const string &solution, double acc = 1) {
 #ifdef PROFILE
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     assertExistence(solution)[solution] += acc;
 #endif
   }
@@ -466,7 +464,7 @@ public:
   
   static inline double getCount(const string &solution) {
 #ifdef PROFILE
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     return assertExistence(solution)[solution];
 #else
     return 0;
@@ -475,7 +473,7 @@ public:
   
   static inline void countMax(const string &solution, double number) {
 #ifdef PROFILE
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     auto &mem1 = assertExistence(solution);
     mem1[solution] = max(mem1[solution], number);
 #endif
@@ -483,7 +481,7 @@ public:
   
   static inline void countMin(const string &solution, double number) {
 #ifdef PROFILE
-    lock_guard lg(lock);
+    //lock_guard lg(lock);
     auto &mem1 = assertExistence(solution);
     mem1[solution] = min(mem1[solution], number);
 #endif
