@@ -1,3 +1,6 @@
+#ifndef STORAGE_LEVELDB_LUDO_DISJOINTSET_H_
+#define STORAGE_LEVELDB_LUDO_DISJOINTSET_H_
+
 #pragma once
 
 #include <vector>
@@ -55,3 +58,5 @@ public:
     resize(capacity);
   }
 };
+
+#endif

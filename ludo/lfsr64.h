@@ -1,5 +1,5 @@
-#ifndef __LFSRGEN64_H
-#define __LFSRGEN64_H
+#ifndef STORAGE_LEVELDB_LUDO_LFSRGEN64_H
+#define STORAGE_LEVELDB_LUDO_LFSRGEN64_H
 
 #include <cstdint>
 #include <cstring>
@@ -105,7 +105,7 @@ private:
               taps = (1ULL << 55) + (1ULL << 53) + (1ULL << 51) + (1ULL << 48);
               break;
             default:
-              throw std::runtime_error("impossible");
+              throw runtime_error("impossible");
           }
           
           regArray[i] ^= taps;

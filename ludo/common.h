@@ -1,54 +1,64 @@
+#ifndef STORAGE_LEVELDB_COMMON_H_
+#define STORAGE_LEVELDB_COMMON_H_
+
 #pragma once
 
-#include <cmath>
-#include <ctime>
-#include <chrono>
-#include <cstdio>
-#include <netdb.h>
-#include <cstring>
-#include <cassert>
 #include <cstdlib>
-#include <utility>
-#include <sched.h>
-#include <unistd.h>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <chrono>
+#include <cassert>
 #include <cinttypes>
-#include <execinfo.h>
-#include <sys/time.h>
-#include <sys/prctl.h>
 #include <sys/types.h>
+#include <ctime>
+#include <sys/time.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <utility>
+#include <sys/prctl.h>
+#include <netdb.h>
+#include <chrono>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sched.h>
+#include <execinfo.h>
 
 
-#include <map>
-#include <set>
-#include <list>
-#include <tuple>
-#include <mutex>
-#include <queue>
-#include <stack>
-#include <array>
-#include <vector>
-#include <random>
-#include <thread>
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <iomanip>
-#include <iterator>
-#include <iostream>
-#include <algorithm>
+
 #include <functional>
-#include <forward_list>
+#include <algorithm>
+#include <iterator>
+#include <utility>
+#include <random>
+#include <thread>
+#include <mutex>
+
+#include <queue>
+#include <stack>
 #include <unordered_set>
 #include <unordered_map>
+#include <map>
+#include <tuple>
+#include <vector>
+#include <array>
+#include <queue>
+#include <set>
+#include <list>
+#include <forward_list>
 
-#include "hash2.h"
-#include "lfsr64.h"
-#include "hashutil.h"
-#include "debugbreak.h"
-#include "disjointset.h"
+#include "ludo/disjointset.h"
+#include "ludo/hash2.h"
+#include "ludo/lfsr64.h"
+#include "ludo/debugbreak.h"
+#include "ludo/hashutil.h"
 
+//using json = nlohmann::json;
 
 #ifndef NDEBUG
 static const bool debugging = true;
@@ -69,7 +79,7 @@ inline uint64_t diff_ms(timeval t1, timeval t2) {
   return diff_us(t1, t2) / 1000ULL;
 }
 
-std::string human(uint64_t word);
+//std::string human(uint64_t word);
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE 1
@@ -425,7 +435,7 @@ public:
   
   static inline void count_(const string &solution, double acc = 1) {
 #ifdef PROFILE
-    //lock_guard lg(lock);
+    lock_guard lg(lock);
     assertExistence(solution)[solution] += acc;
 #endif
   }
@@ -458,7 +468,7 @@ public:
   
   static inline double getCount(const string &solution) {
 #ifdef PROFILE
-    //lock_guard lg(lock);
+    lock_guard lg(lock);
     return assertExistence(solution)[solution];
 #else
     return 0;
@@ -467,7 +477,7 @@ public:
   
   static inline void countMax(const string &solution, double number) {
 #ifdef PROFILE
-    //lock_guard lg(lock);
+    lock_guard lg(lock);
     auto &mem1 = assertExistence(solution);
     mem1[solution] = max(mem1[solution], number);
 #endif
@@ -475,7 +485,7 @@ public:
   
   static inline void countMin(const string &solution, double number) {
 #ifdef PROFILE
-    //lock_guard lg(lock);
+    lock_guard lg(lock);
     auto &mem1 = assertExistence(solution);
     mem1[solution] = min(mem1[solution], number);
 #endif
@@ -527,3 +537,5 @@ private:
 void printCurrentDateAndTime();
 
 void error(const char *msg);
+
+#endif

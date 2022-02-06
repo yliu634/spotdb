@@ -3,8 +3,9 @@ mkdir -p temp
 rm -rf ./temp/*
 
 # ulimit -n 100000
+# scanrandom
 
-./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,scanrandom,stats --num=10002000 --reads=100000 --value_size=1000 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=/home/kvgroup/zq/temp > Result.txt
+./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,stats --num=100020 --reads=10000 --value_size=1000 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
 #./db_bench --benchmarks=fillrandom,stats,readrandom,stats,scanrandom,stats --num=10000000 --reads=1000000 --value_size=1008 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=8 --compression_ratio=1 --use_existing_db=0 --db=/home/zq/SSD-e/temp2 > ../UniKV-thread=8.txt
 #./db_bench --benchmarks=stats,scanrandom,stats --num=100000000 --reads=1000000 --value_size=1008 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=8 --compression_ratio=1 --use_existing_db=1 --db=/home/zq/SSD-e/temp1 > ../scan-thread=8.txt
 

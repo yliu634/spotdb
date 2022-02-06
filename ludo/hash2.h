@@ -3,15 +3,16 @@
  Describes hash functions used in this project.
  */
 
-#pragma once
+#ifndef STORAGE_LEVELDB_LUDO_HASH2_H_
+#define STORAGE_LEVELDB_LUDO_HASH2_H_
 
 #include <functional>
 #include <type_traits>
 #include <cinttypes>
 #include <string>
 #include <iostream>
-#include "farmhash.h"
-#include "hashutil.h"
+#include "ludo/farmhash.h"
+#include "ludo/hashutil.h"
 
 template<class K>
 class Hasher32 {
@@ -147,3 +148,5 @@ public:
     return *(uint64_t*)h;
   }
 };
+#endif
+

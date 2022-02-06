@@ -13,6 +13,8 @@
  limitations under the License.
  ==============================================================================*/
 
+#ifndef STORAGE_LEVELDB_CUCKOO_HT_H_
+#define STORAGE_LEVELDB_CUCKOO_HT_H_
 #pragma once
 
 #include "hash2.h"
@@ -37,7 +39,7 @@
 // "slots" for key/value entries).  Uses breadth-first-search to find
 // a good cuckoo path with less data movement (see
 // http://www.cs.cmu.edu/~dga/papers/cuckoo-eurosys14.pdf )
-
+namespace leveldb {
 template<class Key, class Value, int kCandidateBuckets = 2, int kSlotsPerBucket = 4>
 class CuckooHashTable {
   // Utility function to compute (x * y) >> 64, or "multiply high".
@@ -279,8 +281,7 @@ public:
   }
 
 //private:
-  Hasher32<Key> h[
-      kCandidateBuckets + 1];   // the last h is the digest function used in associated data plane
+  Hasher32<Key> h[kCandidateBuckets + 1];   // the last h is the digest function used in associated data plane
   
   // The load factor is chosen slightly conservatively for speed and
   // to avoid the need for a table rebuild on insertion failure.
@@ -499,4 +500,6 @@ public:
   CuckooPathQueue cpq_;
   CuckooPathEntry visited_[kVisitedListSize];
 };
+}
 
+#endif

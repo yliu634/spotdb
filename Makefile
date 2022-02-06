@@ -46,7 +46,8 @@ TESTS = \
 	util/crc32c_test \
 	util/env_posix_test \
 	util/env_test \
-	util/hash_test
+	util/hash_test #\
+	ludo/percuckoo_test
 
 UTILS = \
 	db/db_bench \
@@ -177,7 +178,7 @@ STATIC_OBJDIRS: \
 	$(STATIC_OUTDIR)/table \
 	$(STATIC_OUTDIR)/util \
 	$(STATIC_OUTDIR)/helpers/memenv \
-	$(STATIC_OUTDIR)/ludo
+	$(STATIC_OUTDIR)/ludo 
 
 $(SHARED_OUTDIR):
 	mkdir $@
@@ -398,6 +399,9 @@ $(STATIC_OUTDIR)/version_set_test:db/version_set_test.cc $(STATIC_LIBOBJECTS) $(
 
 $(STATIC_OUTDIR)/write_batch_test:db/write_batch_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) db/write_batch_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
+
+#$(STATIC_OUTDIR)/percuckoo_test:ludo/percuckoo_test.cc $(STATIC_LIBOBJECTS) $(TESTHARNESS)
+#	$(CXX) $(LDFLAGS) $(CXXFLAGS) ludo/percuckoo_test.cc  $(STATIC_LIBOBJECTS) $(TESTHARNESS) -o $@ $(LIBS)
 
 $(STATIC_OUTDIR)/memenv_test:$(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libspotkv.a $(TESTHARNESS)
 	$(XCRUN) $(CXX) $(LDFLAGS) $(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libspotkv.a $(TESTHARNESS) -o $@ $(LIBS)

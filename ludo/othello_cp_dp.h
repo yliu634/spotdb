@@ -1,12 +1,14 @@
+#ifndef STORAGE_LEVELDB_OTHELLO_CP_DP_H_
+#define STORAGE_LEVELDB_OTHELLO_CP_DP_H_
 #pragma once
 
 #include "common.h"
 
 using namespace std;
 
-template<class K, class V, uint8_t L, uint8_t DL>
-class DataPlaneOthello;
-
+/*template<class K, class V, uint8_t L, uint8_t DL>
+class DataPlaneOthello;*/
+namespace leveldb {
 template<class K, class V, uint8_t L, uint8_t DL,
     bool maintainDP, bool maintainDisjointSet, bool randomized>
 class ControlPlaneOthello;
@@ -171,6 +173,7 @@ public:
  * The array are all stored in an array of uint64_t. There are actually m_a+m_b cells in this array, each of length L.
  * \note Be VERY careful!!!! valueType must be some kind of int with no more than 8 bytes' length
  */
+ /*
 template<class K, class V, uint8_t L = sizeof(V) * 8, uint8_t DL = 0>
 class DataPlaneOthello : public OthelloCommon<K, V, L, DL> {
 public:
@@ -364,6 +367,7 @@ public:
     return mem.size() * sizeof(mem[0]);
   }
 };
+*/
 
 /**
  * Control plane Othello can track connections (Add [amortized], Delete, Membership Judgment) in O(1) time,
@@ -680,7 +684,12 @@ public:
     }
     
     checkIntegrity();
-    return {0, 0, {isEmpty(ha) ? int(ha) : -1, isEmpty(hb) ? int(hb) : -1}};
+    OthelloUpdateResult temp;
+    temp.status = 0;
+    temp.xorTemplate = 0;
+    temp.marks[0] = isEmpty(ha) ? int(ha) : -1; temp.marks[1] = isEmpty(hb) ? int(hb) : -1;
+    return temp;
+    //return {0, 0, {isEmpty(ha) ? int(ha) : -1, isEmpty(hb) ? int(hb) : -1}};
   }
   
   inline OthelloUpdateResult toggleInOthello(const K &k) {
@@ -695,7 +704,13 @@ public:
       uint32_t ha, hb;
       getIndices(k, ha, hb);
       int64_t xorTemplate = fixHalfTreeDFS<true, false, true>(keyId, ha, hb);
-      return {0, 1, {-1, -1}, getHalfTree(k, xorTemplate > 0, false)};
+      OthelloUpdateResult temp;
+        temp.status = 0;
+        temp.xorTemplate = 1;
+        temp.marks[0] = -1; temp.marks[1] = -1;
+        temp.cc = getHalfTree(k, xorTemplate > 0, false);
+      return temp;
+      //return {0, 1, {-1, -1}, getHalfTree(k, xorTemplate > 0, false)};
     }
     
     return {};
@@ -724,8 +739,8 @@ public:
         hab.setSeed((uint64_t(rand()) << 32U) | rand());
         tryCount++;
         if (tryCount > 2 && !(tryCount & (tryCount - 1))) {
-          cout << "Try #" << tryCount << " " << human(nKeysInOthello) << " Keys, ma/mb = "
-               << human(ma) << "/" << human(mb) << " key length: " << sizeof(K) * 8 << "b  value length: "
+          cout << "Try #" << tryCount << " " << "human(nKeysInOthello)" << " Keys, ma/mb = "
+               << "human(ma)" << " / " << "human(mb)" << " key length: " << sizeof(K) * 8 << "b  value length: "
                << sizeof(V) * 8 << "b VDL=" << (int) VDL << endl;
         }
         built = tryBuild();
@@ -1274,3 +1289,5 @@ public:
     return ControlPlaneOthello<K, bool, 0, false, true>::insert(k, true);
   }
 };
+}
+#endif
