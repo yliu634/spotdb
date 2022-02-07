@@ -14,7 +14,7 @@ class PerCuckooTest { };
 TEST(PerCuckooTest, Farmhash) {
     const char s[3]= "ab";
     size_t b=2;
-    uint32_t res = Hash32(s, b);
+    uint32_t res = farmhash::Hash32(s, b);
 }
 
 TEST(PerCuckooTest, DisjointSet) {
