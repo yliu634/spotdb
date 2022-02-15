@@ -144,7 +144,7 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
 
   versions_ = new VersionSet(dbname_, &options_, table_cache_,
                              &internal_comparator_);
-  ControlPlaneLudo<int, int, 2> cp_(1024);
+  //ControlPlaneLudo<int, int, 2> cp_(1024);
 }
 
 DBImpl::~DBImpl() {

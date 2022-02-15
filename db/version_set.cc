@@ -524,6 +524,7 @@ int Version::PickLevelForMemTableOutput(
       level++;
     }
   }
+  printf("%d ", level);
   return level;
 }
 
