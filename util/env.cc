@@ -7,6 +7,7 @@
 namespace leveldb {
 
 Env::~Env() {
+  if (threadPool != nullptr) delete threadPool;
 }
 
 Status Env::NewAppendableFile(const std::string& fname, WritableFile** result) {

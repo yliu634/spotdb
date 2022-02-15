@@ -13,11 +13,12 @@
 #ifndef STORAGE_LEVELDB_INCLUDE_ENV_H_
 #define STORAGE_LEVELDB_INCLUDE_ENV_H_
 
-#include <string>
-#include <vector>
 #include <stdarg.h>
 #include <stdint.h>
+#include <string>
+#include <vector>
 #include "spotkv/status.h"
+#include "spotkv/threadpool.h"
 
 namespace leveldb {
 
@@ -43,7 +44,8 @@ class Env {
   // Create a brand new sequentially-readable file with the specified name.
   // On success, stores a pointer to the new file in *result and returns OK.
   // On failure stores NULL in *result and returns non-OK.  If the file does
-  // not exist, returns a non-OK status.
+  // not exist, returns a non-OK status.  Implementations should return a
+  // NotFound status when the file does not exist.
   //
   // The returned file will only be accessed by one thread at a time.
   virtual Status NewSequentialFile(const std::string& fname,
@@ -53,12 +55,15 @@ class Env {
   // specified name.  On success, stores a pointer to the new file in
   // *result and returns OK.  On failure stores NULL in *result and
   // returns non-OK.  If the file does not exist, returns a non-OK
-  // status.
+  // status.  Implementations should return a NotFound status when the file does
+  // not exist.
   //
   // The returned file may be concurrently accessed by multiple threads.
   virtual Status NewRandomAccessFile(const std::string& fname,
                                      RandomAccessFile** result) = 0;
-
+                                     
+  virtual Status NewRandomAccessFile(const std::string& fname,
+                                     RandomAccessFile** result,int* fileID) = 0;
   // Create an object that writes to a new file with the specified
   // name.  Deletes any existing file with the same name and creates a
   // new file.  On success, stores a pointer to the new file in
@@ -143,6 +148,14 @@ class Env {
   // Start a new thread, invoking "function(arg)" within the new thread.
   // When "function(arg)" returns, the thread will be destroyed.
   virtual void StartThread(void (*function)(void* arg), void* arg) = 0;
+  
+  // Start a new thread, invoking "function(arg)" within the new thread.
+  // When "function(arg)" returns, the thread will be destroyed.
+  virtual pthread_t StartThreadAndReturnThreadId(void (*function)(void* arg), void* arg) = 0;
+
+  // Wait for the thread th to complete
+  // Store the exit status of the thread in return_status
+  virtual void WaitForThread(unsigned long int th, void** return_status) = 0;
 
   // *path is set to a temporary directory that can be used for testing. It may
   // or many not have just been created. The directory may or may not differ
@@ -159,6 +172,10 @@ class Env {
 
   // Sleep/delay the thread for the prescribed number of micro-seconds.
   virtual void SleepForMicroseconds(int micros) = 0;
+  
+  virtual pthread_t GetThreadId() = 0;
+
+  ThreadPool* threadPool;
 
  private:
   // No copying allowed
@@ -268,19 +285,19 @@ class FileLock {
 };
 
 // Log the specified data to *info_log if info_log is non-NULL.
-extern void Log(Logger* info_log, const char* format, ...)
+void Log(Logger* info_log, const char* format, ...)
 #   if defined(__GNUC__) || defined(__clang__)
     __attribute__((__format__ (__printf__, 2, 3)))
 #   endif
     ;
 
 // A utility routine: write "data" to the named file.
-extern Status WriteStringToFile(Env* env, const Slice& data,
-                                const std::string& fname);
+Status WriteStringToFile(Env* env, const Slice& data,
+                                        const std::string& fname);
 
 // A utility routine: read contents of named file into *data
-extern Status ReadFileToString(Env* env, const std::string& fname,
-                               std::string* data);
+Status ReadFileToString(Env* env, const std::string& fname,
+                                       std::string* data);
 
 // An implementation of Env that forwards all calls to another Env.
 // May be useful to clients who wish to override just part of the
@@ -301,6 +318,11 @@ class EnvWrapper : public Env {
   Status NewRandomAccessFile(const std::string& f, RandomAccessFile** r) {
     return target_->NewRandomAccessFile(f, r);
   }
+
+  Status NewRandomAccessFile(const std::string& f, RandomAccessFile** r,int* fileID) {
+    return target_->NewRandomAccessFile(f, r,fileID);
+  }
+
   Status NewWritableFile(const std::string& f, WritableFile** r) {
     return target_->NewWritableFile(f, r);
   }
@@ -330,6 +352,13 @@ class EnvWrapper : public Env {
   void StartThread(void (*f)(void*), void* a) {
     return target_->StartThread(f, a);
   }
+   pthread_t StartThreadAndReturnThreadId(void (*f)(void*), void* a) {
+    return target_->StartThreadAndReturnThreadId(f, a);
+  }
+  void WaitForThread(unsigned long int th, void** return_status) {
+    return target_->WaitForThread(th, return_status);
+  }
+  
   virtual Status GetTestDirectory(std::string* path) {
     return target_->GetTestDirectory(path);
   }
@@ -342,6 +371,10 @@ class EnvWrapper : public Env {
   void SleepForMicroseconds(int micros) {
     target_->SleepForMicroseconds(micros);
   }
+  pthread_t GetThreadId(){
+     return target_->GetThreadId();
+  }
+  
  private:
   Env* target_;
 };
