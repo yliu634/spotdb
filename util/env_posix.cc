@@ -785,7 +785,7 @@ static Env* default_env;
 static void InitDefaultEnv() {
   default_env = new PosixEnv;
   default_env->threadPool = new ThreadPool(50);//32//50
-  std::cerr<<"init env threadpool\n";
+  //std::cerr<<"init env threadpool\n";
 }
 
 void EnvPosixTestHelper::SetReadOnlyFDLimit(int limit) {

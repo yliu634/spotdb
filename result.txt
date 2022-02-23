@@ -1,23 +1,42 @@
 Keys:       16 bytes each
-Values:     1000 bytes each (1000 bytes after compression)
-Entries:    1020
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000
 RawSize:    1.0 MB (estimated)
 FileSize:   1.0 MB (estimated)
 ------------------------------------------------
-fillrandom   :      12.896 micros/op;   75.1 MB/s
+fillrandom   :      60.515 micros/op;   16.4 MB/s
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
+  0        7        1         0        0         1
+  1        1        0         0        0         0
+  2        1        0         0        0         0
 
-readrandom   :       0.561 micros/op; (1000 of 1020 found)
-
-                               Compactions
-Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
---------------------------------------------------
-
+readrandom   :       7.006 micros/op; (227 of 1000 found)
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
+  0        8        1         0        0         1
+  1        1        0         0        0         0
+  2        1        0         0        0         0
+
+readseq      :       0.577 micros/op; 1718.4 MB/s
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        8        1         0        0         1
+  1        1        0         0        0         0
+  2        1        0         0        0         0
+
+readreverse  :       0.600 micros/op; 1653.9 MB/s
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        8        1         0        0         1
+  1        1        0         0        0         0
+  2        1        0         0        0         0
 

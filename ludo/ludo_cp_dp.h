@@ -17,10 +17,10 @@
 
 #pragma once
 
-#include "hash2.h"
-#include "common.h"
-#include "cuckoo_ht.h"
-#include "othello_cp_dp.h"
+#include "ludo/hash2.h"
+#include "ludo/common.h"
+#include "ludo/cuckoo_ht.h"
+#include "ludo/othello_cp_dp.h"
 
 // Class for efficiently storing key->value mappings when the size is
 // known in advance and the keys are pre-hashed into uint64s.

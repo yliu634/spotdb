@@ -73,6 +73,8 @@ class Version {
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
 
+  Status GetLudoCache(const ReadOptions&, const LookupKey& key, std::string* val,
+             GetStats* stats, const uint64_t& file_ludo_number);
   // Adds "stats" into the current state.  Returns true if a new
   // compaction may need to be triggered, false otherwise.
   // REQUIRES: lock is held

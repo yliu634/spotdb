@@ -144,7 +144,8 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
 
   versions_ = new VersionSet(dbname_, &options_, table_cache_,
                              &internal_comparator_);
-  //ControlPlaneLudo<int, int, 2> cp_(1024);
+  
+  cp_ = new ControlPlaneLudo<uint32_t, uint64_t, 16> (1024);
 }
 
 DBImpl::~DBImpl() {
@@ -167,6 +168,8 @@ DBImpl::~DBImpl() {
   delete log_;
   delete logfile_;
   delete table_cache_;
+  delete cp_;
+
 
   if (owns_info_log_) {
     delete options_.info_log;
@@ -497,13 +500,23 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   Iterator* iter = mem->NewIterator();
   Log(options_.info_log, "Level-0 table #%llu: started",
       (unsigned long long) meta.number);
-
+  
+  #ifndef LudoHashing
   Status s;
   {
     mutex_.Unlock();
     s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
     mutex_.Lock();
   }
+  #else
+    Status s;
+    {
+      mutex_.Unlock();
+      s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
+      mutex_.Lock();
+    }
+    //std::future <void*> res = Env::Default()->threadPool->addTask(DBImpl::buildLudoCache, (void *) &iter);
+  #endif
 
   Log(options_.info_log, "Level-0 table #%llu: %lld bytes %s",
       (unsigned long long) meta.number,
@@ -736,7 +749,12 @@ void DBImpl::BackgroundCompaction() {
         versions_->LevelSummary(&tmp));
   } else {
     CompactionState* compact = new CompactionState(c);
-    status = DoCompactionWork(compact);
+
+    if (compact->compaction->level() > 0)
+      status = DoCompactionWork(compact);
+    else
+      status = DoCompactionWorkforLudoCache(compact);
+
     if (!status.ok()) {
       RecordBackgroundError(status);
     }
@@ -1047,6 +1065,162 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   return status;
 }
 
+Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
+  const uint64_t start_micros = env_->NowMicros();
+  int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
+
+  Log(options_.info_log,  "Compacting %d@%d + %d@%d files",
+      compact->compaction->num_input_files(0),
+      compact->compaction->level(),
+      compact->compaction->num_input_files(1),
+      compact->compaction->level() + 1);
+
+  assert(versions_->NumLevelFiles(compact->compaction->level()) > 0);
+  assert(compact->builder == NULL);
+  assert(compact->outfile == NULL);
+  if (snapshots_.empty()) {
+    compact->smallest_snapshot = versions_->LastSequence();
+  } else {
+    compact->smallest_snapshot = snapshots_.oldest()->number_;
+  }
+
+  // Release mutex while we're actually doing the compaction work
+  mutex_.Unlock();
+
+  Iterator* input = versions_->MakeInputIterator(compact->compaction);
+  input->SeekToFirst();
+  Status status;
+  ParsedInternalKey ikey;
+  std::string current_user_key;
+  bool has_current_user_key = false;
+  SequenceNumber last_sequence_for_key = kMaxSequenceNumber;
+  for (; input->Valid() && !shutting_down_.Acquire_Load(); ) {
+    // Prioritize immutable compaction work
+    if (has_imm_.NoBarrier_Load() != NULL) {
+      const uint64_t imm_start = env_->NowMicros();
+      mutex_.Lock();
+      if (imm_ != NULL) {
+        CompactMemTable();
+        bg_cv_.SignalAll();  // Wakeup MakeRoomForWrite() if necessary
+      }
+      mutex_.Unlock();
+      imm_micros += (env_->NowMicros() - imm_start);
+    }
+
+    Slice key = input->key();
+    if (compact->compaction->ShouldStopBefore(key) &&
+        compact->builder != NULL) {
+      status = FinishCompactionOutputFile(compact, input);
+      if (!status.ok()) {
+        break;
+      }
+    }
+
+    // Handle key/value, add to state, etc.
+    bool drop = false;
+    if (!ParseInternalKey(key, &ikey)) {
+      // Do not hide error keys
+      current_user_key.clear();
+      has_current_user_key = false;
+      last_sequence_for_key = kMaxSequenceNumber;
+    } else {
+      if (!has_current_user_key ||
+          user_comparator()->Compare(ikey.user_key,
+                                     Slice(current_user_key)) != 0) {
+        // First occurrence of this user key
+        current_user_key.assign(ikey.user_key.data(), ikey.user_key.size());
+        has_current_user_key = true;
+        last_sequence_for_key = kMaxSequenceNumber;
+      }
+
+      if (last_sequence_for_key <= compact->smallest_snapshot) {
+        // Hidden by an newer entry for same user key
+        drop = true;    // (A)
+      } else if (ikey.type == kTypeDeletion &&
+                 ikey.sequence <= compact->smallest_snapshot &&
+                 compact->compaction->IsBaseLevelForKey(ikey.user_key)) {
+        // For this user key:
+        // (1) there is no data in higher levels
+        // (2) data in lower levels will have larger sequence numbers
+        // (3) data in layers that are being compacted here and have
+        //     smaller sequence numbers will be dropped in the next
+        //     few iterations of this loop (by rule (A) above).
+        // Therefore this deletion marker is obsolete and can be dropped.
+        drop = true;
+      }
+
+      last_sequence_for_key = ikey.sequence;
+    }
+
+    if (!drop) {
+      // Open output file if necessary
+      if (compact->builder == NULL) {
+        status = OpenCompactionOutputFile(compact);
+        if (!status.ok()) {
+          break;
+        }
+      }
+      if (compact->builder->NumEntries() == 0) {
+        compact->current_output()->smallest.DecodeFrom(key);
+      }
+      compact->current_output()->largest.DecodeFrom(key);
+      compact->builder->Add(key, input->value());
+      
+      // uint32_t cpsize = cp_->size();
+      // cp_->remove(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10));
+      // Log(options_.info_log, "Cp removed the key: %s and the size from %lu to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
+      
+      // Close output file if it is big enough
+      if (compact->builder->FileSize() >=
+          compact->compaction->MaxOutputFileSize()) {
+        status = FinishCompactionOutputFile(compact, input);
+        if (!status.ok()) {
+          break;
+        }
+      }
+    }
+
+    input->Next();
+  }
+
+  if (status.ok() && shutting_down_.Acquire_Load()) {
+    status = Status::IOError("Deleting DB during compaction");
+  }
+  if (status.ok() && compact->builder != NULL) {
+    status = FinishCompactionOutputFile(compact, input);
+  }
+  if (status.ok()) {
+    status = input->status();
+  }
+  delete input;
+  input = NULL;
+
+  CompactionStats stats;
+  stats.micros = env_->NowMicros() - start_micros - imm_micros;
+  for (int which = 0; which < 2; which++) {
+    for (int i = 0; i < compact->compaction->num_input_files(which); i++) {
+      stats.bytes_read += compact->compaction->input(which, i)->file_size;
+    }
+  }
+  for (size_t i = 0; i < compact->outputs.size(); i++) {
+    stats.bytes_written += compact->outputs[i].file_size;
+  }
+
+  mutex_.Lock();
+  stats_[compact->compaction->level() + 1].Add(stats);
+
+  if (status.ok()) {
+    status = InstallCompactionResults(compact);
+  }
+  if (!status.ok()) {
+    RecordBackgroundError(status);
+  }
+  VersionSet::LevelSummaryStorage tmp;
+  Log(options_.info_log,
+      "compacted to: %s", versions_->LevelSummary(&tmp));
+  return status;
+}
+
 namespace {
 struct IterState {
   port::Mutex* mu;
@@ -1129,19 +1303,34 @@ Status DBImpl::Get(const ReadOptions& options,
 
   bool have_stat_update = false;
   Version::GetStats stats;
-
+  uint64_t file_number(0); double begin,endopt;
   // Unlock while reading from files and memtables
   {
     mutex_.Unlock();
     // First look in the memtable, then in the immutable memtable (if any).
     LookupKey lkey(key, snapshot);
+    // Log(options_.info_log, "Look up of key: %s and its size is: %zu", key.data(), key.size());
+    // Log(options_.info_log, "Size if Internal key is %zu and userkey: %zu", lkey.internal_key().size(), lkey.user_key().size());
     if (mem->Get(lkey, value, &s)) {
       // Done
+
     } else if (imm != NULL && imm->Get(lkey, value, &s)) {
       // Done
+
+    } else if (cp_->lookUp(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), file_number)) {
+        begin = env_->NowMicros();
+        
+        //cp_->lookUp(key.data(), file_number);
+        s = current->GetLudoCache(options, lkey, value, &stats, file_number);
+        have_stat_update = true;
+
+        endopt = env_->NowMicros();
+        Log(options_.info_log, "The time for Ludo Cache op is %f ms", (endopt-begin));
+        // Done
     } else {
       s = current->Get(options, lkey, value, &stats);
       have_stat_update = true;
+      Log(options_.info_log, "The for State of Cache op is xx ms");
     }
     mutex_.Lock();
   }

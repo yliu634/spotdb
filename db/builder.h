@@ -6,6 +6,7 @@
 #define STORAGE_LEVELDB_DB_BUILDER_H_
 
 #include "spotkv/status.h"
+#include "ludo/ludo_cp_dp.h"
 
 namespace leveldb {
 
@@ -28,6 +29,14 @@ extern Status BuildTable(const std::string& dbname,
                          TableCache* table_cache,
                          Iterator* iter,
                          FileMetaData* meta);
+
+extern Status BuildLudoTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta,
+                         ControlPlaneLudo<uint32_t,uint64_t, 16>* cp);             
 
 }  // namespace leveldb
 

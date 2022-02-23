@@ -14,6 +14,9 @@
 #include "spotkv/env.h"
 #include "port/port.h"
 #include "port/thread_annotations.h"
+#include "ludo/ludo_cp_dp.h"
+
+#define LudoHashing
 
 namespace leveldb {
 
@@ -107,10 +110,12 @@ class DBImpl : public DB {
   void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   static void BGWork(void* db);
   void BackgroundCall();
-  void  BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   void CleanupCompaction(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWork(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DoCompactionWorkforLudoCache(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
 
   Status OpenCompactionOutputFile(CompactionState* compact);
@@ -130,6 +135,8 @@ class DBImpl : public DB {
   // table_cache_ provides its own synchronization
   TableCache* table_cache_;
 
+
+  ControlPlaneLudo<uint32_t, uint64_t, 16>* cp_; 
   // Lock over the persistent DB state.  Non-NULL iff successfully acquired.
   FileLock* db_lock_;
 

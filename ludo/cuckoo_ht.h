@@ -17,8 +17,8 @@
 #define STORAGE_LEVELDB_CUCKOO_HT_H_
 #pragma once
 
-#include "hash2.h"
-#include "common.h"
+#include "ludo/hash2.h"
+#include "ludo/common.h"
 
 // Class for efficiently storing key->value mappings when the size is
 // known in advance and the keys are pre-hashed into uint64s.

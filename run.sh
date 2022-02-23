@@ -5,8 +5,8 @@ rm -rf ./temp/*
 # ulimit -n 100000
 # scanrandom
 
-./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,stats --num=1020 --reads=1000 --value_size=1000 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
-#./db_bench --benchmarks=fillrandom,stats,readrandom,stats,scanrandom,stats --num=10000000 --reads=1000000 --value_size=1008 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=8 --compression_ratio=1 --use_existing_db=0 --db=/home/zq/SSD-e/temp2 > ../UniKV-thread=8.txt
+./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,readseq,stats,readreverse,stats --num=1000 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1 --write_buffer_size=102400 --cache_size=10240 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
+#./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,stats --num=10200 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=/home/zq/SSD-e/temp2 > ../UniKV-thread=8.txt
 #./db_bench --benchmarks=stats,scanrandom,stats --num=100000000 --reads=1000000 --value_size=1008 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=8 --compression_ratio=1 --use_existing_db=1 --db=/home/zq/SSD-e/temp1 > ../scan-thread=8.txt
 
 #./db_bench --benchmarks=fillrandom,stats,readrandom,scanrandom,sstables,stats --num=53200000 --reads=1000000 --value_size=1000 --bloom_bits=10 --open_files=50000 --write_buffer_size=67108864 --max_file_size=2097152 --block_size=4096 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=/home/zq/SSD-e/temp1 > partitionResult.txt
