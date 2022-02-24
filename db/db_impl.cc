@@ -530,11 +530,11 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   // should not be added to the manifest.
   int level = 0;
   if (s.ok() && meta.file_size > 0) {
-    const Slice min_user_key = meta.smallest.user_key();
+    /*const Slice min_user_key = meta.smallest.user_key();
     const Slice max_user_key = meta.largest.user_key();
     if (base != NULL) {
       level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
-    }
+    }*/
     edit->AddFile(level, meta.number, meta.file_size,
                   meta.smallest, meta.largest);
   }
@@ -1093,7 +1093,7 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   ParsedInternalKey ikey;
   std::string current_user_key;
   bool has_current_user_key = false;
-  SequenceNumber last_sequence_for_key = kMaxSequenceNumber;
+  SequenceNumber last_sequence_for_key = kMaxSequenceNumber;   
   for (; input->Valid() && !shutting_down_.Acquire_Load(); ) {
     // Prioritize immutable compaction work
     if (has_imm_.NoBarrier_Load() != NULL) {
@@ -1166,10 +1166,6 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
       compact->current_output()->largest.DecodeFrom(key);
       compact->builder->Add(key, input->value());
       
-      // uint32_t cpsize = cp_->size();
-      // cp_->remove(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10));
-      // Log(options_.info_log, "Cp removed the key: %s and the size from %lu to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
-      
       // Close output file if it is big enough
       if (compact->builder->FileSize() >=
           compact->compaction->MaxOutputFileSize()) {
@@ -1180,6 +1176,10 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
       }
     }
 
+    // uint32_t cpsize = cp_->size();
+    cp_->remove(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10));
+    // Log(options_.info_log, "Cp removed the key: %lu and the size from %u to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
+   
     input->Next();
   }
 
@@ -1212,6 +1212,9 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   if (status.ok()) {
     status = InstallCompactionResults(compact);
   }
+  
+  //std::future <void *> res = Env::Default()->threadPool->addTask(DBImpl::RemoveLudoCompaction, (void *) &(compact->compaction->input(0, i)));
+
   if (!status.ok()) {
     RecordBackgroundError(status);
   }
@@ -1317,20 +1320,19 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != NULL && imm->Get(lkey, value, &s)) {
       // Done
 
-    } else if (cp_->lookUp(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), file_number)) {
-        begin = env_->NowMicros();
-        
-        //cp_->lookUp(key.data(), file_number);
-        s = current->GetLudoCache(options, lkey, value, &stats, file_number);
+    } else if (cp_->lookUp(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), file_number)) {
+        s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
         have_stat_update = true;
-
-        endopt = env_->NowMicros();
-        Log(options_.info_log, "The time for Ludo Cache op is %f ms", (endopt-begin));
+        /*Log(options_.info_log, "From the Cache the key: %lu's value is: %s.", 
+            strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
+            (*value).substr(0, 8).c_str());*/
         // Done
     } else {
       s = current->Get(options, lkey, value, &stats);
       have_stat_update = true;
-      Log(options_.info_log, "The for State of Cache op is xx ms");
+      /*Log(options_.info_log, "From the SSTable the key: %lu's value is: %s.", 
+          strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
+          (*value).substr(0, 8).c_str());*/
     }
     mutex_.Lock();
   }

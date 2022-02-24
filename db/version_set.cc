@@ -348,6 +348,7 @@ Status Version::Get(const ReadOptions& options,
   // in an smaller level, later levels are irrelevant.
   std::vector<FileMetaData*> tmp;
   FileMetaData* tmp2;
+  // for (int level = 0; level < config::kNumLevels; level++) {
   for (int level = 0; level < config::kNumLevels; level++) {
     size_t num_files = files_[level].size();
     if (num_files == 0) continue;
@@ -410,6 +411,7 @@ Status Version::Get(const ReadOptions& options,
       if (!s.ok()) {
         return s;
       }
+      
       switch (saver.state) {
         case kNotFound:
           break;      // Keep searching in other files
@@ -429,6 +431,7 @@ Status Version::Get(const ReadOptions& options,
 }
 
 Status Version::GetLudoCache(const ReadOptions& options,
+                    const Options* options_tmp,
                     const LookupKey& k,
                     std::string* value,
                     GetStats* stats,
@@ -446,13 +449,15 @@ Status Version::GetLudoCache(const ReadOptions& options,
   // We can search level-by-level since entries never hop across
   // levels.  Therefore we are guaranteed that if we find data
   // in an smaller level, later levels are irrelevant.
-  std::vector<FileMetaData*> tmp;
-  FileMetaData* tmp2;
   
+  FileMetaData* tmp2;
   FileMetaData* const* files = &files_[0][0];
   size_t num_files = files_[0].size();
   uint32_t i = 0;
   for (i = 0; i < num_files; i++) {
+    // uint32_t tmp = strtoul(user_key.ToString().substr(0, 16).c_str(), NULL, 10);
+    // Log(options_tmp->info_log, "For key: %u there are %zu files in level-0 and dst file num is: %lu, this is the %u-th one: %lu", 
+    //    tmp, num_files, file_ludo_number, i, files[i]->number);
     if (files[i]->number == file_ludo_number) {
       tmp2 = files[i];
       files = &tmp2;
@@ -460,88 +465,41 @@ Status Version::GetLudoCache(const ReadOptions& options,
       break;
     }
   }
-  if (i >= num_files){
+  if (i >= files_[0].size()){
     s = Status::NotFound(Slice());  // Use empty error message for speed
     return s;
   }
 
-  /*
-  for (int level = 0; level < config::kNumLevels; level++) {
-    size_t num_files = files_[level].size();
-    if (num_files == 0) continue;
+  FileMetaData* f = tmp2;
+  last_file_read = f;
+  last_file_read_level = 0;
 
-    // Get the list of files to search in this level
-    FileMetaData* const* files = &files_[level][0];
-    if (level == 0) {
-      // Level-0 files may overlap each other.  Find all files that
-      // overlap user_key and process them in order from newest to oldest.
-      tmp.reserve(num_files);
-      for (uint32_t i = 0; i < num_files; i++) {
-        FileMetaData* f = files[i];
-        if (ucmp->Compare(user_key, f->smallest.user_key()) >= 0 &&
-            ucmp->Compare(user_key, f->largest.user_key()) <= 0) {
-          tmp.push_back(f);
-        }
-      }
-      if (tmp.empty()) continue;
+  Saver saver;
+  saver.state = kNotFound;
+  saver.ucmp = ucmp;
+  saver.user_key = user_key;
+  saver.value = value;
+  s = vset_->table_cache_->Get(options, f->number, f->file_size,
+                                ikey, &saver, SaveValue);
 
-      std::sort(tmp.begin(), tmp.end(), NewestFirst);
-      files = &tmp[0];
-      num_files = tmp.size();
-    } else {
-      // Binary search to find earliest index whose largest key >= ikey.
-      uint32_t index = FindFile(vset_->icmp_, files_[level], ikey);
-      if (index >= num_files) {
-        files = NULL;
-        num_files = 0;
-      } else {
-        tmp2 = files[index];
-        if (ucmp->Compare(user_key, tmp2->smallest.user_key()) < 0) {
-          // All of "tmp2" is past any data for user_key
-          files = NULL;
-          num_files = 0;
-        } else {
-          files = &tmp2;
-          num_files = 1;
-        }
-      }
-    }
-    */
-    for (uint32_t i = 0; i < num_files; ++i) {
-      if (last_file_read != NULL && stats->seek_file == NULL) {
-        // We have had more than one seek for this read.  Charge the 1st file.
-        stats->seek_file = last_file_read;
-        stats->seek_file_level = last_file_read_level;
-      }
-
-      FileMetaData* f = files[i];
-      last_file_read = f;
-      last_file_read_level = 0;
-
-      Saver saver;
-      saver.state = kNotFound;
-      saver.ucmp = ucmp;
-      saver.user_key = user_key;
-      saver.value = value;
-      s = vset_->table_cache_->Get(options, f->number, f->file_size,
-                                   ikey, &saver, SaveValue);
-      if (!s.ok()) {
-        return s;
-      }
-      switch (saver.state) {
-        case kNotFound:
-          break;      // Keep searching in other files
-        case kFound:
-          return s;
-        case kDeleted:
-          s = Status::NotFound(Slice());  // Use empty error message for speed
-          return s;
-        case kCorrupt:
-          s = Status::Corruption("corrupted key for ", user_key);
-          return s;
-      }
-    }
-  //}
+  stats->seek_file = tmp2;
+  stats->seek_file_level = 0;
+  
+  if (!s.ok()) {
+    return s;
+  }
+  switch (saver.state) {
+    case kNotFound:
+      break;      // Keep searching in other files
+    case kFound:
+      return s;
+    case kDeleted:
+      s = Status::NotFound(Slice());  // Use empty error message for speed
+      return s;
+    case kCorrupt:
+      s = Status::Corruption("corrupted key for ", user_key);
+      return s;
+  }
 
   return Status::NotFound(Slice());  // Use an empty error message for speed
 }

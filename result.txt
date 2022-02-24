@@ -4,39 +4,35 @@ Entries:    1000
 RawSize:    1.0 MB (estimated)
 FileSize:   1.0 MB (estimated)
 ------------------------------------------------
-fillrandom   :      60.515 micros/op;   16.4 MB/s
+fillrandom   :      78.361 micros/op;   12.7 MB/s
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        7        1         0        0         1
+  0        5        0         0        0         1
   1        1        0         0        0         0
-  2        1        0         0        0         0
 
-readrandom   :       7.006 micros/op; (227 of 1000 found)
+readrandom   :      10.710 micros/op; (100 of 1000 found)
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        8        1         0        0         1
+  0        5        0         0        0         1
   1        1        0         0        0         0
-  2        1        0         0        0         0
 
-readseq      :       0.577 micros/op; 1718.4 MB/s
+readseq      :       2.290 micros/op;  433.1 MB/s
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        8        1         0        0         1
+  0        5        0         0        0         1
   1        1        0         0        0         0
-  2        1        0         0        0         0
 
-readreverse  :       0.600 micros/op; 1653.9 MB/s
+readreverse  :       2.500 micros/op;  396.7 MB/s
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        8        1         0        0         1
+  0        5        0         0        0         1
   1        1        0         0        0         0
-  2        1        0         0        0         0
 

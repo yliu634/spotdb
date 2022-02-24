@@ -37,6 +37,8 @@ TEST(PerCuckooTest, Ludo) {
     uint32_t before_size = cp.size();
     cp.remove("000245");
     uint32_t after_size = cp.size();
+    tmp = cp.lookUp("000245", value);
+    ASSERT_EQ(tmp, false);
     ASSERT_EQ(before_size - 1, after_size);
     cp.remove("000145");
     uint32_t afterafter_size = cp.size();
