@@ -5,6 +5,7 @@
 #include "ludo/common.h"
 #include "ludo/disjointset.h"
 #include "ludo/ludo_cp_dp.h"
+#include "ludo/cuckoo_ht.h"
 #include "util/testharness.h"
 
 namespace leveldb {
@@ -26,7 +27,7 @@ TEST(PerCuckooTest, Hash2) {
 }
 
 TEST(PerCuckooTest, Ludo) {
-    ControlPlaneLudo<const char*, uint64_t, 16> cp(1024);
+    CuckooHashTable<const char*, uint64_t> cp(1024);
     cp.insert("000245", 5);
     cp.insert("000345", 6);
     uint64_t value;
@@ -34,15 +35,23 @@ TEST(PerCuckooTest, Ludo) {
     ASSERT_EQ(value, 5);
     bool tmp = cp.lookUp("000545", value);
     ASSERT_EQ(tmp, false);
-    uint32_t before_size = cp.size();
+    uint32_t before_size = cp.EntryCount();
     cp.remove("000245");
-    uint32_t after_size = cp.size();
+    uint32_t after_size = cp.EntryCount();
     tmp = cp.lookUp("000245", value);
     ASSERT_EQ(tmp, false);
     ASSERT_EQ(before_size - 1, after_size);
     cp.remove("000145");
-    uint32_t afterafter_size = cp.size();
+    uint32_t afterafter_size = cp.EntryCount();
     ASSERT_EQ(before_size - 1, afterafter_size);
+
+    uint64_t a = 1000;
+    int64_t b = 3000;
+    cp.insert("bb", (a<<32) + (b&0xffffffff));
+    cp.lookUp("bb", value);
+    // printf("this one : %ld", value);
+    ASSERT_EQ(a, value>>32);
+    ASSERT_EQ(b, value&0xffffffff);
 }
 
 /*

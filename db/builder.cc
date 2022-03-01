@@ -91,10 +91,11 @@ Status BuildLudoTable(const std::string& dbname,
                   TableCache* table_cache,
                   Iterator* iter,
                   FileMetaData* meta,
-                  ControlPlaneLudo<uint32_t, uint64_t, 16>* cp) {
+                  ControlPlaneLudo<uint32_t, uint64_t>* cp) {
   Status s;
   meta->file_size = 0;
   iter->SeekToFirst();
+  int64_t blockCacheOffset(0);
 
   std::string fname = TableFileName(dbname, meta->number);
   if (iter->Valid()) {
@@ -110,7 +111,15 @@ Status BuildLudoTable(const std::string& dbname,
       Slice key = iter->key();
       meta->largest.DecodeFrom(key);
       builder->Add(key, iter->value());
-      cp->insert(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), meta->number, false);
+      cp->insert(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), 
+                 meta->number, 
+                 false);
+      // cp->insert(strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), 
+      //            (meta->number<<32) + (blockCacheOffset&0xffffffff), 
+      //            false);
+      // Log(options.info_log, "The key: %lu is stored in data block: %ld", 
+      //     strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), 
+      //     blockCacheOffset);
       // Log(options.info_log, "Cp insert key: %lu and cp size: %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cp->size());
     }
 

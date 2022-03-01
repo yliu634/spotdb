@@ -327,8 +327,8 @@ public:
     return result;
   }
   
-  static constexpr int kMaxQueueSize = calMaxQueueSize();
-  static constexpr int kVisitedListSize = calVisitedListSize();
+  static constexpr int kMaxQueueSize = 1365; // calMaxQueueSize();
+  static constexpr int kVisitedListSize = 340; // calVisitedListSize();
   
   struct Bucket {
   public:

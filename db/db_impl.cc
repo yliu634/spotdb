@@ -33,6 +33,7 @@
 #include "util/logging.h"
 #include "util/mutexlock.h"
 #include "ludo/ludo_cp_dp.h"
+#include "ludo/cuckoo_ht.h"
 
 namespace leveldb {
 
@@ -145,7 +146,7 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
   versions_ = new VersionSet(dbname_, &options_, table_cache_,
                              &internal_comparator_);
   
-  cp_ = new ControlPlaneLudo<uint32_t, uint64_t, 16> (1024);
+  cp_ = new ControlPlaneLudo<uint32_t, uint64_t> (1024);
 }
 
 DBImpl::~DBImpl() {
@@ -501,7 +502,77 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   Log(options_.info_log, "Level-0 table #%llu: started",
       (unsigned long long) meta.number);
   
-  #ifndef LudoHashing
+  int level = 0;
+  iter->SeekToFirst();
+  meta.smallest.DecodeFrom(iter->key());
+  iter->SeekToLast();
+  meta.smallest.DecodeFrom(iter->key());
+  if (base != NULL) {
+      level = base->PickLevelForMemTableOutput(meta.smallest.user_key(), meta.smallest.user_key());
+    }
+  // Log(options_.info_log, "This SSTbale would be stored in the level of %d.",
+  //     level);
+  Status s;
+
+  if (level != 0)
+  {
+    {
+    mutex_.Unlock();
+    s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
+    mutex_.Lock();
+    }
+  }
+  else
+  {
+    {
+    mutex_.Unlock();
+    s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
+    mutex_.Lock();
+    }
+  }
+  //std::future <void*> res = Env::Default()->threadPool->addTask(DBImpl::buildLudoCache, (void *) &iter);
+
+  Log(options_.info_log, "Level-0 table #%llu: %lld bytes %s",
+      (unsigned long long) meta.number,
+      (unsigned long long) meta.file_size,
+      s.ToString().c_str());
+  delete iter;
+  pending_outputs_.erase(meta.number);
+
+
+  // Note that if file_size is zero, the file has been deleted and
+  // should not be added to the manifest.
+  // int level = 0;
+  if (s.ok() && meta.file_size > 0) {
+    /*const Slice min_user_key = meta.smallest.user_key();
+    const Slice max_user_key = meta.largest.user_key();
+    if (base != NULL) {
+      level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
+    }*/
+    edit->AddFile(level, meta.number, meta.file_size,
+                  meta.smallest, meta.largest);
+  }
+
+  CompactionStats stats;
+  stats.micros = env_->NowMicros() - start_micros;
+  stats.bytes_written = meta.file_size;
+  stats_[level].Add(stats);
+  return s;
+}
+
+/*
+Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
+                                Version* base) {
+  mutex_.AssertHeld();
+  const uint64_t start_micros = env_->NowMicros();
+  FileMetaData meta;
+  meta.number = versions_->NewFileNumber();
+  pending_outputs_.insert(meta.number);
+  Iterator* iter = mem->NewIterator();
+  Log(options_.info_log, "Level-0 table #%llu: started",
+      (unsigned long long) meta.number);
+  
+  #if 0
   Status s;
   {
     mutex_.Unlock();
@@ -528,13 +599,8 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
 
   // Note that if file_size is zero, the file has been deleted and
   // should not be added to the manifest.
-  int level = 0;
+  // int level = 0;
   if (s.ok() && meta.file_size > 0) {
-    /*const Slice min_user_key = meta.smallest.user_key();
-    const Slice max_user_key = meta.largest.user_key();
-    if (base != NULL) {
-      level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
-    }*/
     edit->AddFile(level, meta.number, meta.file_size,
                   meta.smallest, meta.largest);
   }
@@ -544,7 +610,8 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   stats.bytes_written = meta.file_size;
   stats_[level].Add(stats);
   return s;
-}
+} 
+*/
 
 void DBImpl::CompactMemTable() {
   mutex_.AssertHeld();
@@ -1065,6 +1132,26 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   return status;
 }
 
+/*
+void* DBImpl::RemoveLudoCache(Iterator* input) {
+  input->SeekToFirst();
+  Status status;
+  ParsedInternalKey ikey;
+  std::string current_user_key;
+  bool has_current_user_key = false;
+  SequenceNumber last_sequence_for_key = kMaxSequenceNumber;   
+  for (; input->Valid() && !shutting_down_.Acquire_Load(); ) {
+    
+    Slice key = input->key();
+    // uint32_t cpsize = cp_->size();
+    cp_->remove(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10));
+    // Log(options_.info_log, "Cp removed the key: %lu and the size from %u to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
+   
+    input->Next();
+  }
+
+}
+*/
 Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
@@ -1088,6 +1175,7 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   mutex_.Unlock();
 
   Iterator* input = versions_->MakeInputIterator(compact->compaction);
+  //Iterator* iterlelvel0input = versions_->MakeLudoCacheIterator(compact->compaction);
   input->SeekToFirst();
   Status status;
   ParsedInternalKey ikey;
@@ -1210,11 +1298,20 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   stats_[compact->compaction->level() + 1].Add(stats);
 
   if (status.ok()) {
+    /*for (; iterlelvel0input->Valid() && !shutting_down_.Acquire_Load(); ) {
+      Slice key = iterlelvel0input->key();
+      // uint32_t cpsize = cp_->size();
+      cp_->remove(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10));
+      // Log(options_.info_log, "Cp removed the key: %lu and the size from %u to %d", 
+      //     strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
+      iterlelvel0input->Next();
+    }*/
+
     status = InstallCompactionResults(compact);
+    // std::future <void *> res = Env::Default()->threadPool->addTask(DBImpl::RemoveLudoCache,
+    //     iterlelvel0input);
   }
   
-  //std::future <void *> res = Env::Default()->threadPool->addTask(DBImpl::RemoveLudoCompaction, (void *) &(compact->compaction->input(0, i)));
-
   if (!status.ok()) {
     RecordBackgroundError(status);
   }
@@ -1322,10 +1419,10 @@ Status DBImpl::Get(const ReadOptions& options,
 
     } else if (cp_->lookUp(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
-        have_stat_update = true;
-        /*Log(options_.info_log, "From the Cache the key: %lu's value is: %s.", 
+        // have_stat_update = true;
+        /* Log(options_.info_log, "From the Cache the key: %lu's value is: %s.", 
             strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
-            (*value).substr(0, 8).c_str());*/
+            (*value).substr(0, 8).c_str()); */
         // Done
     } else {
       s = current->Get(options, lkey, value, &stats);

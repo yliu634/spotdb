@@ -74,7 +74,8 @@ public:
   static const uint MAX_REHASH = 2;
   
   static_assert(sizeof(V) * 8 >= VL);
-  static const uint64_t ValueMask = (1ULL << VL) - 1;
+  static const uint64_t ValueMask = 0xffffffff; // (1ULL << VL) - 1;
+  // static const uint64_t ValueMask = (1ULL << VL) - 1;
   static const uint64_t VDMask = ValueMask;
   
   // The load factor is chosen slightly conservatively for speed and

@@ -349,7 +349,7 @@ Status Version::Get(const ReadOptions& options,
   std::vector<FileMetaData*> tmp;
   FileMetaData* tmp2;
   // for (int level = 0; level < config::kNumLevels; level++) {
-  for (int level = 0; level < config::kNumLevels; level++) {
+  for (int level = 1; level < config::kNumLevels; level++) {
     size_t num_files = files_[level].size();
     if (num_files == 0) continue;
 
@@ -441,16 +441,25 @@ Status Version::GetLudoCache(const ReadOptions& options,
   const Comparator* ucmp = vset_->icmp_.user_comparator();
   Status s;
 
+  // uint64_t fileCacheNumber = file_ludo_number >> 32;
+  // int64_t blockLudoOffset = (int64_t) file_ludo_number & 0xffffffff; // (1ULL<<32 - 1); 
+
   stats->seek_file = NULL;
   stats->seek_file_level = -1;
   FileMetaData* last_file_read = NULL;
   int last_file_read_level = -1;
 
+  Saver saver;
+  saver.state = kNotFound;
+  saver.ucmp = ucmp;
+  saver.user_key = user_key;
+  saver.value = value;
+
   // We can search level-by-level since entries never hop across
   // levels.  Therefore we are guaranteed that if we find data
   // in an smaller level, later levels are irrelevant.
   
-  FileMetaData* tmp2;
+  FileMetaData* f;
   FileMetaData* const* files = &files_[0][0];
   size_t num_files = files_[0].size();
   uint32_t i = 0;
@@ -459,8 +468,8 @@ Status Version::GetLudoCache(const ReadOptions& options,
     // Log(options_tmp->info_log, "For key: %u there are %zu files in level-0 and dst file num is: %lu, this is the %u-th one: %lu", 
     //    tmp, num_files, file_ludo_number, i, files[i]->number);
     if (files[i]->number == file_ludo_number) {
-      tmp2 = files[i];
-      files = &tmp2;
+      f = files[i];
+      files = &f;
       num_files = 1;
       break;
     }
@@ -470,19 +479,14 @@ Status Version::GetLudoCache(const ReadOptions& options,
     return s;
   }
 
-  FileMetaData* f = tmp2;
+  // FileMetaData* f = tmp2;
   last_file_read = f;
   last_file_read_level = 0;
 
-  Saver saver;
-  saver.state = kNotFound;
-  saver.ucmp = ucmp;
-  saver.user_key = user_key;
-  saver.value = value;
-  s = vset_->table_cache_->Get(options, f->number, f->file_size,
+  s = vset_->table_cache_->GetLudoCache(options, f->number, f->file_size,//file_block_number
                                 ikey, &saver, SaveValue);
 
-  stats->seek_file = tmp2;
+  stats->seek_file = f;
   stats->seek_file_level = 0;
   
   if (!s.ok()) {
@@ -1359,6 +1363,32 @@ Iterator* VersionSet::MakeInputIterator(Compaction* c) {
       }
     }
   }
+  assert(num <= space);
+  Iterator* result = NewMergingIterator(&icmp_, list, num);
+  delete[] list;
+  return result;
+}
+
+Iterator* VersionSet::MakeLudoCacheIterator(Compaction* c) {
+  ReadOptions options;
+  options.verify_checksums = options_->paranoid_checks;
+  options.fill_cache = false;
+
+  // Level-0 files have to be merged together.  For other levels,
+  // we will make a concatenating iterator per level.
+  // TODO(opt): use concatenating iterator for level-0 if there is no overlap
+  const int space = (c->level() == 0 ? c->inputs_[0].size() + 1 : 2);
+  Iterator** list = new Iterator*[space];
+  int num = 0;
+
+  if (!c->inputs_[0].empty()) {
+      const std::vector<FileMetaData*>& files = c->inputs_[0];
+      for (size_t i = 0; i < files.size(); i++) {
+        list[num++] = table_cache_->NewIterator(
+            options, files[i]->number, files[i]->file_size);
+      }
+  }
+  
   assert(num <= space);
   Iterator* result = NewMergingIterator(&icmp_, list, num);
   delete[] list;

@@ -15,6 +15,7 @@
 #include "port/port.h"
 #include "port/thread_annotations.h"
 #include "ludo/ludo_cp_dp.h"
+#include "ludo/cuckoo_ht.h"
 
 #define LudoHashing
 
@@ -117,6 +118,7 @@ class DBImpl : public DB {
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWorkforLudoCache(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  //static void* RemoveLudoCache(Iterator* input);
 
   Status OpenCompactionOutputFile(CompactionState* compact);
   Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
@@ -136,7 +138,7 @@ class DBImpl : public DB {
   TableCache* table_cache_;
 
 
-  ControlPlaneLudo<uint32_t, uint64_t, 16>* cp_; 
+  ControlPlaneLudo<uint32_t, uint64_t>* cp_; 
   // Lock over the persistent DB state.  Non-NULL iff successfully acquired.
   FileLock* db_lock_;
 

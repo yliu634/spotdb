@@ -249,6 +249,8 @@ class VersionSet {
   // The caller should delete the iterator when no longer needed.
   Iterator* MakeInputIterator(Compaction* c);
 
+  Iterator* MakeLudoCacheIterator(Compaction* c);
+  
   // Returns true iff some level needs a compaction.
   bool NeedsCompaction() const {
     Version* v = current_;

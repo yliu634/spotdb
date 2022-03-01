@@ -7,6 +7,7 @@
 
 #include "spotkv/status.h"
 #include "ludo/ludo_cp_dp.h"
+#include "ludo/cuckoo_ht.h"
 
 namespace leveldb {
 
@@ -36,7 +37,7 @@ extern Status BuildLudoTable(const std::string& dbname,
                          TableCache* table_cache,
                          Iterator* iter,
                          FileMetaData* meta,
-                         ControlPlaneLudo<uint32_t,uint64_t, 16>* cp);             
+                         ControlPlaneLudo<uint32_t, uint64_t>* cp);             
 
 }  // namespace leveldb
 

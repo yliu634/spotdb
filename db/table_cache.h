@@ -44,6 +44,14 @@ class TableCache {
              void* arg,
              void (*handle_result)(void*, const Slice&, const Slice&));
 
+  Status GetLudoCache(const ReadOptions& options,
+            uint64_t file_number,
+            uint64_t file_size,
+            // int64_t ludo_offset,
+            const Slice& k,
+            void* arg,
+            void (*handle_result)(void*, const Slice&, const Slice&));
+
   // Evict any entry for the specified file number
   void Evict(uint64_t file_number);
 

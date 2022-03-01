@@ -239,6 +239,9 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
       // Not found
     } else {
       Iterator* block_iter = BlockReader(this, options, iiter->value());
+       Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
+             strtoul(k.ToString().substr(0,16).c_str(), NULL, 10), 
+             handle.offset());
       block_iter->Seek(k);
       if (block_iter->Valid()) {
         (*saver)(arg, block_iter->key(), block_iter->value());
@@ -254,6 +257,45 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
   return s;
 }
 
+Status Table::InternalLudoGet(const ReadOptions& options, const Slice& k,
+                              void* arg,
+                              void (*saver)(void*, const Slice&, const Slice&)) {
+  Status s;
+  Iterator* iiter = rep_->index_block->NewIterator(rep_->options.comparator);
+  iiter->Seek(k);
+  if (iiter->Valid()) {
+    Slice handle_value = iiter->value();
+    FilterBlockReader* filter = rep_->filter;
+    BlockHandle handle;
+    #if 0
+     if (handle.DecodeFrom(&handle_value).ok()) {
+    #else
+    if (filter != NULL &&
+        handle.DecodeFrom(&handle_value).ok() &&
+        !filter->KeyMayMatch(handle.offset(), k)
+        ) { 
+      
+      // Not found
+    } else {
+    #endif
+      Iterator* block_iter = BlockReader(this, options, iiter->value());
+       Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
+             strtoul(k.ToString().substr(0,16).c_str(), NULL, 10), 
+             handle.offset());
+      block_iter->Seek(k);
+      if (block_iter->Valid()) {
+        (*saver)(arg, block_iter->key(), block_iter->value());
+      }
+      s = block_iter->status();
+      delete block_iter;
+    }
+  }
+  if (s.ok()) {
+    s = iiter->status();
+  }
+  delete iiter;
+  return s;
+}
 
 uint64_t Table::ApproximateOffsetOf(const Slice& key) const {
   Iterator* index_iter =
