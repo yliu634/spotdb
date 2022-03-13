@@ -1,12 +1,12 @@
 #!/bin/bash
 function __runGLSM(){
 
-rm -rf ../persitentIndexDir/B_TreeStore.txt
-rm -rf ../persitentIndexDir/hashTableStore.txt
+#rm -rf ../persitentIndexDir/B_TreeStore.txt
+#rm -rf ../persitentIndexDir/hashTableStore.txt
 rm -rf $dbfilename/*
 
-./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > unikv-load-100G-read-10M-threads=test.txt
-#./ycsbc -db unikv -threads 1 -P $workload_name1 -dbfilename "/home/yiliu/projs/unikv/temp" -configpath "$configpath" -skipLoad true > unikv-load-100G-scan-1M-threads=test.txt
+./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > reslevel.txt
+./ycsbc -db spotkv -threads 1 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > respotkv.txt
 
 #./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad false > leveldb-load-100G-read-10M.txt
 #./ycsbc -db leveldb -threads 1 -P $workload_name1 -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad true > leveldb-load-100G-scan-1M.txt
@@ -22,13 +22,13 @@ rm -rf $dbfilename/*
 
 }
 
-workload_name=./workloads/workloadc-1.spec
-workload_name1=./workloads/workloadc-2.spec
-workload_name2=./workloads/workloadc-3.spec
-workload_name3=./workloads/workloadc-4.spec
-workload_name4=./workloads/workloadc-5.spec
-workload_name5=./workloads/workloadc-6.spec
-workload_name6=./workloads/workloadc.spec
+workload_name=./workloads/workloada.spec
+workload_name1=./workloads/workloadb.spec
+workload_name2=./workloads/workloadc-1.spec
+workload_name3=./workloads/workloadd.spec
+workload_name4=./workloads/workloade.spec
+workload_name5=./workloads/workloadf.spec
+workload_name6=./workloads/workloade.spec
 
 configpath=./configDir/leveldb_config.ini
 dbfilename=../temp
