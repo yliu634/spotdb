@@ -267,7 +267,7 @@ Status Table::InternalLudoGet(const ReadOptions& options, const Slice& k,
     Slice handle_value = iiter->value();
     FilterBlockReader* filter = rep_->filter;
     BlockHandle handle;
-    #if 0
+    #if 1
      if (handle.DecodeFrom(&handle_value).ok()) {
     #else
     if (filter != NULL &&
