@@ -1,6 +1,6 @@
 #include "leveldb_db.h"
 #include <cstring>
-#include"basic_config.hh"
+#include"basic_config.h"
 #include<iostream>
 #include <sys/types.h>
 #include <sys/stat.h>

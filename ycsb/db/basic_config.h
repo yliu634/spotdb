@@ -1,5 +1,5 @@
-#ifndef BASIC_CONFIG_HH_
-#define BASIC_CONFIG_HH_
+#ifndef BASIC_CONFIG_H_
+#define BASIC_CONFIG_H_
 
 #include <string>
 #include <boost/property_tree/ptree.hpp>

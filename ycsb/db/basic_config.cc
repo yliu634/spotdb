@@ -1,4 +1,4 @@
-#include"basic_config.hh"
+#include"basic_config.h"
 #include<iostream>
 template<typename T>
 void Basic_ConfigMod<T>::setConfigPath (const char* path) {
