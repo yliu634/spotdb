@@ -24,6 +24,7 @@ On Ubuntu 14.04 LTS or above, install
 
 `$ sudo apt-get update`  
 `$ sudo apt-get install g++ cmake clang libboost-all-dev libsnappy-dev libtbb-dev libhiredis-dev`
+`$ sudo apt-get install -y ceph librados-dev maven mlocate python3-pip google-perftools libgoogle-perftools-dev cmake build-essential gdb libssl-dev pkgconf tmux clang liblua5.3-dev libboost-all-dev openssl` 
 
 Getting the source code of SpotKV  
 `$ git clone https://github.com/yliu634/spotdb.git`
@@ -46,7 +47,7 @@ Getting the source code of YCSB-C modified by Qiang Zhang @USTC
 Build YCSB-C on Ubuntu  
 `$ cd ycsb`  
 `$ make clean & make`  
-`$ ./run_KVTest.sh`  
+`$ ./main.sh`  
 
 As the driver for Redis is linked by default, change the runtime library path to include the hiredis library by:  
 `$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib`    
