@@ -508,6 +508,21 @@ Status Version::GetLudoCache(const ReadOptions& options,
   return Status::NotFound(Slice());  // Use an empty error message for speed
 }
 
+bool Version::CountMinUpdate(const ReadOptions& options,
+                    const Options* options_tmp,
+                    const Slice& k,
+                    std::string* value,
+                    CountMinSketch<uint16_t>* ctm,
+                    Cache* cmc) {
+  //uint32_t key = strtoul(k.ToString().substr(0, 16).c_str(), NULL, 10);
+  ctm->Update(k.data(), k.size(), 1);
+  if (ctm->EstimateRate(k.data(), k.size()) > 0.02){
+    //Log(options_tmp->info_log, "We found key %lu frequency is greater than value size: %zu.", 
+    //    strtoul(k.ToString().substr(0, 16).c_str(), NULL, 10), value->size());
+    cmc->Insert(k, value, value->size(), NULL);
+  }
+}
+
 bool Version::UpdateStats(const GetStats& stats) {
   FileMetaData* f = stats.seek_file;
   if (f != NULL) {

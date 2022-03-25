@@ -1,4 +1,3 @@
-
 #include "ludo/hash2.h"
 #include "ludo/hashutil.h"
 #include "ludo/farmhash.h"
@@ -6,11 +5,20 @@
 #include "ludo/disjointset.h"
 #include "ludo/ludo_cp_dp.h"
 #include "ludo/cuckoo_ht.h"
+#include "ludo/count_min.h"
 #include "util/testharness.h"
 
 namespace leveldb {
 
 class PerCuckooTest { };
+
+TEST(PerCuckooTest, CM) {
+    CountMinSketch<uint16_t> c(0.1, 0.1);
+    c.Update("hello", 1, 1);
+    c.Update("world", 1, 2);
+    uint32_t h = c.Estimate("world", 1);
+    ASSERT_EQ(h,2);
+}
 
 TEST(PerCuckooTest, Farmhash) {
     const char s[3]= "ab";

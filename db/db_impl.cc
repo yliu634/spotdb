@@ -34,6 +34,7 @@
 #include "util/mutexlock.h"
 #include "ludo/ludo_cp_dp.h"
 #include "ludo/cuckoo_ht.h"
+#include "ludo/count_min.h"
 
 namespace leveldb {
 
@@ -147,6 +148,8 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
                              &internal_comparator_);
   
   cp_ = new ControlPlaneLudo<uint32_t, uint64_t> (1024);
+  ctm_ = new CountMinSketch<uint16_t> (3, 80, true);
+  cmc_ = NewLRUCache(1024);
 }
 
 DBImpl::~DBImpl() {
@@ -170,6 +173,8 @@ DBImpl::~DBImpl() {
   delete logfile_;
   delete table_cache_;
   delete cp_;
+  delete ctm_;
+  delete cmc_;
 
 
   if (owns_info_log_) {
@@ -1424,12 +1429,27 @@ Status DBImpl::Get(const ReadOptions& options,
             strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
             (*value).substr(0, 8).c_str()); */
         // Done
-    } else {
+    } else {  
+      Cache::Handle* handle = NULL;
+      handle = cmc_->Lookup(key);
+      if (handle == NULL) {
+        s = current->Get(options, lkey, value, &stats);
+      } else {
+        *value = reinterpret_cast<char*>(cmc_->Value(handle));
+        //value.size()
+        s = Status::OK();
+      }
+      have_stat_update = true;
+      current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
+      
+      /* Original version:
       s = current->Get(options, lkey, value, &stats);
       have_stat_update = true;
-      /*Log(options_.info_log, "From the SSTable the key: %lu's value is: %s.", 
+      current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
+      Log(options_.info_log, "From the SSTable the key: %lu's value is: %s.", 
           strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
-          (*value).substr(0, 8).c_str());*/
+          (*value).substr(0, 8).c_str());
+      */
     }
     mutex_.Lock();
   }

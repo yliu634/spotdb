@@ -22,6 +22,7 @@
 #include "db/version_edit.h"
 #include "port/port.h"
 #include "port/thread_annotations.h"
+#include "ludo/count_min.h"
 
 namespace leveldb {
 
@@ -79,6 +80,9 @@ class Version {
   // compaction may need to be triggered, false otherwise.
   // REQUIRES: lock is held
   bool UpdateStats(const GetStats& stats);
+
+  bool CountMinUpdate(const ReadOptions& options, const Options* options_tmp,
+                    const Slice& k, std::string* value, CountMinSketch<uint16_t>* ctm, Cache* cmc);
 
   // Record a sample of bytes read at the specified internal key.
   // Samples are taken approximately once every config::kReadBytesPeriod

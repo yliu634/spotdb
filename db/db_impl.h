@@ -14,8 +14,10 @@
 #include "spotkv/env.h"
 #include "port/port.h"
 #include "port/thread_annotations.h"
+#include "spotkv/cache.h"
 #include "ludo/ludo_cp_dp.h"
 #include "ludo/cuckoo_ht.h"
+#include "ludo/count_min.h"
 
 #define LudoHashing
 
@@ -139,6 +141,8 @@ class DBImpl : public DB {
 
 
   ControlPlaneLudo<uint32_t, uint64_t>* cp_; 
+  CountMinSketch<uint16_t>* ctm_;
+  Cache* cmc_;
   // Lock over the persistent DB state.  Non-NULL iff successfully acquired.
   FileLock* db_lock_;
 
