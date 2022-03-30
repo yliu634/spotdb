@@ -253,6 +253,7 @@ class VersionSet {
   // The caller should delete the iterator when no longer needed.
   Iterator* MakeInputIterator(Compaction* c);
 
+  Iterator* MakeInputIteratorSpot(Compaction* c);
   Iterator* MakeLudoCacheIterator(Compaction* c);
   
   // Returns true iff some level needs a compaction.
@@ -344,8 +345,14 @@ class Compaction {
   // "which" must be either 0 or 1
   int num_input_files(int which) const { return inputs_[which].size(); }
 
+  int num_input_real() const { return inputReal_.size(); }
+
   // Return the ith input file at "level()+which" ("which" must be 0 or 1).
   FileMetaData* input(int which, int i) const { return inputs_[which][i]; }
+
+  FileMetaData* inputReal(int i) const { return inputReal_[i]; }
+  void UpdateInputReal();
+  bool SpotCompaction() { return SpotCompaction_; };
 
   // Maximum size of files to build during this compaction.
   uint64_t MaxOutputFileSize() const { return max_output_file_size_; }
@@ -383,6 +390,9 @@ class Compaction {
 
   // Each compaction reads inputs from "level_" and "level_+1"
   std::vector<FileMetaData*> inputs_[2];      // The two sets of inputs
+  std::vector<FileMetaData*> inputReal_;
+  double WAdeduction_; 
+  bool SpotCompaction_;
 
   // State used to check for number of of overlapping grandparent files
   // (parent == level_ + 1, grandparent == level_ + 2)

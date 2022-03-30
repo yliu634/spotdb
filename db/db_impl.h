@@ -118,6 +118,10 @@ class DBImpl : public DB {
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWork(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DoCompactionWorkSpot(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DoCompactionWorkSelfLevel(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWorkforLudoCache(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   //static void* RemoveLudoCache(Iterator* input);
@@ -125,6 +129,8 @@ class DBImpl : public DB {
   Status OpenCompactionOutputFile(CompactionState* compact);
   Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
   Status InstallCompactionResults(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status InstallCompactionResultsSelfLevel(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
 
   // Constant after construction

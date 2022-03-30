@@ -1384,6 +1384,33 @@ Iterator* VersionSet::MakeInputIterator(Compaction* c) {
   return result;
 }
 
+Iterator* VersionSet::MakeInputIteratorSpot(Compaction* c) {
+  ReadOptions options;
+  options.verify_checksums = options_->paranoid_checks;
+  options.fill_cache = false;
+
+  // Level-0 files have to be merged together.  For other levels,
+  // we will make a concatenating iterator per level.
+  // TODO(opt): use concatenating iterator for level-0 if there is no overlap
+  const int space = (c->level() == 0 ? c->inputs_[0].size() + 1 : 2);
+  Iterator** list = new Iterator*[space];
+  int num = 0;
+  if (!c->inputs_[0].empty()) {
+    list[num++] = NewTwoLevelIterator(
+            new Version::LevelFileNumIterator(icmp_, &c->inputs_[0]),
+            &GetFileIterator, table_cache_, options);
+  }
+  if (!c->inputReal_.empty() && !c->inputs_[1].empty()) {
+    list[num++] = NewTwoLevelIterator(
+            new Version::LevelFileNumIterator(icmp_, &c->inputReal_),
+            &GetFileIterator, table_cache_, options);
+  }
+  assert(num <= space);
+  Iterator* result = NewMergingIterator(&icmp_, list, num);
+  delete[] list;
+  return result;
+}
+
 Iterator* VersionSet::MakeLudoCacheIterator(Compaction* c) {
   ReadOptions options;
   options.verify_checksums = options_->paranoid_checks;
@@ -1460,7 +1487,7 @@ Compaction* VersionSet::PickCompaction() {
   }
 
   SetupOtherInputs(c);
-
+  c->UpdateInputReal();
   return c;
 }
 
@@ -1573,7 +1600,9 @@ Compaction::Compaction(const Options* options, int level)
       input_version_(NULL),
       grandparent_index_(0),
       seen_key_(false),
-      overlapped_bytes_(0) {
+      overlapped_bytes_(0),
+      WAdeduction_(0.8),
+      SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
   }
@@ -1596,9 +1625,18 @@ bool Compaction::IsTrivialMove() const {
 }
 
 void Compaction::AddInputDeletions(VersionEdit* edit) {
-  for (int which = 0; which < 2; which++) {
-    for (size_t i = 0; i < inputs_[which].size(); i++) {
-      edit->DeleteFile(level_ + which, inputs_[which][i]->number);
+  if (!SpotCompaction_) {
+    for (int which = 0; which < 2; which++) {
+      for (size_t i = 0; i < inputs_[which].size(); i++) {
+        edit->DeleteFile(level_ + which, inputs_[which][i]->number);
+      }
+    }
+  } else {
+    for (size_t i = 0; i < inputs_[0].size(); i++) {
+      edit->DeleteFile(level_, inputs_[0][i]->number);
+    }
+    for (size_t i = 0; i < inputReal_.size(); i++) {
+      edit->DeleteFile(level_ + 1, inputReal_[i]->number);
     }
   }
 }
@@ -1652,6 +1690,16 @@ void Compaction::ReleaseInputs() {
     input_version_->Unref();
     input_version_ = NULL;
   }
+}
+
+void Compaction::UpdateInputReal() {
+  inputReal_.clear();
+  int tmp = num_input_files(1);
+  if (tmp > 5) {
+    tmp = (int)(ceil(tmp * WAdeduction_));
+    if (tmp < num_input_files(1)) { SpotCompaction_ = true; }
+  }
+  inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
 }
 
 }  // namespace leveldb
