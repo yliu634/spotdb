@@ -7,6 +7,7 @@
 
 #include <deque>
 #include <set>
+#include "db/builder.h"
 #include "db/dbformat.h"
 #include "db/log_writer.h"
 #include "db/snapshot.h"
@@ -118,7 +119,7 @@ class DBImpl : public DB {
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWork(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  Status DoCompactionWorkSpot(CompactionState* compact)
+  Status DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfCompaction, FileMetaData& LastSpotTable)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status DoCompactionWorkSelfLevel(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
@@ -129,6 +130,8 @@ class DBImpl : public DB {
   Status OpenCompactionOutputFile(CompactionState* compact);
   Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
   Status InstallCompactionResults(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status InstallCompactionResultsSpot(CompactionState* compact, FileMetaData& LastSpotTable)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status InstallCompactionResultsSelfLevel(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);

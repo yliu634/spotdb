@@ -5,7 +5,7 @@ rm -rf ./temp/*
 # ulimit -n 100000
 # scanrandom
 
-./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,readseq,stats,readreverse,stats --num=1002000 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
+./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,readseq,stats,readreverse,stats --num=1000000 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
 #./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,readseq,stats --num=10000000 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
 #./out-static/db_bench --benchmarks=fillrandom,stats,readrandom,stats,readseq,stats --num=100000000 --reads=1000 --value_size=1024 --bloom_bits=10 --open_files=1000 --write_buffer_size=67108864 --cache_size=8388608 --threads=1 --compression_ratio=1 --use_existing_db=0 --db=temp > result.txt
 

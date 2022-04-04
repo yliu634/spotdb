@@ -513,28 +513,20 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   iter->SeekToLast();
   meta.smallest.DecodeFrom(iter->key());
   if (base != NULL) {
-      level = base->PickLevelForMemTableOutput(meta.smallest.user_key(), meta.smallest.user_key());
-    }
+      //level = base->PickLevelForMemTableOutput(meta.smallest.user_key(), meta.smallest.user_key());
+
+  }
   // Log(options_.info_log, "This SSTbale would be stored in the level of %d.",
   //     level);
   Status s;
 
-  if (level != 0)
+  
   {
-    {
-    mutex_.Unlock();
-    s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
-    mutex_.Lock();
-    }
-  }
-  else
-  {
-    {
     mutex_.Unlock();
     s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
     mutex_.Lock();
-    }
   }
+  
   //std::future <void*> res = Env::Default()->threadPool->addTask(DBImpl::buildLudoCache, (void *) &iter);
 
   Log(options_.info_log, "Level-0 table #%llu: %lld bytes %s",
@@ -564,59 +556,6 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   stats_[level].Add(stats);
   return s;
 }
-
-/*
-Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
-                                Version* base) {
-  mutex_.AssertHeld();
-  const uint64_t start_micros = env_->NowMicros();
-  FileMetaData meta;
-  meta.number = versions_->NewFileNumber();
-  pending_outputs_.insert(meta.number);
-  Iterator* iter = mem->NewIterator();
-  Log(options_.info_log, "Level-0 table #%llu: started",
-      (unsigned long long) meta.number);
-  
-  #if 0
-  Status s;
-  {
-    mutex_.Unlock();
-    s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
-    mutex_.Lock();
-  }
-  #else
-    Status s;
-    {
-      mutex_.Unlock();
-      s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
-      mutex_.Lock();
-    }
-    //std::future <void*> res = Env::Default()->threadPool->addTask(DBImpl::buildLudoCache, (void *) &iter);
-  #endif
-
-  Log(options_.info_log, "Level-0 table #%llu: %lld bytes %s",
-      (unsigned long long) meta.number,
-      (unsigned long long) meta.file_size,
-      s.ToString().c_str());
-  delete iter;
-  pending_outputs_.erase(meta.number);
-
-
-  // Note that if file_size is zero, the file has been deleted and
-  // should not be added to the manifest.
-  // int level = 0;
-  if (s.ok() && meta.file_size > 0) {
-    edit->AddFile(level, meta.number, meta.file_size,
-                  meta.smallest, meta.largest);
-  }
-
-  CompactionStats stats;
-  stats.micros = env_->NowMicros() - start_micros;
-  stats.bytes_written = meta.file_size;
-  stats_[level].Add(stats);
-  return s;
-} 
-*/
 
 void DBImpl::CompactMemTable() {
   mutex_.AssertHeld();
@@ -822,10 +761,36 @@ void DBImpl::BackgroundCompaction() {
   } else {
     CompactionState* compact = new CompactionState(c);
 
-    if (compact->compaction->level() > 0)
-      status = DoCompactionWork(compact);
-    else
-      status = DoCompactionWorkforLudoCache(compact);
+    if (compact->compaction->level() > 0) {
+      bool NeedSelfCompaction = false;
+      FileMetaData* LastSpotTable = NULL;
+      FileMetaData tmp;
+      //Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
+      //status = DoCompactionWork(compact);
+      auto tcp = compact->compaction->num_input_real();
+      status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      LastSpotTable = &tmp;
+      //Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+      //DeleteObsoleteFiles();
+      if (NeedSelfCompaction) {
+        //TODO: 
+        Compaction* c2 = versions_->PickSelfLevelCompaction(compact->compaction, LastSpotTable);
+        CompactionState* compact2 = new CompactionState(c2);
+        //assert(c2->compaction->num_input_files(0) > 1);
+        Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
+        Status status2 = DoCompactionWorkSelfLevel(compact2);
+        Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+        if (status2.ok()) {
+          CleanupCompaction(compact2);
+          c2->ReleaseInputs();
+        }
+        //DeleteObsoleteFiles();
+        delete c2;
+      }
+    }
+    else {
+      status = DoCompactionWorkforLudoCache(compact); //remove cuckoo key-value pairs;
+    }
 
     if (!status.ok()) {
       RecordBackgroundError(status);
@@ -954,7 +919,6 @@ Status DBImpl::FinishCompactionOutputFile(CompactionState* compact,
   return s;
 }
 
-
 Status DBImpl::InstallCompactionResults(CompactionState* compact) {
   mutex_.AssertHeld();
   Log(options_.info_log,  "Compacted %d@%d + %d@%d files => %lld bytes",
@@ -976,15 +940,40 @@ Status DBImpl::InstallCompactionResults(CompactionState* compact) {
   return versions_->LogAndApply(compact->compaction->edit(), &mutex_);
 }
 
+Status DBImpl::InstallCompactionResultsSpot(CompactionState* compact, FileMetaData& LastSpotTable) {
+  mutex_.AssertHeld();
+  Log(options_.info_log,  "Compacted %d@%d + %d@%d files => %lld bytes",
+      compact->compaction->num_input_files(0),
+      compact->compaction->level(),
+      compact->compaction->num_input_real(),
+      compact->compaction->level() + 1,
+      static_cast<long long>(compact->total_bytes));
+
+  // Add compaction outputs
+  compact->compaction->AddInputDeletions(compact->compaction->edit());
+  const int level = compact->compaction->level();
+  for (size_t i = 0; i < compact->outputs.size(); i++) {
+    const CompactionState::Output& out = compact->outputs[i];
+    compact->compaction->edit()->AddFile(
+        level + 1,
+        out.number, out.file_size, out.smallest, out.largest);
+  }
+  LastSpotTable = compact->compaction->edit()->LastSpotTable();
+  Log(options_.info_log, "LastSpotTable's numner is: %lu and smallest key is: %lu",
+            LastSpotTable.number,
+            strtoul(LastSpotTable.smallest.user_key().ToString().substr(0,16).c_str(), NULL, 10));
+  return versions_->LogAndApply(compact->compaction->edit(), &mutex_);
+}
+
 Status DBImpl::InstallCompactionResultsSelfLevel(CompactionState* compact) {
   mutex_.AssertHeld();
-  Log(options_.info_log,  "Compacted %d@%d files => %lld bytes",
+  Log(options_.info_log,  "Self Compacted %d@%d files => %lld bytes",
       compact->compaction->num_input_files(0),
       compact->compaction->level(),
       static_cast<long long>(compact->total_bytes));
 
   // Add compaction outputs
-  compact->compaction->AddInputDeletions(compact->compaction->edit());
+  compact->compaction->AddInputDeletionsSelfLevel(compact->compaction->edit());
   const int level = compact->compaction->level();
   for (size_t i = 0; i < compact->outputs.size(); i++) {
     const CompactionState::Output& out = compact->outputs[i];
@@ -1081,7 +1070,7 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
 
       last_sequence_for_key = ikey.sequence;
     }
-#if 0
+  #if 0
     Log(options_.info_log,
         "  Compact: %s, seq %d, type: %d %d, drop: %d, is_base: %d, "
         "%d smallest_snapshot: %d",
@@ -1089,7 +1078,7 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
         (int)ikey.sequence, ikey.type, kTypeValue, drop,
         compact->compaction->IsBaseLevelForKey(ikey.user_key),
         (int)last_sequence_for_key, (int)compact->smallest_snapshot);
-#endif
+  #endif
 
     if (!drop) {
       // Open output file if necessary
@@ -1156,14 +1145,14 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   return status;
 }
 
-Status DBImpl::DoCompactionWorkSpot(CompactionState* compact) {
+Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfCompaction, FileMetaData& LastSpotTable) {
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
   Slice StartingKeyCurrentTable;
   Log(options_.info_log,  "SpotKV Compacting %d@%d + %d@%d files",
       compact->compaction->num_input_files(0),
       compact->compaction->level(),
-      compact->compaction->num_input_files(1),
+      compact->compaction->num_input_real(),
       compact->compaction->level() + 1);
 
   assert(versions_->NumLevelFiles(compact->compaction->level()) > 0);
@@ -1282,20 +1271,6 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact) {
     status = input->status();
   }
 
-  if (compact->compaction->SpotCompaction()) {
-    ParseInternalKey(StartingKeyCurrentTable, &ikey);
-    InternalKey jkey = compact->compaction->input(1, 
-                          compact->compaction->num_input_real())->smallest;
-    if (user_comparator()->Compare(ikey.user_key,
-                                    jkey.user_key()) <= 0) {
-      Log(options_.info_log,  "Compaction begins first %d from %d with non-decreasing.",
-          compact->compaction->num_input_real(),
-          compact->compaction->num_input_files(1));                            
-    } else {
-      //TODO:
-      //
-    }
-  }
   delete input;
   input = NULL;
 
@@ -1308,10 +1283,10 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact) {
     }
   }*/
   for (int i = 0; i < compact->compaction->num_input_files(0); i++) {
-      stats.bytes_read += compact->compaction->input(0, i)->file_size;
+    stats.bytes_read += compact->compaction->input(0, i)->file_size;
   }
   for (int i = 0; i < compact->compaction->num_input_real(); i++) {
-      stats.bytes_read += compact->compaction->inputReal(i)->file_size;
+    stats.bytes_read += compact->compaction->inputReal(i)->file_size;
   }
   for (size_t i = 0; i < compact->outputs.size(); i++) {
     stats.bytes_written += compact->outputs[i].file_size;
@@ -1321,23 +1296,42 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact) {
   stats_[compact->compaction->level() + 1].Add(stats);
 
   if (status.ok()) {
-    status = InstallCompactionResults(compact);
+    status = InstallCompactionResultsSpot(compact, LastSpotTable);   
   }
   if (!status.ok()) {
     RecordBackgroundError(status);
   }
+
   VersionSet::LevelSummaryStorage tmp;
   Log(options_.info_log,
       "compacted to: %s", versions_->LevelSummary(&tmp));
+
+  if (status.ok()) {
+    if (compact->compaction->SpotCompaction()) {
+      //ParseInternalKey(StartingKeyCurrentTable, &ikey);
+      InternalKey jkey = compact->compaction->input(1, 
+                            compact->compaction->num_input_real())->smallest;
+      if (user_comparator()->Compare(LastSpotTable.smallest.user_key(),
+                                      jkey.user_key()) <= 0) {
+        NeedSelfCompaction = false;                        
+      } else {
+        //TODO:
+        NeedSelfCompaction = true;
+        Log(options_.info_log,  
+            "LastSpotTable starts from: %lu and the first Un-compaction table starts from: %lu.",
+            strtoul(LastSpotTable.smallest.user_key().ToString().substr(0,16).c_str(), NULL, 10),
+            //strtoul(ikey.user_key.ToString().substr(0,16).c_str(), NULL, 10),
+            strtoul(jkey.user_key().ToString().substr(0,16).c_str(), NULL, 10));
+      }
+    }
+  }
+
   return status;
 }
 
-Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact){
+Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact) {
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
-
-  Compaction* c;
-  int level;
 
   Log(options_.info_log,  "Self Level Compacting %d@%d files",
       compact->compaction->num_input_files(0),
@@ -1354,8 +1348,9 @@ Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact){
 
   // Release mutex while we're actually doing the compaction work
   mutex_.Unlock();
-
-  Iterator* input = versions_->MakeInputIterator(compact->compaction);
+  
+  assert(compact->compaction->num_input_files(0) > 1);
+  Iterator* input = versions_->MakeInputIteratorSelfLevel(compact->compaction);
   input->SeekToFirst();
   Status status;
   ParsedInternalKey ikey;
@@ -1455,10 +1450,9 @@ Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact){
   for (size_t i = 0; i < compact->outputs.size(); i++) {
     stats.bytes_written += compact->outputs[i].file_size;
   }
-
+  
   mutex_.Lock();
   stats_[compact->compaction->level()].Add(stats);
-
   if (status.ok()) {
     status = InstallCompactionResultsSelfLevel(compact);
   }
@@ -1468,6 +1462,7 @@ Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact){
   VersionSet::LevelSummaryStorage tmp;
   Log(options_.info_log,
       "compacted to: %s", versions_->LevelSummary(&tmp));
+  
   return status;
 }
 
@@ -1744,7 +1739,7 @@ Status DBImpl::Get(const ReadOptions& options,
 
   bool have_stat_update = false;
   Version::GetStats stats;
-  uint64_t file_number(0); double begin,endopt;
+  uint64_t file_number(0);
   // Unlock while reading from files and memtables
   {
     mutex_.Unlock();
@@ -1760,25 +1755,33 @@ Status DBImpl::Get(const ReadOptions& options,
 
     } else if (cp_->lookUp(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
-        // have_stat_update = true;
+        /*if (!s.ok())
+          s = current->GetSpot(options, lkey, value, &stats);
+        */// have_stat_update = true;
         /* Log(options_.info_log, "From the Cache the key: %lu's value is: %s.", 
             strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
             (*value).substr(0, 8).c_str()); */
         // Done
-    } else {  
-      Cache::Handle* handle = NULL;
-      handle = cmc_->Lookup(key);
-      if (handle == NULL) {
-        s = current->Get(options, lkey, value, &stats);
-      } else {
-        *value = reinterpret_cast<char*>(cmc_->Value(handle));
-        //value.size()
-        s = Status::OK();
-      }
-      have_stat_update = true;
-      current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
-      
-      /* Original version:
+    } else {
+
+      #if 1
+        s = current->GetSpot(options, lkey, value, &stats);
+        //s = current->Get(options, lkey, value, &stats);
+        have_stat_update = true;
+      #else
+        Cache::Handle* handle = NULL;
+        handle = cmc_->Lookup(key);
+        if (handle == NULL) {
+          s = current->GetSpot(options, lkey, value, &stats);
+          have_stat_update = true;
+        } else {
+          *value = reinterpret_cast<char*>(cmc_->Value(handle));
+          s = Status::OK();
+        }
+        current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
+      #endif
+
+      /* before single-side compaction:
       s = current->Get(options, lkey, value, &stats);
       have_stat_update = true;
       current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);

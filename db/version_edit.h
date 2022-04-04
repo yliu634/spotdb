@@ -56,6 +56,10 @@ class VersionEdit {
     compact_pointers_.push_back(std::make_pair(level, key));
   }
 
+  FileMetaData LastSpotTable() {
+    return new_files_.back().second;
+  }
+
   // Add the specified file at the specified number.
   // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
   // REQUIRES: "smallest" and "largest" are smallest and largest keys in file

@@ -53,6 +53,7 @@ public:
         h += delta;
         if (Cnt_[j][h % w_] == 0) {
           Reset();
+          Cnt_[j][h % w_] = 1;
           break;  
         }
     }

@@ -73,9 +73,11 @@ class Version {
   };
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
-
+  Status GetSpot(const ReadOptions&, const LookupKey& key, std::string* val,
+             GetStats* stats);
   Status GetLudoCache(const ReadOptions&, const Options* options_tmp, const LookupKey& key, std::string* val,
              GetStats* stats, const uint64_t& file_ludo_number);
+             
   // Adds "stats" into the current state.  Returns true if a new
   // compaction may need to be triggered, false otherwise.
   // REQUIRES: lock is held
@@ -235,7 +237,7 @@ class VersionSet {
   // Otherwise returns a pointer to a heap-allocated object that
   // describes the compaction.  Caller should delete the result.
   Compaction* PickCompaction();
-
+  Compaction* PickSelfLevelCompaction(Compaction* cspot, FileMetaData* LastSpotTable);
   // Return a compaction object for compacting the range [begin,end] in
   // the specified level.  Returns NULL if there is nothing in that
   // level that overlaps the specified range.  Caller should delete
@@ -254,8 +256,10 @@ class VersionSet {
   Iterator* MakeInputIterator(Compaction* c);
 
   Iterator* MakeInputIteratorSpot(Compaction* c);
+  Iterator* MakeInputIteratorSelfLevel(Compaction* c);
   Iterator* MakeLudoCacheIterator(Compaction* c);
-  
+  bool FileMetaDataCmp (const FileMetaData** f1, const FileMetaData** f2);
+
   // Returns true iff some level needs a compaction.
   bool NeedsCompaction() const {
     Version* v = current_;
@@ -297,7 +301,8 @@ class VersionSet {
                  InternalKey* largest);
 
   void SetupOtherInputs(Compaction* c);
-
+  void SetupOtherInputsSpot(Compaction* c);
+  
   // Save current contents to *log
   Status WriteSnapshot(log::Writer* log);
 
@@ -363,7 +368,7 @@ class Compaction {
 
   // Add all inputs to this compaction as delete operations to *edit.
   void AddInputDeletions(VersionEdit* edit);
-
+  void AddInputDeletionsSelfLevel(VersionEdit* edit);
   // Returns true if the information we have available guarantees that
   // the compaction is producing data in "level+1" for which no data exists
   // in levels greater than "level+1".
