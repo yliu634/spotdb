@@ -279,9 +279,9 @@ Status Table::InternalLudoGet(const ReadOptions& options, const Slice& k,
     } else {
     #endif
       Iterator* block_iter = BlockReader(this, options, iiter->value());
-       Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
-             strtoul(k.ToString().substr(0,16).c_str(), NULL, 10), 
-             handle.offset());
+      Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
+            strtoul(k.ToString().substr(0,16).c_str(), NULL, 10), 
+            handle.offset());
       block_iter->Seek(k);
       if (block_iter->Valid()) {
         (*saver)(arg, block_iter->key(), block_iter->value());

@@ -1,0 +1,34 @@
+oks: 1000000, res_time: 44 s
+
+oks = 1000000
+Total time of insert: 44521749 us,  Per insert time: 44.5217 us
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        2      126         4        0       998
+  1      245      482        10     1035      1034
+  2      115      232        10     1341      1318
+  3      450      904        13     1166       991
+
+oks: 5000, res_time: 0 s
+
+Write numbers: 253, WRITE latency: 8.51383 us,  Write ops: 117456 ops/s
+Read numbers: 4747, READ latency: 2.48051 us,  Read ops: 403142 ops/s
+Scan numbers: 0, SCAN latency: -nan us,  Scan ops: -nan ops/s
+Zero-result lookup: 
+ Zero-result ops: 0, total time: 0 us
+ Zero-result throughput: -nan ops/s, latency: -nanus
+oks = 5000
+Total time of operate: 14085 us,  Per operate time: 2.817 us
+throughput: 354988 ops/s
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        2      126         4        0       998
+  1      245      482        10     1035      1034
+  2      115      232        10     1341      1318
+  3      450      904        13     1166       991
+
+
+# Transaction throughput (KTPS)
+350.754121

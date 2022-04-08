@@ -50,12 +50,12 @@ public:
     const uint32_t delta = (h >> 17) | (h << 15);  // Rotate right 17 bits
     for (size_t j = 0; j < d_; j ++) {
         Cnt_[j][h % w_] += c;
-        h += delta;
         if (Cnt_[j][h % w_] == 0) {
           Reset();
           Cnt_[j][h % w_] = 1;
           break;  
         }
+        h += delta;
     }
   }
 

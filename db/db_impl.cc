@@ -767,7 +767,6 @@ void DBImpl::BackgroundCompaction() {
       FileMetaData tmp;
       //Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
       //status = DoCompactionWork(compact);
-      auto tcp = compact->compaction->num_input_real();
       status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
       LastSpotTable = &tmp;
       //Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
@@ -1764,7 +1763,7 @@ Status DBImpl::Get(const ReadOptions& options,
         // Done
     } else {
 
-      #if 1
+      #if 0
         s = current->GetSpot(options, lkey, value, &stats);
         //s = current->Get(options, lkey, value, &stats);
         have_stat_update = true;

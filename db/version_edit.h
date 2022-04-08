@@ -55,7 +55,6 @@ class VersionEdit {
   void SetCompactPointer(int level, const InternalKey& key) {
     compact_pointers_.push_back(std::make_pair(level, key));
   }
-
   FileMetaData LastSpotTable() {
     return new_files_.back().second;
   }
