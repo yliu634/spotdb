@@ -3,14 +3,12 @@
 //  YCSB-C
 //
 
-#include "redis_db.h"
-
 #include <cstring>
+#include "redis_db.h"
 
 using namespace std;
 
 namespace ycsbc {
-
 int RedisDB::Read(const string &table, const string &key,
          const vector<string> *fields,
          vector<KVPair> &result) {

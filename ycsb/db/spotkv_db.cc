@@ -1,14 +1,16 @@
-#include "spotkv_db.h"
+#include <iostream>
 #include <cstring>
-#include"basic_config.h"
-#include<iostream>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <memory>
 #include <vector>
+#include <time.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <spotkv/cache.h>
-#include<time.h>
+
+#include "spotkv_db.h"
+#include "basic_config.h"
+
 using namespace std;
 
 namespace ycsbc {

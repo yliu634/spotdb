@@ -1,26 +1,25 @@
 #ifndef YCSB_C_ROCKSDB_H
 #define YCSB_C_ROCKSDB_H
 
-#include "core/db.h"
-#include "core/core_workload.h"
 #include "db_factory.h"
-#include "core/properties.h"
+#include "core/db.h"
 #include "core/utils.h"
+#include "core/properties.h"
+#include "core/core_workload.h"
 
 #include <iostream>
-#include <string>
+#include <cstring>
 #include <fstream>
 #include <rocksdb/db.h>
 #include <rocksdb/env.h>
+#include <rocksdb/cache.h>
 #include <rocksdb/status.h>
 #include <rocksdb/options.h>
-#include <rocksdb/filter_policy.h>
-#include <rocksdb/cache.h>
+#include <rocksdb/write_batch.h>
 #include <rocksdb/filter_policy.h>
 #include <rocksdb/merge_operator.h>
-#include <rocksdb/status.h>
 #include <rocksdb/utilities/options_util.h>
-#include <rocksdb/write_batch.h>
+
 
 using std::cout;
 using std::endl;

@@ -2,15 +2,16 @@
 #define BASIC_CONFIG_H_
 
 #include <string>
+#include <cstddef>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <boost/smart_ptr.hpp>
+#include <boost/concept_check.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-#include <boost/concept_check.hpp>
-#include <boost/smart_ptr.hpp>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include<cstddef>
-typedef  unsigned long long  ULL;
+
+typedef unsigned long long ULL;
 
 template<typename T>
 class Basic_ConfigMod {

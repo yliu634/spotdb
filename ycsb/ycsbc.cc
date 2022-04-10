@@ -94,7 +94,7 @@ int main(const int argc, const char *argv[]) {
   
   utils::Properties props;
   ycsbc::WallTimer loadRunTimer,totalTimer;
-  double loadTime;
+  //double loadTime;
   totalTimer.Start();
   string file_name = ParseCommandLine(argc, argv, props);
 

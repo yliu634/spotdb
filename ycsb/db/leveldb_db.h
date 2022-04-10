@@ -1,14 +1,16 @@
 #ifndef YCSB_C_LEVELDB_H
 #define YCSB_C_LEVELDB_H
-#include "core/db.h"
+
 #include <iostream>
 #include <string>
-#include "core/properties.h"
+#include <fstream>
 #include <leveldb/db.h>
 #include <leveldb/env.h>
-#include<leveldb/filter_policy.h>
-//#include<leveldb/statistics.h>
-#include <fstream>
+#include <leveldb/filter_policy.h>
+
+#include "core/db.h"
+#include "core/properties.h"
+
 using std::cout;
 using std::endl;
 

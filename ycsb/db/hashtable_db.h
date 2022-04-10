@@ -9,10 +9,10 @@
 #ifndef YCSB_C_HASHTABLE_DB_H_
 #define YCSB_C_HASHTABLE_DB_H_
 
-#include "core/db.h"
-
 #include <string>
 #include <vector>
+
+#include "core/db.h"
 #include "lib/string_hashtable.h"
 
 namespace ycsbc {

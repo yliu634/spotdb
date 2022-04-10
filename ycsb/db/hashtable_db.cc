@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Jinglei Ren <jinglei@ren.systems>.
 //
 
-#include "db/hashtable_db.h"
-
 #include <string>
 #include <vector>
+
+#include "db/hashtable_db.h"
 #include "lib/string_hashtable.h"
 
 using std::string;

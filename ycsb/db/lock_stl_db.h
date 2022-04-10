@@ -9,14 +9,13 @@
 #ifndef YCSB_C_LOCK_STL_DB_H_
 #define YCSB_C_LOCK_STL_DB_H_
 
-#include "db/hashtable_db.h"
-
 #include <string>
 #include <vector>
+
+#include "db/hashtable_db.h"
 #include "lib/lock_stl_hashtable.h"
 
 namespace ycsbc {
-
 class LockStlDB : public HashtableDB {
  public:
   LockStlDB() : HashtableDB(

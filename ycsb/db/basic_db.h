@@ -9,11 +9,11 @@
 #ifndef YCSB_C_BASIC_DB_H_
 #define YCSB_C_BASIC_DB_H_
 
-#include "core/db.h"
-
 #include <iostream>
 #include <string>
 #include <mutex>
+
+#include "core/db.h"
 #include "core/properties.h"
 
 using std::cout;
@@ -33,15 +33,7 @@ class BasicDB : public DB {
            std::vector<KVPair> &result) {
     std::lock_guard<std::mutex> lock(mutex_);
     cout << "READ "  << key << endl;
-    /* if (fields) { */
-    /*   cout << " [ "; */
-    /*   for (auto f : *fields) { */
-    /*     cout << f << ' '; */
-    /*   } */
-    /*   cout << ']' << endl; */
-    /* } else { */
-    /*   cout  << " < all fields >" << endl; */
-    /* } */
+    
     return 0;
   }
 

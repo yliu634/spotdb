@@ -9,10 +9,10 @@
 #ifndef YCSB_C_TBB_RAND_DB_H_
 #define YCSB_C_TBB_RAND_DB_H_
 
-#include "db/hashtable_db.h"
-
 #include <string>
 #include <vector>
+
+#include "db/hashtable_db.h"
 #include "lib/tbb_rand_hashtable.h"
 
 namespace ycsbc {

@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Jinglei Ren <jinglei@ren.systems>.
 //
 #include <string>
-#include "db/db_factory.h"
+
 #include "db/basic_db.h"
-#include "db/lock_stl_db.h"
 #include "db/redis_db.h"
+#include "db/db_factory.h"
+#include "db/lock_stl_db.h"
 #include "db/tbb_rand_db.h"
 #include "db/tbb_scan_db.h"
 #include "db/leveldb_db.h"
