@@ -1766,7 +1766,7 @@ Status DBImpl::Get(const ReadOptions& options,
       #if 0
         s = current->GetSpot(options, lkey, value, &stats);
         //s = current->Get(options, lkey, value, &stats);
-        have_stat_update = true;
+        //have_stat_update = true;
       #else
         Cache::Handle* handle = NULL;
         handle = cmc_->Lookup(key);

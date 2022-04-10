@@ -5,8 +5,8 @@ function __runGLSM(){
 #rm -rf ../persitentIndexDir/hashTableStore.txt
 rm -rf $dbfilename/*
 
-./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > reslevel.txt
-./ycsbc -db spotkv -threads 1 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > respotkv.txt
+./ycsbc -db leveldb -threads 2 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > reslevel.txt
+./ycsbc -db spotkv -threads 2 -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false > respotkv.txt
 
 #./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad false > leveldb-load-100G-read-10M.txt
 #./ycsbc -db leveldb -threads 1 -P $workload_name1 -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad true > leveldb-load-100G-scan-1M.txt

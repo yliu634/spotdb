@@ -1,34 +1,65 @@
-oks: 1000000, res_time: 16 s
+oks: 500000, res_time: 16 s
 
-oks = 1000000
-Total time of insert: 16655488 us,  Per insert time: 16.6555 us
+oks = 500000
+Total time of insert: 16248980 us,  Per insert time: 32.498 us
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
   0        2      126         3        0       883
-  1      252      501         6      776       775
-  2      110      221         5      623       686
+  1      247      491         6      776       775
+  2      115      231         5      645       708
   3       48       97         0        0         0
 
-oks: 5000, res_time: 0 s
+oks: 500000, res_time: 16 s
 
-Write numbers: 253, WRITE latency: 8.69565 us,  Write ops: 115000 ops/s
-Read numbers: 4747, READ latency: 2.47293 us,  Read ops: 404379 ops/s
+oks = 500000
+Total time of insert: 16249929 us,  Per insert time: 32.4999 us
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        2      126         3        0       883
+  1      247      491         6      776       775
+  2      115      231         5      645       708
+  3       48       97         0        0         0
+
+oks: 2500, res_time: 0 s
+
+Write numbers: 120, WRITE latency: 10.15 us,  Write ops: 98522.2 ops/s
+Read numbers: 2380, READ latency: 2.68992 us,  Read ops: 371759 ops/s
 Scan numbers: 0, SCAN latency: -nan us,  Scan ops: -nan ops/s
 Zero-result lookup: 
  Zero-result ops: 0, total time: 0 us
  Zero-result throughput: -nan ops/s, latency: -nanus
-oks = 5000
-Total time of operate: 14100 us,  Per operate time: 2.82 us
-throughput: 354610 ops/s
+oks = 2500
+Total time of operate: 7701 us,  Per operate time: 3.0804 us
+throughput: 324633 ops/s
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
   0        2      126         3        0       883
-  1      252      501         6      776       775
-  2      110      221         5      623       686
+  1      247      491         6      776       775
+  2      115      231         5      645       708
+  3       48       97         0        0         0
+
+oks: 2500, res_time: 0 s
+
+Write numbers: 118, WRITE latency: 10.7712 us,  Write ops: 92840.3 ops/s
+Read numbers: 2382, READ latency: 2.81612 us,  Read ops: 355098 ops/s
+Scan numbers: 0, SCAN latency: -nan us,  Scan ops: -nan ops/s
+Zero-result lookup: 
+ Zero-result ops: 0, total time: 0 us
+ Zero-result throughput: -nan ops/s, latency: -nanus
+oks = 2500
+Total time of operate: 8073 us,  Per operate time: 3.2292 us
+throughput: 309674 ops/s
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        2      126         3        0       883
+  1      247      491         6      776       775
+  2      115      231         5      645       708
   3       48       97         0        0         0
 
 
 # Transaction throughput (KTPS)
-352.137474
+610.948192

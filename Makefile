@@ -149,6 +149,7 @@ clean:
 	-rm -rf out-static out-shared out-ios-x86 out-ios-arm out-ios-universal
 	-rm -f build_config.mk
 	-rm -rf ios-x86 ios-arm
+	-rm -rf temp/*
 
 $(STATIC_OUTDIR):
 	mkdir $@

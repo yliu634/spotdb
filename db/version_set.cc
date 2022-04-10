@@ -1600,6 +1600,33 @@ Compaction* VersionSet::PickCompaction() {
     c = new Compaction(options_, level);
 
     // Pick the first file that comes after compact_pointer_[level]
+    FileMetaData* t = nullptr;
+
+    #if 0
+    for (size_t i = 0; i < current_->files_[level].size(); i++) {
+      FileMetaData* f = current_->files_[level][i];
+      if (compact_pointer_[level].empty() ||
+          icmp_.Compare(f->largest.Encode(), compact_pointer_[level]) > 0) {
+        c->inputs_[0].push_back(f);
+        if (i + 1 == current_->files_[level].size())
+          break;
+
+        t = c->inputs_[0][0];
+        size_t j = i + 1;
+        while (j < current_->files_[level].size()) {
+          //for (size_t j = i + 1; j < current_->files_[level].size(); j++) {
+          FileMetaData* f = current_->files_[level][j];
+          if (icmp_.Compare(t->largest.Encode(), f->smallest.Encode()) > 0) {
+            c->inputs_[0].push_back(f);
+          } else {
+            break;
+          }
+          j ++;
+        }
+        break;
+      }
+    }
+    #else
     for (size_t i = 0; i < current_->files_[level].size(); i++) {
       FileMetaData* f = current_->files_[level][i];
       if (compact_pointer_[level].empty() ||
@@ -1608,6 +1635,8 @@ Compaction* VersionSet::PickCompaction() {
         break;
       }
     }
+    #endif
+
     if (c->inputs_[0].empty()) {
       // Wrap-around to the beginning of the key space
       c->inputs_[0].push_back(current_->files_[level][0]);
@@ -1632,7 +1661,11 @@ Compaction* VersionSet::PickCompaction() {
     // which will include the picked file. 
     current_->GetOverlappingInputs(0, &smallest, &largest, &c->inputs_[0]);
     assert(!c->inputs_[0].empty());
-  }
+  } /*else {
+    if (!c->inputs_[0].empty()) {
+      FileMetaData* f = c->inputs_[0][0];
+    } 
+  }*/
 
   //SetupOtherInputs(c);
   SetupOtherInputsSpot(c);
@@ -1813,7 +1846,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.6),
+      WAdeduction_(0.8),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
