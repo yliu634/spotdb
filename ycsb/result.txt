@@ -1,0 +1,23 @@
+
+************* LevelDB *************
+************* RocksDB *************
+oks: 1000000, res_time: 7 s
+
+oks = 1000000
+Total time of insert: 7422110 us,  Per insert time: 7.42211 us
+oks: 5000, res_time: 0 s
+
+Write numbers: 253, WRITE latency: 9.88933 us,  Write ops: 101119 ops/s
+Read numbers: 4747, READ latency: 4.03139 us,  Read ops: 248054 ops/s
+Scan numbers: 0, SCAN latency: -nan us,  Scan ops: -nan ops/s
+Zero-result lookup: 
+ Zero-result ops: 0, total time: 0 us
+ Zero-result throughput: -nan ops/s, latency: -nanus
+oks = 5000
+Total time of operate: 21832 us,  Per operate time: 4.3664 us
+throughput: 229022 ops/s
+
+# Transaction throughput (KTPS)
+227.438137
+************** UniKV **************
+************* SpotKV **************

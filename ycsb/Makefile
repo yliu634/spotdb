@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-std=c++11  -Wall -pthread -I./ -g -lrt
-LDFLAGS= -ltcmalloc -lpthread -ltbb -lhiredis  -lboost_system -lboost_thread -lrt -lleveldb -lspotkv#-lunikv  #-lpebblesdb -lboost_thread -lleveldb -lpebblesdb -lhyperleveldb  -lleveldb
+LDFLAGS= -ltcmalloc -lpthread -ltbb -lhiredis  -lboost_system -lboost_thread -lrt -lleveldb -lspotkv -lrocksdb  #-lpebblesdb -lboost_thread -lleveldb -lpebblesdb -lhyperleveldb  -lleveldb
 SUBDIRS=core db redis
 SUBSRCS=$(wildcard core/*.cc) $(wildcard db/*.cc)
 OBJECTS=$(SUBSRCS:.cc=.o)
