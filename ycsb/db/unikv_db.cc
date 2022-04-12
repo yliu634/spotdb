@@ -53,16 +53,16 @@ UniKVDB::UniKVDB(const char* dbfilename,const char* configPath)
     //options.opEp_.seek_compaction_ = seek_compaction_flag;
     options.block_cache = leveldb::NewLRUCache(block_cache_size);
     //options.opEp_.size_ratio = size_ratio;
-    fprintf(stderr,"block_cache_size %lu, max_open_files:%d,  size_ratio: %d \n",options.block_cache,options.max_open_files,size_ratio);
-    fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
+    //fprintf(stderr,"block_cache_size %lu, max_open_files:%d,  size_ratio: %d \n",block_cache_size,options.max_open_files,size_ratio);
+    //fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
     //if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = leveldb::CreateDBStatistics();
    // }
     leveldb::Status status = leveldb::DB::Open(options,dbfilename, &db_);
-    if(!status.ok()){
-	fprintf(stderr,"can't open leveldb\n");
-	cerr<<status.ToString()<<endl;
-	exit(0);
+        if(!status.ok()){
+        fprintf(stderr,"can't open leveldb\n");
+        cerr<<status.ToString()<<endl;
+        exit(0);
     }
 }
 bool  UniKVDB::hasRead = false;

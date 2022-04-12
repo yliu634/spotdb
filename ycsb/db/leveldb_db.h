@@ -34,7 +34,7 @@ public :
 
   int Delete(const std::string &table, const std::string &key);
   void openStatistics();
-  void printAccessFreq();
+  //void printAccessFreq();
   virtual ~LevelDB();
   virtual void doSomeThing(const char *thing_str="adjust_filter");
   virtual void analysisTableKey();

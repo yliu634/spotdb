@@ -53,7 +53,7 @@ private:
     int _bloom_bits;
     bool _open_log;
     int _max_file_size;
-    int _bloom_type;  //0 means origin bloom filter, 1 means  hierarchical bloom filter, 2 means multi_bloom_filter
+    int _bloom_type;  //0 means origin bloom filter
     bool _compression_flag;
     bool _directIO_flag;
     bool _seek_compaction_flag;
@@ -63,46 +63,6 @@ private:
     size_t _blockCacheSize;
     size_t _MemTableSize;
     int _sizeRatio;
-public:
-    std::string getBloom_filename();
-    int getMax_open_files();
-    int getBloomType();
-    int getBloom_bits();
-    bool getOpen_log();
-    int getMax_file_size();
-    void setConfigPath(const char*key);
-    bool getCompression_flag();
-    bool getDirectIOFlag();
-    bool getSeekCompactionFlag();
-    bool getStatisticsOpen();
-    std::string getBitsArrayFilename();
-    int getLRUsNum();
-    double getFiltersCapacityRatio();
-    size_t getBlockCacheSize();
-    int getSizeRatio();
-    size_t getMemTableSize();
-};
-
-class PebblesDB_ConfigMod:public Basic_ConfigMod<PebblesDB_ConfigMod>{
-private:
-    friend class Basic_ConfigMod<PebblesDB_ConfigMod>;
-    std::string _bloom_filename;
-    std::string _bloom_bits_array_filename;
-    int _max_open_files;
-    bool _hierarchical_bloom_flag;
-    int _bloom_bits;
-    bool _open_log;
-    int _max_file_size;
-    int _bloom_type;  //0 means origin bloom filter, 1 means  hierarchical bloom filter, 2 means multi_bloom_filter
-    bool _compression_flag;
-    bool _directIO_flag;
-    bool _seek_compaction_flag;
-    bool _statistics_open;
-    int _lrus_num;
-    double _filters_capacity_ratio;
-    size_t _blockCacheSize;
-    int _sizeRatio;
-    size_t _MemTableSize;
 public:
     std::string getBloom_filename();
     int getMax_open_files();
@@ -133,7 +93,7 @@ private:
     int _bloom_bits;
     bool _open_log;
     int _max_file_size;
-    int _bloom_type;  //0 means origin bloom filter, 1 means  hierarchical bloom filter, 2 means multi_bloom_filter
+    int _bloom_type;  //0 means origin bloom filter
     bool _compression_flag;
     bool _directIO_flag;
     bool _seek_compaction_flag;

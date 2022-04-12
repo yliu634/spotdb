@@ -21,15 +21,11 @@ RocksDB::RocksDB(const char* dbfilename,const char* configPath)
     rocksdb::Options options;
     LevelDB_ConfigMod::getInstance().setConfigPath(configPath);//basic_config.c
     std::string bloom_filename;
-    int bloom_bits = LevelDB_ConfigMod::getInstance().getBloom_bits();;
-    int max_open_files = LevelDB_ConfigMod::getInstance().getMax_open_files();
-    int max_File_sizes = LevelDB_ConfigMod::getInstance().getMax_file_size();
-    int bloom_type = LevelDB_ConfigMod::getInstance().getBloomType();
     bool seek_compaction_flag = LevelDB_ConfigMod::getInstance().getSeekCompactionFlag();
     size_t block_cache_size = LevelDB_ConfigMod::getInstance().getBlockCacheSize();
     size_t memTableSize=LevelDB_ConfigMod::getInstance().getMemTableSize();
     int size_ratio = LevelDB_ConfigMod::getInstance().getSizeRatio();
-  
+    int bloom_bits = 10;
     bool compression_Open = LevelDB_ConfigMod::getInstance().getCompression_flag();
     bool directIO_flag = LevelDB_ConfigMod::getInstance().getDirectIOFlag();
     /*
@@ -43,14 +39,17 @@ RocksDB::RocksDB(const char* dbfilename,const char* configPath)
     options.create_if_missing = true;
     options.compression = compression_Open?
         rocksdb::CompressionType::kSnappyCompression:rocksdb::CompressionType::kNoCompression;  //compression is disabled.
+    options.target_file_size_base = 2097152; //2M
+    options.max_open_files = 1000;
+    
+    options.write_buffer_size = 67108864;//64M
+    options.level0_file_num_compaction_trigger = 5;
+    //options.bloom_bits = 10;
+    rocksdb::BlockBasedTableOptions table_options;
+    table_options.filter_policy.reset(rocksdb::NewBloomFilterPolicy(10, false));
+    options.table_factory.reset(
+      rocksdb::NewBlockBasedTableFactory(table_options));
 
-    options.write_buffer_size=memTableSize;//67108864;8388608
-    //options.block_size=4096;
-    //options.max_file_size = max_File_sizes;
-    options.max_open_files = max_open_files;
-    //options.opEp_.seek_compaction_ = seek_compaction_flag;
-    //options.block_cache = rocksdb::NewLRUCache(block_cache_size);
-    //options.opEp_.size_ratio = size_ratio;
     fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
     //if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = rocksdb::CreateDBStatistics();
@@ -70,7 +69,7 @@ int RocksDB::Read(const string& table, const string& key,
     //rocksdb::ReadOptions readop;
     rocksdb::Status s = db_->Get(rocksdb::ReadOptions(), key, &value);
     if(s.IsNotFound()){
-        // fprintf(stderr,"not found!\n");
+        // fprintf(stderr,"Not found!\n");
         return DB::kErrorNoData;
     }
     if(!s.ok()){
@@ -84,7 +83,6 @@ int RocksDB::Read(const string& table, const string& key,
 int RocksDB::Insert(const string& table, const string& key, vector< DB::KVPair >& values)
 {
     rocksdb::Status s;
-    //int count = 0;
     for(KVPair &p : values){
         //clock_t start_time=clock();
         s = db_->Put(rocksdb::WriteOptions(), key, p.second);
@@ -97,10 +95,6 @@ int RocksDB::Insert(const string& table, const string& key, vector< DB::KVPair >
             exit(0);
         }
     }
-    /*if(count != 1){
-	  fprintf(stderr,"insert error\n");
-	  exit(0);
-    }*/
     return DB::kOK;
 }
 
@@ -126,7 +120,7 @@ int RocksDB::Scan(const string& table, const string& key, int len, const vector<
         //int num_next = len;
         if (iter->Valid() && iter->key() == key) {	   
             //fprintf(stderr,"after iter->Seek(key)!\n"); 
-            for (int j = 0; iter->Valid() && j < len; j++) {
+            for (int j = 0; iter->Valid() && j < len; j ++) {
                 iter->Next();
             // value=iter->value();
             // scanValue.push_back(iter->value());
