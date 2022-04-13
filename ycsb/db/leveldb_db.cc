@@ -25,11 +25,9 @@ LevelDB::LevelDB(const char* dbfilename,const char* configPath) {
     int max_open_files = LevelDB_ConfigMod::getInstance().getMax_open_files();
     size_t memTableSize=LevelDB_ConfigMod::getInstance().getMemTableSize();
     int bloom_type = LevelDB_ConfigMod::getInstance().getBloomType();
-    bool seek_compaction_flag = LevelDB_ConfigMod::getInstance().getSeekCompactionFlag();
     size_t block_cache_size = LevelDB_ConfigMod::getInstance().getBlockCacheSize();
     //int size_ratio = LevelDB_ConfigMod::getInstance().getSizeRatio();
     bool compression_Open = LevelDB_ConfigMod::getInstance().getCompression_flag();
-    bool directIO_flag = LevelDB_ConfigMod::getInstance().getDirectIOFlag();
     
     if (bloom_type == 1) {
         } else if (bloom_type == 0){
@@ -51,7 +49,7 @@ LevelDB::LevelDB(const char* dbfilename,const char* configPath) {
     // options.opEp_.size_ratio = size_ratio;
     fprintf(stderr, "********* LevelDB ********\n");
     // fprintf(stderr,"block_cache_size %lu, max_open_files:%d",options.block_cache, options.max_open_files);
-    fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
+    // fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
     // if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = leveldb::CreateDBStatistics();
     // }

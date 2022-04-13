@@ -20,38 +20,29 @@ RocksDB::RocksDB(const char* dbfilename,const char* configPath)
 {
     rocksdb::Options options;
     LevelDB_ConfigMod::getInstance().setConfigPath(configPath);//basic_config.c
-    std::string bloom_filename;
-    bool seek_compaction_flag = LevelDB_ConfigMod::getInstance().getSeekCompactionFlag();
-    size_t block_cache_size = LevelDB_ConfigMod::getInstance().getBlockCacheSize();
-    size_t memTableSize=LevelDB_ConfigMod::getInstance().getMemTableSize();
-    int size_ratio = LevelDB_ConfigMod::getInstance().getSizeRatio();
+    
     int bloom_bits = 10;
+    int cache_size = 8388608;
     bool compression_Open = LevelDB_ConfigMod::getInstance().getCompression_flag();
-    bool directIO_flag = LevelDB_ConfigMod::getInstance().getDirectIOFlag();
-    /*
-    if(bloom_type == 1){
-    }else if(bloom_type == 0){
-	    options.filter_policy = rocksdb::NewBloomFilterPolicy(bloom_bits);
-    }else if(bloom_type == 2){
-    }else{
-	    fprintf(stderr,"Wrong filter type!\n");
-    }*/
+    
     options.create_if_missing = true;
     options.compression = compression_Open?
         rocksdb::CompressionType::kSnappyCompression:rocksdb::CompressionType::kNoCompression;  //compression is disabled.
     options.target_file_size_base = 2097152; //2M
+    options.target_file_size_multiplier = 10;
     options.max_open_files = 1000;
-    
     options.write_buffer_size = 67108864;//64M
     options.level0_file_num_compaction_trigger = 5;
-    //options.bloom_bits = 10;
+    
     rocksdb::BlockBasedTableOptions table_options;
-    table_options.filter_policy.reset(rocksdb::NewBloomFilterPolicy(10, false));
+    table_options.filter_policy.reset(rocksdb::NewBloomFilterPolicy(bloom_bits, false));
+
+    table_options.block_cache = rocksdb::NewLRUCache(cache_size);
     options.table_factory.reset(
       rocksdb::NewBlockBasedTableFactory(table_options));
 
-    fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
-    //if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
+    fprintf(stderr, "********* RocksDB **********");
+    // if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = rocksdb::CreateDBStatistics();
     // }
     rocksdb::Status s = rocksdb::DB::Open(options,dbfilename, &db_);

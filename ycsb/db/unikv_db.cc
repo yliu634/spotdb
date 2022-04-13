@@ -225,7 +225,7 @@ void UniKVDB::doSomeThing(const char* thing_str)
     cout<<stat_str<<endl;*/
   }
 
-  //////////////////
+  /*
   cout<<"writeDataSize: "<<db_->writeDataSize<<endl;
   cout<<"writeDataSizeActual: "<<db_->writeDataSizeActual<<endl;
   cout<<"readDataSize: "<<db_->readDataSize<<endl;
@@ -241,7 +241,7 @@ void UniKVDB::doSomeThing(const char* thing_str)
   //cout<<" db_->reduceIOInComp: "<< db_->reduceIOInComp<<endl;
   //cout<<" db_->totalIOInComp: "<< db_->totalIOInComp<<endl;
   //cout<<" db_->totalDropKeyN: "<< db_->totalDropKeyN<<endl;
-  //////////////////
+  //////////////////*/
 }
 
 void UniKVDB::openStatistics(){
