@@ -1359,16 +1359,16 @@ int VersionSet::NumLevelFiles(int level) const {
 
 const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
   // Update code if kNumLevels changes
-  assert(config::kNumLevels == 7);
+  //assert(config::kNumLevels == 7);
   snprintf(scratch->buffer, sizeof(scratch->buffer),
            "files[ %d %d %d %d %d %d %d ]",
            int(current_->files_[0].size()),
            int(current_->files_[1].size()),
-           int(current_->files_[2].size()),
+           int(current_->files_[2].size()));/*
            int(current_->files_[3].size()),
            int(current_->files_[4].size()),
            int(current_->files_[5].size()),
-           int(current_->files_[6].size()));
+           int(current_->files_[6].size()));*/
   return scratch->buffer;
 }
 
@@ -1846,7 +1846,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.6),
+      WAdeduction_(0.5),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
@@ -1953,8 +1953,9 @@ void Compaction::UpdateInputReal() {
       tmp = (int)(ceil(tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { SpotCompaction_ = true; }
     }
-    inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
+    //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }
+  inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
 }
 
 }  // namespace leveldb

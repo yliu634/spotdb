@@ -23,8 +23,8 @@ On Ubuntu 14.04 LTS or above, install
 * Snappy: libsnappy-dev
 
 `$ sudo apt-get update`  
-`$ sudo apt-get install g++ cmake clang libboost-all-dev libsnappy-dev libtbb-dev libhiredis-dev`
-`$ sudo apt-get install -y ceph librados-dev maven mlocate python3-pip google-perftools libgoogle-perftools-dev cmake build-essential gdb libssl-dev pkgconf tmux clang liblua5.3-dev libboost-all-dev openssl` 
+`$ sudo apt-get install g++ cmake clang libboost-all-dev libsnappy-dev libtbb-dev libhiredis-dev`  
+`$ sudo apt-get install -y ceph librados-dev maven mlocate python3-pip google-perftools libgoogle-perftools-dev cmake build-essential gdb libssl-dev pkgconf tmux clang liblua5.3-dev libboost-all-dev openssl libgflags-dev`  
 
 Getting the source code of SpotKV  
 `$ git clone https://github.com/yliu634/spotdb.git`
