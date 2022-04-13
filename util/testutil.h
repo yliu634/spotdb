@@ -9,7 +9,7 @@
 #include "spotkv/slice.h"
 #include "util/random.h"
 
-namespace leveldb {
+namespace spotkv {
 namespace test {
 
 // Store in *dst a random string of length "len" and return a Slice that
@@ -58,6 +58,6 @@ class ErrorEnv : public EnvWrapper {
 };
 
 }  // namespace test
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_UTIL_TESTUTIL_H_

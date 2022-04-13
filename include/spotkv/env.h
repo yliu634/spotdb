@@ -20,7 +20,7 @@
 #include "spotkv/status.h"
 #include "spotkv/threadpool.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class FileLock;
 class Logger;
@@ -379,6 +379,6 @@ class EnvWrapper : public Env {
   Env* target_;
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_ENV_H_

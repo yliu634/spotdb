@@ -36,7 +36,7 @@
 #include "ludo/cuckoo_ht.h"
 #include "ludo/count_min.h"
 
-namespace leveldb {
+namespace spotkv {
 
 const int kNumNonTableCacheFiles = 10;
 
@@ -2213,4 +2213,4 @@ Status DestroyDB(const std::string& dbname, const Options& options) {
   return result;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

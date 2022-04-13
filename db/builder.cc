@@ -12,7 +12,7 @@
 #include "spotkv/env.h"
 #include "spotkv/iterator.h"
 
-namespace leveldb {
+namespace spotkv {
 
 Status BuildTable(const std::string& dbname,
                   Env* env,
@@ -168,4 +168,4 @@ Status BuildLudoTable(const std::string& dbname,
   return s;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

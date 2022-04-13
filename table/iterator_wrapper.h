@@ -8,7 +8,7 @@
 #include "spotkv/iterator.h"
 #include "spotkv/slice.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // A internal wrapper class with an interface similar to Iterator that
 // caches the valid() and key() results for an underlying iterator.
@@ -61,6 +61,6 @@ class IteratorWrapper {
   Slice key_;
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_

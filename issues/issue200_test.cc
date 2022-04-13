@@ -9,7 +9,7 @@
 #include "spotkv/db.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Issue200 { };
 
@@ -52,8 +52,8 @@ TEST(Issue200, Test) {
   DestroyDB(dbpath, options);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

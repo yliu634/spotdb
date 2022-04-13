@@ -24,7 +24,7 @@
 
 #endif  // defined(LEVELDB_PLATFORM_POSIX_SSE)
 
-namespace leveldb {
+namespace spotkv {
 namespace port {
 
 #if defined(LEVELDB_PLATFORM_POSIX_SSE)
@@ -126,4 +126,4 @@ uint32_t AcceleratedCRC32C(uint32_t crc, const char* buf, size_t size) {
 }
 
 }  // namespace port
-}  // namespace leveldb
+}  // namespace spotkv

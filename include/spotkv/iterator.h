@@ -18,7 +18,7 @@
 #include "spotkv/slice.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Iterator {
  public:
@@ -95,6 +95,6 @@ extern Iterator* NewEmptyIterator();
 // Return an empty iterator with the specified status.
 extern Iterator* NewErrorIterator(const Status& status);
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_ITERATOR_H_

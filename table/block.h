@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "spotkv/iterator.h"
 
-namespace leveldb {
+namespace spotkv {
 
 struct BlockContents;
 class Comparator;
@@ -39,6 +39,6 @@ class Block {
   class Iter;
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_TABLE_BLOCK_H_

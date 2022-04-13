@@ -152,8 +152,8 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         exit(0);
       }
       input.close();
-      props.SetProperty(string("recordcount"), string("3000000"));
-      props.SetProperty(string("operationcount"), string("0"));
+      props.SetProperty(string("recordcount"), string("1000000"));
+      props.SetProperty(string("operationcount"), string("50000"));
       argindex++;
     } else if (strcmp(argv[argindex], "-dbfilename") == 0) {
         argindex++;

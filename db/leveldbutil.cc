@@ -7,7 +7,7 @@
 #include "spotkv/env.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 namespace {
 
 class StdoutPrinter : public WritableFile {
@@ -35,7 +35,7 @@ bool HandleDumpCommand(Env* env, char** files, int num) {
 }
 
 }  // namespace
-}  // namespace leveldb
+}  // namespace spotkv
 
 static void Usage() {
   fprintf(
@@ -46,7 +46,7 @@ static void Usage() {
 }
 
 int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
+  spotkv::Env* env = spotkv::Env::Default();
   bool ok = true;
   if (argc < 2) {
     Usage();
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
   } else {
     std::string command = argv[1];
     if (command == "dump") {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+      ok = spotkv::HandleDumpCommand(env, argv+2, argc-2);
     } else {
       Usage();
       ok = false;

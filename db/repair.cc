@@ -38,7 +38,7 @@
 #include "spotkv/db.h"
 #include "spotkv/env.h"
 
-namespace leveldb {
+namespace spotkv {
 
 namespace {
 
@@ -458,4 +458,4 @@ Status RepairDB(const std::string& dbname, const Options& options) {
   return repairer.Run();
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

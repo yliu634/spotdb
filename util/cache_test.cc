@@ -8,7 +8,7 @@
 #include "util/coding.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // Conversions between numeric keys/values and the types expected by Cache.
 static std::string EncodeKey(int k) {
@@ -219,8 +219,8 @@ TEST(CacheTest, Prune) {
   ASSERT_EQ(-1, Lookup(2));
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

@@ -21,7 +21,7 @@
 #include "db/write_batch_internal.h"
 #include "util/coding.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // WriteBatch header has an 8-byte sequence number followed by a 4-byte count.
 static const size_t kHeader = 12;
@@ -144,4 +144,4 @@ void WriteBatchInternal::Append(WriteBatch* dst, const WriteBatch* src) {
   dst->rep_.append(src->rep_.data() + kHeader, src->rep_.size() - kHeader);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

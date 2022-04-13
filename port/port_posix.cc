@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-namespace leveldb {
+namespace spotkv {
 namespace port {
 
 static void PthreadCall(const char* label, int result) {
@@ -50,4 +50,4 @@ void InitOnce(OnceType* once, void (*initializer)()) {
 }
 
 }  // namespace port
-}  // namespace leveldb
+}  // namespace spotkv

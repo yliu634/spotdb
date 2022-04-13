@@ -10,7 +10,7 @@
 #include "util/logging.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static std::string PrintContents(WriteBatch* b) {
   InternalKeyComparator cmp(BytewiseComparator());
@@ -113,8 +113,8 @@ TEST(WriteBatchTest, Append) {
             PrintContents(&b1));
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

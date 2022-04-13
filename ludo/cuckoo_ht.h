@@ -39,7 +39,7 @@
 // "slots" for key/value entries).  Uses breadth-first-search to find
 // a good cuckoo path with less data movement (see
 // http://www.cs.cmu.edu/~dga/papers/cuckoo-eurosys14.pdf )
-namespace leveldb {
+namespace spotkv {
 template<class Key, class Value, int kCandidateBuckets = 2, int kSlotsPerBucket = 4>
 class CuckooHashTable {
   // Utility function to compute (x * y) >> 64, or "multiply high".

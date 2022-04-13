@@ -43,7 +43,7 @@
 #define ARCH_CPU_MIPS_FAMILY 1
 #endif
 
-namespace leveldb {
+namespace spotkv {
 namespace port {
 
 // Define MemoryBarrier() if available
@@ -237,6 +237,6 @@ class AtomicPointer {
 #undef ARCH_CPU_PPC_FAMILY
 
 }  // namespace port
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // PORT_ATOMIC_POINTER_H_

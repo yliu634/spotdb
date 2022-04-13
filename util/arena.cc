@@ -5,7 +5,7 @@
 #include "util/arena.h"
 #include <assert.h>
 
-namespace leveldb {
+namespace spotkv {
 
 static const int kBlockSize = 4096;
 
@@ -65,4 +65,4 @@ char* Arena::AllocateNewBlock(size_t block_bytes) {
   return result;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

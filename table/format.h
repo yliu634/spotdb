@@ -11,7 +11,7 @@
 #include "spotkv/status.h"
 #include "spotkv/table_builder.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Block;
 class RandomAccessFile;
@@ -103,6 +103,6 @@ inline BlockHandle::BlockHandle()
       size_(~static_cast<uint64_t>(0)) {
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_TABLE_FORMAT_H_

@@ -6,7 +6,7 @@
 
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Coding { };
 
@@ -189,8 +189,8 @@ TEST(Coding, Strings) {
   ASSERT_EQ("", input.ToString());
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

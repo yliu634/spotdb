@@ -14,12 +14,12 @@
 #include "util/coding.h"
 #include "util/logging.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // Grouping of constants.  We may want to make some of these
 // parameters set via options.
 namespace config {
-static const int kNumLevels = 3;
+static const int kNumLevels = 7;
 static const int kNumSpotTables = 4;
 // Level-0 compaction is started when we hit this many files.
 static const int kL0_CompactionTrigger = 5;//5
@@ -225,6 +225,6 @@ inline LookupKey::~LookupKey() {
   if (start_ != space_) delete[] start_;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_

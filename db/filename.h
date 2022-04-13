@@ -13,7 +13,7 @@
 #include "spotkv/status.h"
 #include "port/port.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Env;
 
@@ -80,6 +80,6 @@ extern Status SetCurrentFile(Env* env, const std::string& dbname,
                              uint64_t descriptor_number);
 
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_FILENAME_H_

@@ -5,7 +5,7 @@
 #include "util/hash.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class HASH { };
 
@@ -47,8 +47,8 @@ TEST(HASH, SignedUnsignedIssue) {
       0xf333dabb);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

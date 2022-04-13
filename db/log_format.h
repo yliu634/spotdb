@@ -8,7 +8,7 @@
 #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
 #define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
 
-namespace leveldb {
+namespace spotkv {
 namespace log {
 
 enum RecordType {
@@ -30,6 +30,6 @@ static const int kBlockSize = 32768;
 static const int kHeaderSize = 4 + 2 + 1;
 
 }  // namespace log
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_

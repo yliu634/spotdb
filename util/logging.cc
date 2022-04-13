@@ -11,7 +11,7 @@
 #include "spotkv/env.h"
 #include "spotkv/slice.h"
 
-namespace leveldb {
+namespace spotkv {
 
 void AppendNumberTo(std::string* str, uint64_t num) {
   char buf[30];
@@ -69,4 +69,4 @@ bool ConsumeDecimalNumber(Slice* in, uint64_t* val) {
   return (digits > 0);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

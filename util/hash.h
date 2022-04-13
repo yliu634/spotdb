@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-namespace leveldb {
+namespace spotkv {
 
 extern uint32_t Hash(const char* data, size_t n, uint32_t seed);
 

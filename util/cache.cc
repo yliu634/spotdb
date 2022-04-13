@@ -11,7 +11,7 @@
 #include "util/hash.h"
 #include "util/mutexlock.h"
 
-namespace leveldb {
+namespace spotkv {
 
 Cache::~Cache() {
 }
@@ -402,4 +402,4 @@ Cache* NewLRUCache(size_t capacity) {
   return new ShardedLRUCache(capacity);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

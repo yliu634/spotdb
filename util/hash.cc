@@ -13,7 +13,7 @@
 #define FALLTHROUGH_INTENDED do { } while (0)
 #endif
 
-namespace leveldb {
+namespace spotkv {
 
 uint32_t Hash(const char* data, size_t n, uint32_t seed) {
   // Similar to murmur hash
@@ -49,4 +49,4 @@ uint32_t Hash(const char* data, size_t n, uint32_t seed) {
 }
 
 
-}  // namespace leveldb
+}  // namespace spotkv

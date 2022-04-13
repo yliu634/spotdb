@@ -24,7 +24,7 @@
 #include "port/thread_annotations.h"
 #include "ludo/count_min.h"
 
-namespace leveldb {
+namespace spotkv {
 
 namespace log { class Writer; }
 
@@ -416,6 +416,6 @@ class Compaction {
   size_t level_ptrs_[config::kNumLevels];
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_VERSION_SET_H_

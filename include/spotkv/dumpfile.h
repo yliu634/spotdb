@@ -9,7 +9,7 @@
 #include "spotkv/env.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // Dump the contents of the file named by fname in text format to
 // *dst.  Makes a sequence of dst->Append() calls; each call is passed
@@ -20,6 +20,6 @@ namespace leveldb {
 // file, or if the file cannot be read.
 Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_

@@ -6,7 +6,7 @@
 #include "port/port.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 const char* Status::CopyState(const char* state) {
   uint32_t size;
@@ -72,4 +72,4 @@ std::string Status::ToString() const {
   }
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

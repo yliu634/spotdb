@@ -114,10 +114,10 @@ static bool FLAGS_reuse_logs = false;
 // Use the db with the following name.
 static const char* FLAGS_db = NULL;
 
-namespace leveldb {
+namespace spotkv {
 
 namespace {
-leveldb::Env* g_env = NULL;
+spotkv::Env* g_env = NULL;
 
 // Helper for quickly generating random data.
 class RandomGenerator {
@@ -951,20 +951,20 @@ class Benchmark {
   }
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  FLAGS_write_buffer_size = leveldb::Options().write_buffer_size;
-  FLAGS_max_file_size = leveldb::Options().max_file_size;
-  FLAGS_block_size = leveldb::Options().block_size;
-  FLAGS_open_files = leveldb::Options().max_open_files;
+  FLAGS_write_buffer_size = spotkv::Options().write_buffer_size;
+  FLAGS_max_file_size = spotkv::Options().max_file_size;
+  FLAGS_block_size = spotkv::Options().block_size;
+  FLAGS_open_files = spotkv::Options().max_open_files;
   std::string default_db_path;
 
   for (int i = 1; i < argc; i++) {
     double d;
     int n;
     char junk;
-    if (leveldb::Slice(argv[i]).starts_with("--benchmarks=")) {
+    if (spotkv::Slice(argv[i]).starts_with("--benchmarks=")) {
       FLAGS_benchmarks = argv[i] + strlen("--benchmarks=");
     } else if (sscanf(argv[i], "--compression_ratio=%lf%c", &d, &junk) == 1) {
       FLAGS_compression_ratio = d;
@@ -1005,16 +1005,16 @@ int main(int argc, char** argv) {
     }
   }
 
-  leveldb::g_env = leveldb::Env::Default();
+  spotkv::g_env = spotkv::Env::Default();
 
   // Choose a location for the test database if none given with --db=<path>
   if (FLAGS_db == NULL) {
-      leveldb::g_env->GetTestDirectory(&default_db_path);
+      spotkv::g_env->GetTestDirectory(&default_db_path);
       default_db_path += "/dbbench";
       FLAGS_db = default_db_path.c_str();
   }
 
-  leveldb::Benchmark benchmark;
+  spotkv::Benchmark benchmark;
   benchmark.Run();
   return 0;
 }

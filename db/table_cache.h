@@ -14,7 +14,7 @@
 #include "spotkv/table.h"
 #include "port/port.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Env;
 
@@ -64,6 +64,6 @@ class TableCache {
   Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_TABLE_CACHE_H_

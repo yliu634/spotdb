@@ -11,7 +11,7 @@
 #include "spotkv/slice.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class SequentialFile;
 
@@ -108,6 +108,6 @@ class Reader {
 };
 
 }  // namespace log
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_LOG_READER_H_

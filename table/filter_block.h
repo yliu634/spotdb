@@ -16,7 +16,7 @@
 #include "spotkv/slice.h"
 #include "util/hash.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class FilterPolicy;
 

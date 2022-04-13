@@ -10,7 +10,7 @@
 #include "spotkv/slice.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class WritableFile;
 
@@ -49,6 +49,6 @@ class Writer {
 };
 
 }  // namespace log
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_

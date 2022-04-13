@@ -8,7 +8,7 @@
 #include "util/testharness.h"
 #include "util/env_posix_test_helper.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static const int kDelayMicros = 100000;
 static const int kReadOnlyFileLimit = 4;
@@ -38,9 +38,9 @@ TEST(EnvPosixTest, TestOpenOnRead) {
   fclose(f);
 
   // Open test file some number above the sum of the two limits to force
-  // open-on-read behavior of POSIX Env leveldb::RandomAccessFile.
+  // open-on-read behavior of POSIX Env spotkv::RandomAccessFile.
   const int kNumFiles = kReadOnlyFileLimit + kMMapLimit + 5;
-  leveldb::RandomAccessFile* files[kNumFiles] = {0};
+  spotkv::RandomAccessFile* files[kNumFiles] = {0};
   for (int i = 0; i < kNumFiles; i++) {
     ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
   }
@@ -56,11 +56,11 @@ TEST(EnvPosixTest, TestOpenOnRead) {
   ASSERT_OK(env_->DeleteFile(test_file));
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
   // All tests currently run with the same read-only file limits.
-  leveldb::EnvPosixTest::SetFileLimits(leveldb::kReadOnlyFileLimit,
-                                       leveldb::kMMapLimit);
-  return leveldb::test::RunAllTests();
+  spotkv::EnvPosixTest::SetFileLimits(spotkv::kReadOnlyFileLimit,
+                                       spotkv::kMMapLimit);
+  return spotkv::test::RunAllTests();
 }

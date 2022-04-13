@@ -15,7 +15,7 @@
 #include "util/coding.h"
 #include "util/crc32c.h"
 
-namespace leveldb {
+namespace spotkv {
 
 struct TableBuilder::Rep {
   Options options;
@@ -303,4 +303,4 @@ uint64_t TableBuilder::FileSize() const {
   return rep_->offset;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

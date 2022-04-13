@@ -9,7 +9,7 @@
 #include "ludo/ludo_cp_dp.h"
 #include "ludo/cuckoo_ht.h"
 
-namespace leveldb {
+namespace spotkv {
 
 struct Options;
 struct FileMetaData;
@@ -39,6 +39,6 @@ extern Status BuildLudoTable(const std::string& dbname,
                          FileMetaData* meta,
                          ControlPlaneLudo<uint32_t, uint64_t>* cp);             
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_BUILDER_H_

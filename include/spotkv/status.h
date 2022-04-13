@@ -16,7 +16,7 @@
 #include <string>
 #include "spotkv/slice.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Status {
  public:
@@ -107,6 +107,6 @@ inline void Status::operator=(const Status& s) {
   }
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_STATUS_H_

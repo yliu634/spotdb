@@ -17,7 +17,7 @@
 #include "util/testharness.h"
 #include "util/testutil.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static std::string RandomString(Random* rnd, int len) {
   std::string r;
@@ -2143,16 +2143,16 @@ void BM_LogAndApply(int iters, int num_base_files) {
           buf, iters, us, ((float)us) / iters);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
   if (argc > 1 && std::string(argv[1]) == "--benchmark") {
-    leveldb::BM_LogAndApply(1000, 1);
-    leveldb::BM_LogAndApply(1000, 100);
-    leveldb::BM_LogAndApply(1000, 10000);
-    leveldb::BM_LogAndApply(100, 100000);
+    spotkv::BM_LogAndApply(1000, 1);
+    spotkv::BM_LogAndApply(1000, 100);
+    spotkv::BM_LogAndApply(1000, 10000);
+    spotkv::BM_LogAndApply(100, 100000);
     return 0;
   }
 
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

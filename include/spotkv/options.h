@@ -7,7 +7,7 @@
 
 #include <stddef.h>
 
-namespace leveldb {
+namespace spotkv {
 
 class Cache;
 class Comparator;
@@ -208,6 +208,6 @@ struct WriteOptions {
   }
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_OPTIONS_H_

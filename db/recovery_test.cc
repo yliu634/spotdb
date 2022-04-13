@@ -13,7 +13,7 @@
 #include "util/testharness.h"
 #include "util/testutil.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class RecoveryTest {
  public:
@@ -317,8 +317,8 @@ TEST(RecoveryTest, MultipleLogFiles) {
   ASSERT_EQ("there", Get("hi"));
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

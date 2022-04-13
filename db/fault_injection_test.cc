@@ -23,7 +23,7 @@
 #include "util/testharness.h"
 #include "util/testutil.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static const int kValueSize = 1000;
 static const int kMaxNumValues = 2000;
@@ -50,7 +50,7 @@ Status SyncDir(const std::string& dir) {
 
 // A basic file truncation function suitable for this test.
 Status Truncate(const std::string& filename, uint64_t length) {
-  leveldb::Env* env = leveldb::Env::Default();
+  spotkv::Env* env = spotkv::Env::Default();
 
   SequentialFile* orig_file;
   Status s = env->NewSequentialFile(filename, &orig_file);
@@ -58,7 +58,7 @@ Status Truncate(const std::string& filename, uint64_t length) {
     return s;
 
   char* scratch = new char[length];
-  leveldb::Slice result;
+  spotkv::Slice result;
   s = orig_file->Read(length, &result, scratch);
   delete orig_file;
   if (s.ok()) {
@@ -547,8 +547,8 @@ TEST(FaultInjectionTest, FaultTestWithLogReuse) {
   DoTest();
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

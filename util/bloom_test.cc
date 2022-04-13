@@ -9,7 +9,7 @@
 #include "util/testharness.h"
 #include "util/testutil.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static const int kVerbose = 1;
 
@@ -155,8 +155,8 @@ TEST(BloomTest, VaryingLengths) {
 
 // Different bits-per-byte
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

@@ -22,7 +22,7 @@
 
 #define LudoHashing
 
-namespace leveldb {
+namespace spotkv {
 
 class MemTable;
 class TableCache;
@@ -228,6 +228,6 @@ extern Options SanitizeOptions(const std::string& db,
                                const InternalFilterPolicy* ipolicy,
                                const Options& src);
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_DB_IMPL_H_

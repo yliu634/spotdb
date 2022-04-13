@@ -16,30 +16,30 @@
 #include "spotkv/status.h"
 #include "spotkv/write_batch.h"
 
-using leveldb::Cache;
-using leveldb::Comparator;
-using leveldb::CompressionType;
-using leveldb::DB;
-using leveldb::Env;
-using leveldb::FileLock;
-using leveldb::FilterPolicy;
-using leveldb::Iterator;
-using leveldb::kMajorVersion;
-using leveldb::kMinorVersion;
-using leveldb::Logger;
-using leveldb::NewBloomFilterPolicy;
-using leveldb::NewLRUCache;
-using leveldb::Options;
-using leveldb::RandomAccessFile;
-using leveldb::Range;
-using leveldb::ReadOptions;
-using leveldb::SequentialFile;
-using leveldb::Slice;
-using leveldb::Snapshot;
-using leveldb::Status;
-using leveldb::WritableFile;
-using leveldb::WriteBatch;
-using leveldb::WriteOptions;
+using spotkv::Cache;
+using spotkv::Comparator;
+using spotkv::CompressionType;
+using spotkv::DB;
+using spotkv::Env;
+using spotkv::FileLock;
+using spotkv::FilterPolicy;
+using spotkv::Iterator;
+using spotkv::kMajorVersion;
+using spotkv::kMinorVersion;
+using spotkv::Logger;
+using spotkv::NewBloomFilterPolicy;
+using spotkv::NewLRUCache;
+using spotkv::Options;
+using spotkv::RandomAccessFile;
+using spotkv::Range;
+using spotkv::ReadOptions;
+using spotkv::SequentialFile;
+using spotkv::Slice;
+using spotkv::Snapshot;
+using spotkv::Status;
+using spotkv::WritableFile;
+using spotkv::WriteBatch;
+using spotkv::WriteOptions;
 
 extern "C" {
 

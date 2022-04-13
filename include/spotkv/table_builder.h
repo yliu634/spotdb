@@ -17,7 +17,7 @@
 #include "spotkv/options.h"
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class BlockBuilder;
 class BlockHandle;
@@ -87,6 +87,6 @@ class TableBuilder {
   void operator=(const TableBuilder&);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_TABLE_BUILDER_H_

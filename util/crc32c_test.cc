@@ -5,7 +5,7 @@
 #include "util/crc32c.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 namespace crc32c {
 
 class CRC { };
@@ -65,8 +65,8 @@ TEST(CRC, Mask) {
 }
 
 }  // namespace crc32c
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

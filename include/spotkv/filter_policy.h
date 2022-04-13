@@ -18,7 +18,7 @@
 
 #include <string>
 
-namespace leveldb {
+namespace spotkv {
 
 class Slice;
 

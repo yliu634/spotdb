@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace leveldb {
+namespace spotkv {
 
 class MemEnvTest {
  public:
@@ -234,8 +234,8 @@ TEST(MemEnvTest, DBTest) {
   delete db;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

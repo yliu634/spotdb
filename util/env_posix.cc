@@ -28,7 +28,7 @@
 #include "util/posix_logger.h"
 #include "util/env_posix_test_helper.h"
 
-namespace leveldb {
+namespace spotkv {
 
 namespace {
 
@@ -803,4 +803,4 @@ Env* Env::Default() {
   return default_env;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

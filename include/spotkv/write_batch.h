@@ -24,7 +24,7 @@
 #include <string>
 #include "spotkv/status.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Slice;
 
@@ -59,6 +59,6 @@ class WriteBatch {
   // Intentionally copyable
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_

@@ -17,16 +17,16 @@ shows how to open a database, creating it if necessary:
 #include <cassert>
 #include "spotkv/db.h"
 
-leveldb::DB* db;
-leveldb::Options options;
+spotkv::DB* db;
+spotkv::Options options;
 options.create_if_missing = true;
-leveldb::Status status = leveldb::DB::Open(options, "/tmp/testdb", &db);
+spotkv::Status status = spotkv::DB::Open(options, "/tmp/testdb", &db);
 assert(status.ok());
 ...
 ```
 
 If you want to raise an error if the database already exists, add the following
-line before the `leveldb::DB::Open` call:
+line before the `spotkv::DB::Open` call:
 
 ```c++
 options.error_if_exists = true;
@@ -34,12 +34,12 @@ options.error_if_exists = true;
 
 ## Status
 
-You may have noticed the `leveldb::Status` type above. Values of this type are
+You may have noticed the `spotkv::Status` type above. Values of this type are
 returned by most functions in leveldb that may encounter an error. You can check
 if such a result is ok, and also print an associated error message:
 
 ```c++
-leveldb::Status s = ...;
+spotkv::Status s = ...;
 if (!s.ok()) cerr << s.ToString() << endl;
 ```
 
@@ -60,9 +60,9 @@ For example, the following code moves the value stored under key1 to key2.
 
 ```c++
 std::string value;
-leveldb::Status s = db->Get(leveldb::ReadOptions(), key1, &value);
-if (s.ok()) s = db->Put(leveldb::WriteOptions(), key2, value);
-if (s.ok()) s = db->Delete(leveldb::WriteOptions(), key1);
+spotkv::Status s = db->Get(spotkv::ReadOptions(), key1, &value);
+if (s.ok()) s = db->Put(spotkv::WriteOptions(), key2, value);
+if (s.ok()) s = db->Delete(spotkv::WriteOptions(), key1);
 ```
 
 ## Atomic Updates
@@ -75,12 +75,12 @@ be avoided by using the `WriteBatch` class to atomically apply a set of updates:
 #include "spotkv/write_batch.h"
 ...
 std::string value;
-leveldb::Status s = db->Get(leveldb::ReadOptions(), key1, &value);
+spotkv::Status s = db->Get(spotkv::ReadOptions(), key1, &value);
 if (s.ok()) {
-  leveldb::WriteBatch batch;
+  spotkv::WriteBatch batch;
   batch.Delete(key1);
   batch.Put(key2, value);
-  s = db->Write(leveldb::WriteOptions(), &batch);
+  s = db->Write(spotkv::WriteOptions(), &batch);
 }
 ```
 
@@ -104,7 +104,7 @@ persistent storage. (On Posix systems, this is implemented by calling either
 operation returns.)
 
 ```c++
-leveldb::WriteOptions write_options;
+spotkv::WriteOptions write_options;
 write_options.sync = true;
 db->Put(write_options, ...);
 ```
@@ -132,7 +132,7 @@ synchronous write will be amortized across all of the writes in the batch.
 
 A database may only be opened by one process at a time. The leveldb
 implementation acquires a lock from the operating system to prevent misuse.
-Within a single process, the same `leveldb::DB` object may be safely shared by
+Within a single process, the same `spotkv::DB` object may be safely shared by
 multiple concurrent threads. I.e., different threads may write into or fetch
 iterators or call Get on the same database without any external synchronization
 (the leveldb implementation will automatically do the required synchronization).
@@ -147,7 +147,7 @@ The following example demonstrates how to print all key,value pairs in a
 database.
 
 ```c++
-leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
+spotkv::Iterator* it = db->NewIterator(spotkv::ReadOptions());
 for (it->SeekToFirst(); it->Valid(); it->Next()) {
   cout << it->key().ToString() << ": "  << it->value().ToString() << endl;
 }
@@ -186,10 +186,10 @@ of the current state.
 Snapshots are created by the `DB::GetSnapshot()` method:
 
 ```c++
-leveldb::ReadOptions options;
+spotkv::ReadOptions options;
 options.snapshot = db->GetSnapshot();
 ... apply some updates to db ...
-leveldb::Iterator* iter = db->NewIterator(options);
+spotkv::Iterator* iter = db->NewIterator(options);
 ... read using iter to view the state when the snapshot was created ...
 delete iter;
 db->ReleaseSnapshot(options.snapshot);
@@ -202,7 +202,7 @@ state that was being maintained just to support reading as of that snapshot.
 ## Slice
 
 The return value of the `it->key()` and `it->value()` calls above are instances
-of the `leveldb::Slice` type. Slice is a simple structure that contains a length
+of the `spotkv::Slice` type. Slice is a simple structure that contains a length
 and a pointer to an external byte array. Returning a Slice is a cheaper
 alternative to returning a `std::string` since we do not need to copy
 potentially large keys and values. In addition, leveldb methods do not return
@@ -213,10 +213,10 @@ C++ strings and null-terminated C-style strings can be easily converted to a
 Slice:
 
 ```c++
-leveldb::Slice s1 = "hello";
+spotkv::Slice s1 = "hello";
 
 std::string str("world");
-leveldb::Slice s2 = str;
+spotkv::Slice s2 = str;
 ```
 
 A Slice can be easily converted back to a C++ string:
@@ -231,7 +231,7 @@ external byte array into which the Slice points remains live while the Slice is
 in use. For example, the following is buggy:
 
 ```c++
-leveldb::Slice slice;
+spotkv::Slice slice;
 if (...) {
   std::string str = ...;
   slice = str;
@@ -248,16 +248,16 @@ The preceding examples used the default ordering function for key, which orders
 bytes lexicographically. You can however supply a custom comparator when opening
 a database.  For example, suppose each database key consists of two numbers and
 we should sort by the first number, breaking ties by the second number. First,
-define a proper subclass of `leveldb::Comparator` that expresses these rules:
+define a proper subclass of `spotkv::Comparator` that expresses these rules:
 
 ```c++
-class TwoPartComparator : public leveldb::Comparator {
+class TwoPartComparator : public spotkv::Comparator {
  public:
   // Three-way comparison function:
   //   if a < b: negative result
   //   if a > b: positive result
   //   else: zero result
-  int Compare(const leveldb::Slice& a, const leveldb::Slice& b) const {
+  int Compare(const spotkv::Slice& a, const spotkv::Slice& b) const {
     int a1, a2, b1, b2;
     ParseKey(a, &a1, &a2);
     ParseKey(b, &b1, &b2);
@@ -270,7 +270,7 @@ class TwoPartComparator : public leveldb::Comparator {
 
   // Ignore the following methods for now:
   const char* Name() const { return "TwoPartComparator"; }
-  void FindShortestSeparator(std::string*, const leveldb::Slice&) const {}
+  void FindShortestSeparator(std::string*, const spotkv::Slice&) const {}
   void FindShortSuccessor(std::string*) const {}
 };
 ```
@@ -279,11 +279,11 @@ Now create a database using this custom comparator:
 
 ```c++
 TwoPartComparator cmp;
-leveldb::DB* db;
-leveldb::Options options;
+spotkv::DB* db;
+spotkv::Options options;
 options.create_if_missing = true;
 options.comparator = &cmp;
-leveldb::Status status = leveldb::DB::Open(options, "/tmp/testdb", &db);
+spotkv::Status status = spotkv::DB::Open(options, "/tmp/testdb", &db);
 ...
 ```
 
@@ -291,7 +291,7 @@ leveldb::Status status = leveldb::DB::Open(options, "/tmp/testdb", &db);
 
 The result of the comparator's Name method is attached to the database when it
 is created, and is checked on every subsequent database open. If the name
-changes, the `leveldb::DB::Open` call will fail. Therefore, change the name if
+changes, the `spotkv::DB::Open` call will fail. Therefore, change the name if
 and only if the new key format and comparison function are incompatible with
 existing databases, and it is ok to discard the contents of all existing
 databases.
@@ -330,9 +330,9 @@ applications may want to disable compression entirely, but should only do so if
 benchmarks show a performance improvement:
 
 ```c++
-leveldb::Options options;
-options.compression = leveldb::kNoCompression;
-... leveldb::DB::Open(options, name, ...) ....
+spotkv::Options options;
+options.compression = spotkv::kNoCompression;
+... spotkv::DB::Open(options, name, ...) ....
 ```
 
 ### Cache
@@ -344,10 +344,10 @@ it is used to cache frequently used uncompressed block contents.
 ```c++
 #include "spotkv/cache.h"
 
-leveldb::Options options;
-options.cache = leveldb::NewLRUCache(100 * 1048576);  // 100MB cache
-leveldb::DB* db;
-leveldb::DB::Open(options, name, &db);
+spotkv::Options options;
+options.cache = spotkv::NewLRUCache(100 * 1048576);  // 100MB cache
+spotkv::DB* db;
+spotkv::DB::Open(options, name, &db);
 ... use the db ...
 delete db
 delete options.cache;
@@ -363,9 +363,9 @@ the data processed by the bulk read does not end up displacing most of the
 cached contents. A per-iterator option can be used to achieve this:
 
 ```c++
-leveldb::ReadOptions options;
+spotkv::ReadOptions options;
 options.fill_cache = false;
-leveldb::Iterator* it = db->NewIterator(options);
+spotkv::Iterator* it = db->NewIterator(options);
 for (it->SeekToFirst(); it->Valid(); it->Next()) {
   ...
 }
@@ -396,10 +396,10 @@ involve multiple reads from disk. The optional FilterPolicy mechanism can be
 used to reduce the number of disk reads substantially.
 
 ```c++
-leveldb::Options options;
+spotkv::Options options;
 options.filter_policy = NewBloomFilterPolicy(10);
-leveldb::DB* db;
-leveldb::DB::Open(options, "/tmp/testdb", &db);
+spotkv::DB* db;
+spotkv::DB::Open(options, "/tmp/testdb", &db);
 ... use the database ...
 delete db;
 delete options.filter_policy;
@@ -422,7 +422,7 @@ application should provide a custom filter policy that also ignores trailing
 spaces. For example:
 
 ```c++
-class CustomFilterPolicy : public leveldb::FilterPolicy {
+class CustomFilterPolicy : public spotkv::FilterPolicy {
  private:
   FilterPolicy* builtin_policy_;
 
@@ -465,7 +465,7 @@ operation. By default, paranoid checking is off so that the database can be used
 even if parts of its persistent storage have been corrupted.
 
 If a database is corrupted (perhaps it cannot be opened when paranoid checking
-is turned on), the `leveldb::RepairDB` function may be used to recover as much
+is turned on), the `spotkv::RepairDB` function may be used to recover as much
 of the data as possible
 
 ## Approximate Sizes
@@ -474,11 +474,11 @@ The `GetApproximateSizes` method can used to get the approximate number of bytes
 of file system space used by one or more key ranges.
 
 ```c++
-leveldb::Range ranges[2];
-ranges[0] = leveldb::Range("a", "c");
-ranges[1] = leveldb::Range("x", "z");
+spotkv::Range ranges[2];
+ranges[0] = spotkv::Range("a", "c");
+ranges[1] = spotkv::Range("x", "z");
 uint64_t sizes[2];
-leveldb::Status s = db->GetApproximateSizes(ranges, 2, sizes);
+spotkv::Status s = db->GetApproximateSizes(ranges, 2, sizes);
 ```
 
 The preceding call will set `sizes[0]` to the approximate number of bytes of
@@ -488,20 +488,20 @@ approximate number of bytes used by the key range `[x..z)`.
 ## Environment
 
 All file operations (and other operating system calls) issued by the leveldb
-implementation are routed through a `leveldb::Env` object. Sophisticated clients
+implementation are routed through a `spotkv::Env` object. Sophisticated clients
 may wish to provide their own Env implementation to get better control.
 For example, an application may introduce artificial delays in the file IO
 paths to limit the impact of leveldb on other activities in the system.
 
 ```c++
-class SlowEnv : public leveldb::Env {
+class SlowEnv : public spotkv::Env {
   ... implementation of the Env interface ...
 };
 
 SlowEnv env;
-leveldb::Options options;
+spotkv::Options options;
 options.env = &env;
-Status s = leveldb::DB::Open(options, ...);
+Status s = spotkv::DB::Open(options, ...);
 ```
 
 ## Porting
@@ -510,7 +510,7 @@ leveldb may be ported to a new platform by providing platform specific
 implementations of the types/methods/functions exported by
 `leveldb/port/port.h`.  See `leveldb/port/port_example.h` for more details.
 
-In addition, the new platform may need a new default `leveldb::Env`
+In addition, the new platform may need a new default `spotkv::Env`
 implementation.  See `leveldb/util/env_posix.h` for an example.
 
 ## Other Information

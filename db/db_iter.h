@@ -9,7 +9,7 @@
 #include "spotkv/db.h"
 #include "db/dbformat.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class DBImpl;
 
@@ -23,6 +23,6 @@ extern Iterator* NewDBIterator(
     SequenceNumber sequence,
     uint32_t seed);
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_

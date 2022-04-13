@@ -4,7 +4,7 @@
 
 #include "spotkv/env.h"
 
-namespace leveldb {
+namespace spotkv {
 
 Env::~Env() {
   if (threadPool != nullptr) delete threadPool;
@@ -98,4 +98,4 @@ Status ReadFileToString(Env* env, const std::string& fname, std::string* data) {
 EnvWrapper::~EnvWrapper() {
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

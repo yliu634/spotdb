@@ -8,7 +8,7 @@
 #include "db/dbformat.h"
 #include "spotkv/db.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class SnapshotList;
 
@@ -62,6 +62,6 @@ class SnapshotList {
   SnapshotImpl list_;
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_DB_SNAPSHOT_H_

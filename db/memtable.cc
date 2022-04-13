@@ -9,7 +9,7 @@
 #include "spotkv/iterator.h"
 #include "util/coding.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static Slice GetLengthPrefixedSlice(const char* data) {
   uint32_t len;
@@ -142,4 +142,4 @@ bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
   return false;
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

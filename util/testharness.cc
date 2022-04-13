@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-namespace leveldb {
+namespace spotkv {
 namespace test {
 
 namespace {
@@ -74,4 +74,4 @@ int RandomSeed() {
 }
 
 }  // namespace test
-}  // namespace leveldb
+}  // namespace spotkv

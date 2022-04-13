@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-namespace leveldb {
+namespace spotkv {
 
 // A very simple random number generator.  Not especially good at
 // generating truly random bits, but good enough for our needs in this
@@ -59,6 +59,6 @@ class Random {
   }
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_UTIL_RANDOM_H_

@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include "port/port.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Arena {
  public:
@@ -63,6 +63,6 @@ inline char* Arena::Allocate(size_t bytes) {
   return AllocateFallback(bytes);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_UTIL_ARENA_H_

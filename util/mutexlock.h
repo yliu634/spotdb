@@ -8,7 +8,7 @@
 #include "port/port.h"
 #include "port/thread_annotations.h"
 
-namespace leveldb {
+namespace spotkv {
 
 // Helper class that locks a mutex on construction and unlocks the mutex when
 // the destructor of the MutexLock object is invoked.
@@ -35,7 +35,7 @@ class SCOPED_LOCKABLE MutexLock {
   void operator=(const MutexLock&);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 
 #endif  // STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_

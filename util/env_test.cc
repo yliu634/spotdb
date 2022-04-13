@@ -7,7 +7,7 @@
 #include "port/port.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static const int kDelayMicros = 100000;
 static const int kReadOnlyFileLimit = 4;
@@ -99,8 +99,8 @@ TEST(EnvTest, StartThread) {
   ASSERT_EQ(state.val, 3);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

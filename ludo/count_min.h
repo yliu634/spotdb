@@ -6,7 +6,7 @@
 #include <cmath>
 #include "util/hash.h"
 
-namespace leveldb {
+namespace spotkv {
 
 template <class Counter> 
 class CountMinSketch {

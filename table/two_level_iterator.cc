@@ -9,7 +9,7 @@
 #include "table/format.h"
 #include "table/iterator_wrapper.h"
 
-namespace leveldb {
+namespace spotkv {
 
 namespace {
 
@@ -179,4 +179,4 @@ Iterator* NewTwoLevelIterator(
   return new TwoLevelIterator(index_iter, block_function, arg, options);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

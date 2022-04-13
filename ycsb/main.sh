@@ -36,7 +36,7 @@ rm -rf $dbfilename/*
 
 workload_name=./workloads/workloada-1.spec
 workload_name1=./workloads/workloadb.spec
-workload_name2=./workloads/workloadc-1.spec
+workload_name2=./workloads/workloadc.spec
 workload_name3=./workloads/workloadd.spec
 workload_name4=./workloads/workloade.spec
 workload_name5=./workloads/workloadf.spec

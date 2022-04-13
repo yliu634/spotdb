@@ -8,7 +8,7 @@
 #include "db/dbformat.h"
 #include "spotkv/write_batch.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class MemTable;
 
@@ -44,7 +44,7 @@ class WriteBatchInternal {
   static void Append(WriteBatch* dst, const WriteBatch* src);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 
 #endif  // STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_

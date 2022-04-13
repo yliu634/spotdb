@@ -18,7 +18,7 @@
 #include "util/coding.h"
 #include "util/logging.h"
 
-namespace leveldb {
+namespace spotkv {
 
 static int TargetFileSize(const Options* options) {
   return options->max_file_size;
@@ -1958,4 +1958,4 @@ void Compaction::UpdateInputReal() {
   inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
 }
 
-}  // namespace leveldb
+}  // namespace spotkv

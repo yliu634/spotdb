@@ -17,7 +17,7 @@ namespace ycsbc {
     
 SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
     
-    leveldb::Options options;
+    spotkv::Options options;
     LevelDB_ConfigMod::getInstance().setConfigPath(configPath);
     
     int bloom_bits = LevelDB_ConfigMod::getInstance().getBloom_bits();
@@ -33,12 +33,12 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
     if (directIO_flag) {
 	   options.opEp_.no_cache_io_ = true;
 	   fprintf(stderr,"directIO\n");
-	   leveldb::setDirectIOFlag(directIO_flag);
+	   spotkv::setDirectIOFlag(directIO_flag);
     }
     ****/
     if (bloom_type == 1) {
         } else if (bloom_type == 0){
-            options.filter_policy = leveldb::NewBloomFilterPolicy(bloom_bits);
+            options.filter_policy = spotkv::NewBloomFilterPolicy(bloom_bits);
         } else if (bloom_type == 2){
         } else {
             fprintf(stderr,"Wrong filter type!\n");
@@ -46,21 +46,21 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
 
 
     options.create_if_missing = true;
-    options.compression = compression_Open? leveldb::kSnappyCompression:leveldb::kNoCompression;  //compression is disabled.
+    options.compression = compression_Open? spotkv::kSnappyCompression:spotkv::kNoCompression;  //compression is disabled.
     options.write_buffer_size = memTableSize;//67108864;8388608
     options.max_file_size = max_File_sizes;
     options.max_open_files = max_open_files;
     options.block_size = 4096;
     // options.opEp_.seek_compaction_ = seek_compaction_flag;
-    options.block_cache = leveldb::NewLRUCache(block_cache_size);
+    options.block_cache = spotkv::NewLRUCache(block_cache_size);
     // options.opEp_.size_ratio = size_ratio;
     fprintf(stderr, "********* SpotKV ********\n");
     // fprintf(stderr,"block_cache_size %lu, max_open_files:%d",options.block_cache, options.max_open_files);
     // fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
     // if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
-    //  options.opEp_.stats_ = leveldb::CreateDBStatistics();
+    //  options.opEp_.stats_ = spotkv::CreateDBStatistics();
     // }
-    leveldb::Status status = leveldb::DB::Open(options,dbfilename, &db_);
+    spotkv::Status status = spotkv::DB::Open(options,dbfilename, &db_);
     if (!status.ok()) {
         fprintf(stderr, "can't open leveldb\n");
         cerr << status.ToString() << endl;
@@ -71,7 +71,7 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
 int SpotkvDB::Read(const string& table, const string& key, 
                     const vector<string>* fields, vector<DB::KVPair>& result) {
     std::string value;
-    leveldb::Status s = db_->Get(leveldb::ReadOptions(), key, &value);
+    spotkv::Status s = db_->Get(spotkv::ReadOptions(), key, &value);
     if(s.IsNotFound()){
         // fprintf(stderr,"Not Found!\n");
         return DB::kErrorNoData;
@@ -86,14 +86,14 @@ int SpotkvDB::Read(const string& table, const string& key,
 
 int SpotkvDB::Insert(const string& table, const string& key, 
                                         vector< DB::KVPair >& values) {
-    leveldb::Status s;
+    spotkv::Status s;
     for(KVPair &p : values) {
         // cout<<p.second.length()<<endl;
-        // leveldb::WriteOptions write_options_;
-        // write_options_=leveldb::WriteOptions();
+        // spotkv::WriteOptions write_options_;
+        // write_options_=spotkv::WriteOptions();
         // write_options_.sync = true;
         //clock_t start_time=clock();
-        s = db_->Put(leveldb::WriteOptions(), key, p.second);
+        s = db_->Put(spotkv::WriteOptions(), key, p.second);
         //s = db_->Put(write_options_, key, p.second);
         //clock_t end_time=clock();
         if(!s.ok()){
@@ -114,7 +114,7 @@ int SpotkvDB::Scan(const string& table, const string& key, int len,
                     const vector< string >* fields, vector< vector< DB::KVPair > >& result) {
     vector< DB::KVPair > scanValue;
     std::string value;
-    leveldb:: Iterator* iter = db_->NewIterator(leveldb::ReadOptions());
+    spotkv:: Iterator* iter = db_->NewIterator(spotkv::ReadOptions());
     iter->Seek(key);
     int num_next = len;
     if (iter->Valid() && iter->key() == key) {	   
@@ -138,7 +138,7 @@ int SpotkvDB::Update(const string& table, const string& key, vector< DB::KVPair 
 }
 
 void SpotkvDB::analysisTableKey(){
-	//db_->AnalysisTableKeys(leveldb::ReadOptions());
+	//db_->AnalysisTableKeys(spotkv::ReadOptions());
 }
 
 void SpotkvDB::Close() {};

@@ -4,8 +4,8 @@
 
 #include "spotkv/filter_policy.h"
 
-namespace leveldb {
+namespace spotkv {
 
 FilterPolicy::~FilterPolicy() { }
 
-}  // namespace leveldb
+}  // namespace spotkv

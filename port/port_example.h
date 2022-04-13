@@ -10,7 +10,7 @@
 #ifndef STORAGE_LEVELDB_PORT_PORT_EXAMPLE_H_
 #define STORAGE_LEVELDB_PORT_PORT_EXAMPLE_H_
 
-namespace leveldb {
+namespace spotkv {
 namespace port {
 
 // TODO(jorlow): Many of these belong more in the environment class rather than
@@ -136,6 +136,6 @@ extern bool GetHeapProfile(void (*func)(void*, const char*, int), void* arg);
 uint32_t AcceleratedCRC32C(uint32_t crc, const char* buf, size_t size);
 
 }  // namespace port
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_PORT_PORT_EXAMPLE_H_

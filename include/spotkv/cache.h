@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include "spotkv/slice.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Cache;
 
@@ -105,6 +105,6 @@ class Cache {
   void operator=(const Cache&);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_CACHE_H_

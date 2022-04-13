@@ -8,7 +8,7 @@
 #include "ludo/count_min.h"
 #include "util/testharness.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class PerCuckooTest { };
 
@@ -73,8 +73,8 @@ TEST(PerCuckooTest, Common) {
 */
 
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+  return spotkv::test::RunAllTests();
 }

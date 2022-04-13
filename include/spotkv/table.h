@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "spotkv/iterator.h"
 
-namespace leveldb {
+namespace spotkv {
 
 class Block;
 class BlockHandle;
@@ -83,6 +83,6 @@ class Table {
   void operator=(const Table&);
 };
 
-}  // namespace leveldb
+}  // namespace spotkv
 
 #endif  // STORAGE_LEVELDB_INCLUDE_TABLE_H_

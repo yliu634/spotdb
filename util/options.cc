@@ -7,7 +7,7 @@
 #include "spotkv/comparator.h"
 #include "spotkv/env.h"
 
-namespace leveldb {
+namespace spotkv {
 
 Options::Options()
     : comparator(BytewiseComparator()),
@@ -27,4 +27,4 @@ Options::Options()
       filter_policy(NULL) {
 }
 
-}  // namespace leveldb
+}  // namespace spotkv
