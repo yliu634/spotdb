@@ -1,5 +1,5 @@
-#ifndef STORAGE_LEVELDB_LUDO_HASHUTIL_H_
-#define STORAGE_LEVELDB_LUDO_HASHUTIL_H_
+#ifndef STORAGE_SPOTKV_LUDO_HASHUTIL_H_
+#define STORAGE_SPOTKV_LUDO_HASHUTIL_H_
 
 #include <stdint.h>
 #include <stdlib.h>

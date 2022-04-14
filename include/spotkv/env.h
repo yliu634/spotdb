@@ -10,8 +10,8 @@
 // All Env implementations are safe for concurrent access from
 // multiple threads without any external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_ENV_H_
-#define STORAGE_LEVELDB_INCLUDE_ENV_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_ENV_H_
+#define STORAGE_SPOTKV_INCLUDE_ENV_H_
 
 #include <stdarg.h>
 #include <stdint.h>

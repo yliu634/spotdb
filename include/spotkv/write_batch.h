@@ -18,8 +18,8 @@
 // non-const method, all threads accessing the same WriteBatch must use
 // external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
-#define STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_WRITE_BATCH_H_
+#define STORAGE_SPOTKV_INCLUDE_WRITE_BATCH_H_
 
 #include <string>
 #include "spotkv/status.h"

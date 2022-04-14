@@ -1,5 +1,5 @@
-#ifndef STORAGE_LEVELDB_COUNT_MIN_H_
-#define STORAGE_LEVELDB_COUNT_MIN_H_
+#ifndef STORAGE_SPOTKV_COUNT_MIN_H_
+#define STORAGE_SPOTKV_COUNT_MIN_H_
 
 #include <ctime>
 #include <limits>

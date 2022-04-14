@@ -37,8 +37,8 @@
   (5) All of the pointer arguments must be non-NULL.
 */
 
-#ifndef STORAGE_LEVELDB_INCLUDE_C_H_
-#define STORAGE_LEVELDB_INCLUDE_C_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_C_H_
+#define STORAGE_SPOTKV_INCLUDE_C_H_
 
 #ifdef __cplusplus
 extern "C" {

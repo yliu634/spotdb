@@ -1846,7 +1846,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.5),
+      WAdeduction_(0.7),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;

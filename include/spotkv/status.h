@@ -10,8 +10,8 @@
 // non-const method, all threads accessing the same Status must use
 // external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_STATUS_H_
-#define STORAGE_LEVELDB_INCLUDE_STATUS_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_STATUS_H_
+#define STORAGE_SPOTKV_INCLUDE_STATUS_H_
 
 #include <string>
 #include "spotkv/slice.h"

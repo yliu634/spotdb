@@ -4,8 +4,8 @@
 //
 // See port_example.h for documentation for the following types/functions.
 
-#ifndef STORAGE_LEVELDB_PORT_PORT_POSIX_H_
-#define STORAGE_LEVELDB_PORT_PORT_POSIX_H_
+#ifndef STORAGE_SPOTKV_PORT_PORT_POSIX_H_
+#define STORAGE_SPOTKV_PORT_PORT_POSIX_H_
 
 #undef PLATFORM_IS_LITTLE_ENDIAN
 #if defined(OS_MACOSX)

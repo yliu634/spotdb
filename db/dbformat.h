@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_DB_DBFORMAT_H_
-#define STORAGE_LEVELDB_DB_DBFORMAT_H_
+#ifndef STORAGE_SPOTKV_DB_DBFORMAT_H_
+#define STORAGE_SPOTKV_DB_DBFORMAT_H_
 
 #include <stdio.h>
 #include "spotkv/comparator.h"
@@ -19,8 +19,8 @@ namespace spotkv {
 // Grouping of constants.  We may want to make some of these
 // parameters set via options.
 namespace config {
-static const int kNumLevels = 7;
-static const int kNumSpotTables = 4;
+static const int kNumLevels = 3;
+static const int kNumSpotTables = 5;
 // Level-0 compaction is started when we hit this many files.
 static const int kL0_CompactionTrigger = 5;//5
 

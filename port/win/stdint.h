@@ -4,8 +4,8 @@
 
 // MSVC didn't ship with this file until the 2010 version.
 
-#ifndef STORAGE_LEVELDB_PORT_WIN_STDINT_H_
-#define STORAGE_LEVELDB_PORT_WIN_STDINT_H_
+#ifndef STORAGE_SPOTKV_PORT_WIN_STDINT_H_
+#define STORAGE_SPOTKV_PORT_WIN_STDINT_H_
 
 #if !defined(_MSC_VER)
 #error This file should only be included when compiling with MSVC.

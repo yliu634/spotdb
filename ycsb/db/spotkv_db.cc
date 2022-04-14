@@ -60,7 +60,7 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
     // if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = spotkv::CreateDBStatistics();
     // }
-    spotkv::Status status = spotkv::DB::Open(options,dbfilename, &db_);
+    spotkv::Status status = spotkv::DB::Open(options, dbfilename, &db_);
     if (!status.ok()) {
         fprintf(stderr, "can't open leveldb\n");
         cerr << status.ToString() << endl;

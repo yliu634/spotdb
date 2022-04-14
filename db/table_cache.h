@@ -4,8 +4,8 @@
 //
 // Thread-safe (provides internal synchronization)
 
-#ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+#ifndef STORAGE_SPOTKV_DB_TABLE_CACHE_H_
+#define STORAGE_SPOTKV_DB_TABLE_CACHE_H_
 
 #include <string>
 #include <stdint.h>

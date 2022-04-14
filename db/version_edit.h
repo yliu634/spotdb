@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
-#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+#ifndef STORAGE_SPOTKV_DB_VERSION_EDIT_H_
+#define STORAGE_SPOTKV_DB_VERSION_EDIT_H_
 
 #include <set>
 #include <utility>

@@ -4,8 +4,8 @@
 //
 // Simple hash function used for internal data structures
 
-#ifndef STORAGE_LEVELDB_UTIL_HASH_H_
-#define STORAGE_LEVELDB_UTIL_HASH_H_
+#ifndef STORAGE_SPOTKV_UTIL_HASH_H_
+#define STORAGE_SPOTKV_UTIL_HASH_H_
 
 #include <stddef.h>
 #include <stdint.h>

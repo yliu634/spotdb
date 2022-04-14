@@ -12,8 +12,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  ==============================================================================*/
-#ifndef STORAGE_LEVELDB_LUDO_CP_DP_H_
-#define STORAGE_LEVELDB_LUDO_CP_DP_H_
+#ifndef STORAGE_SPOTKV_LUDO_CP_DP_H_
+#define STORAGE_SPOTKV_LUDO_CP_DP_H_
 
 #pragma once
 

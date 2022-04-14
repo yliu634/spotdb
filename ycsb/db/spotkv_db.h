@@ -40,7 +40,7 @@ public :
     virtual void analysisTableKey();
     void Close();
 private:
-    SpotkvDB::DB *db_;
+    spotkv::DB *db_;
     std::ofstream outW; 
     static bool hasRead;
     void printFilterCount();

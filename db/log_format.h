@@ -5,8 +5,8 @@
 // Log format information shared by reader and writer.
 // See ../doc/log_format.md for more detail.
 
-#ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#ifndef STORAGE_SPOTKV_DB_LOG_FORMAT_H_
+#define STORAGE_SPOTKV_DB_LOG_FORMAT_H_
 
 namespace spotkv {
 namespace log {

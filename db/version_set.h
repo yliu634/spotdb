@@ -12,8 +12,8 @@
 // Version,VersionSet are thread-compatible, but require external
 // synchronization on all accesses.
 
-#ifndef STORAGE_LEVELDB_DB_VERSION_SET_H_
-#define STORAGE_LEVELDB_DB_VERSION_SET_H_
+#ifndef STORAGE_SPOTKV_DB_VERSION_SET_H_
+#define STORAGE_SPOTKV_DB_VERSION_SET_H_
 
 #include <map>
 #include <set>

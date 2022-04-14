@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
-#define STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+#ifndef STORAGE_SPOTKV_TABLE_BLOCK_BUILDER_H_
+#define STORAGE_SPOTKV_TABLE_BLOCK_BUILDER_H_
 
 #include <vector>
 

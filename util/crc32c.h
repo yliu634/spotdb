@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_UTIL_CRC32C_H_
-#define STORAGE_LEVELDB_UTIL_CRC32C_H_
+#ifndef STORAGE_SPOTKV_UTIL_CRC32C_H_
+#define STORAGE_SPOTKV_UTIL_CRC32C_H_
 
 #include <stddef.h>
 #include <stdint.h>

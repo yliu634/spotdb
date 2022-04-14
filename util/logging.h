@@ -5,8 +5,8 @@
 // Must not be included from any .h files to avoid polluting the namespace
 // with macros.
 
-#ifndef STORAGE_LEVELDB_UTIL_LOGGING_H_
-#define STORAGE_LEVELDB_UTIL_LOGGING_H_
+#ifndef STORAGE_SPOTKV_UTIL_LOGGING_H_
+#define STORAGE_SPOTKV_UTIL_LOGGING_H_
 
 #include <stdio.h>
 #include <stdint.h>

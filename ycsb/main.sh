@@ -11,10 +11,10 @@ echo "************* LevelDB *************" >> result.txt
 ./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -rf $dbfilename/*
 echo "************* RocksDB *************" >> result.txt
-#./ycsbc -db rocksdb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+./ycsbc -db rocksdb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -rf $dbfilename/*
 echo "************** UniKV **************" >> result.txt
-#./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -rf $dbfilename/*
 echo "************* SpotKV **************" >> result.txt
 ./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt

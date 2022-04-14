@@ -1,5 +1,5 @@
-#ifndef STORAGE_LEVELDB_COMMON_H_
-#define STORAGE_LEVELDB_COMMON_H_
+#ifndef STORAGE_SPOTKV_COMMON_H_
+#define STORAGE_SPOTKV_COMMON_H_
 
 #pragma once
 

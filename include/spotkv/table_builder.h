@@ -10,8 +10,8 @@
 // non-const method, all threads accessing the same TableBuilder must use
 // external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_TABLE_BUILDER_H_
-#define STORAGE_LEVELDB_INCLUDE_TABLE_BUILDER_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_TABLE_BUILDER_H_
+#define STORAGE_SPOTKV_INCLUDE_TABLE_BUILDER_H_
 
 #include <stdint.h>
 #include "spotkv/options.h"

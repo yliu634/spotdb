@@ -16,7 +16,7 @@ using namespace std;
 namespace ycsbc {
 UniKVDB::UniKVDB(const char* dbfilename,const char* configPath)
 {
-    leveldb::Options options;
+    unikv::Options options;
     LevelDB_ConfigMod::getInstance().setConfigPath(configPath);//basic_config.c
     std::string bloom_filename;
     int bloom_bits = LevelDB_ConfigMod::getInstance().getBloom_bits();;
@@ -33,32 +33,32 @@ UniKVDB::UniKVDB(const char* dbfilename,const char* configPath)
     /*if(directIO_flag){
 	   options.opEp_.no_cache_io_ = true;
 	   fprintf(stderr,"directIO\n");
-	   //    leveldb::setDirectIOFlag(directIO_flag);
+	   //    unikv::setDirectIOFlag(directIO_flag);
     }*/
     if(bloom_type == 1){
     }else if(bloom_type == 0){
-	    options.filter_policy = leveldb::NewBloomFilterPolicy(bloom_bits);
+	    options.filter_policy = unikv::NewBloomFilterPolicy(bloom_bits);
     }else if(bloom_type == 2){
     }else{
 	    fprintf(stderr,"Wrong filter type!\n");
     }
 
     options.create_if_missing = true;
-    options.compression = compression_Open?leveldb::kSnappyCompression:leveldb::kNoCompression; //compression is disabled.
+    options.compression = compression_Open?unikv::kSnappyCompression:unikv::kNoCompression; //compression is disabled.
 
     options.write_buffer_size=memTableSize;//67108864;
     options.block_size=4096;
     //options.max_file_size = max_File_sizes;
     options.max_open_files = max_open_files;
     //options.opEp_.seek_compaction_ = seek_compaction_flag;
-    options.block_cache = leveldb::NewLRUCache(block_cache_size);
+    options.block_cache = unikv::NewLRUCache(block_cache_size);
     //options.opEp_.size_ratio = size_ratio;
     //fprintf(stderr,"block_cache_size %lu, max_open_files:%d,  size_ratio: %d \n",block_cache_size,options.max_open_files,size_ratio);
     //fprintf(stderr,"bloom_bits:%d,seek_compaction_flag:%d\n",bloom_bits,seek_compaction_flag);
     //if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
-    //  options.opEp_.stats_ = leveldb::CreateDBStatistics();
+    //  options.opEp_.stats_ = unikv::CreateDBStatistics();
    // }
-    leveldb::Status status = leveldb::DB::Open(options,dbfilename, &db_);
+    unikv::Status status = unikv::DB::Open(options,dbfilename, &db_);
         if(!status.ok()){
         fprintf(stderr,"can't open leveldb\n");
         cerr<<status.ToString()<<endl;
@@ -69,7 +69,7 @@ bool  UniKVDB::hasRead = false;
 int UniKVDB::Read(const string& table, const string& key, const vector< string >* fields, vector< DB::KVPair >& result)
 {
     std::string value;
-    leveldb::Status s = db_->Get(leveldb::ReadOptions(), key, &value);
+    unikv::Status s = db_->Get(unikv::ReadOptions(), key, &value);
     if(s.IsNotFound()){
 	// fprintf(stderr,"not found!\n");
 	return DB::kErrorNoData;
@@ -85,15 +85,15 @@ int UniKVDB::Read(const string& table, const string& key, const vector< string >
 
 int UniKVDB::Insert(const string& table, const string& key, vector< DB::KVPair >& values)
 {
-    leveldb::Status s;
+    unikv::Status s;
     int count = 0;
     for(KVPair &p : values){
 	//cout<<p.second.length()<<endl;
-    /*leveldb::WriteOptions write_options_;
-    write_options_=leveldb::WriteOptions();
+    /*unikv::WriteOptions write_options_;
+    write_options_=unikv::WriteOptions();
     write_options_.sync = true;*/
     clock_t start_time=clock();
-	s = db_->Put(leveldb::WriteOptions(), key, p.second);
+	s = db_->Put(unikv::WriteOptions(), key, p.second);
     //s = db_->Put(write_options_, key, p.second);
     clock_t end_time=clock();
     //outW<<static_cast<double>(end_time-start_time)/CLOCKS_PER_SEC*1000<<endl;
@@ -121,7 +121,7 @@ int UniKVDB::Scan(const string& table, const string& key, int len, const vector<
 {
     vector< DB::KVPair > scanValue;
 	std::string value;
-    int t = db_->NewIterator(leveldb::ReadOptions(), (char*)key.c_str(), len);
+    int t = db_->NewIterator(unikv::ReadOptions(), (char*)key.c_str(), len);
     if(t>0){
         return DB::kOK;
     }else{
@@ -135,7 +135,7 @@ int UniKVDB::Update(const string& table, const string& key, vector< DB::KVPair >
 }
 
 void UniKVDB::analysisTableKey(){
-	//db_->AnalysisTableKeys(leveldb::ReadOptions());
+	//db_->AnalysisTableKeys(unikv::ReadOptions());
 }
 
 void UniKVDB::Close()
@@ -208,7 +208,7 @@ void UniKVDB::printFilterCount()
 void UniKVDB::doSomeThing(const char* thing_str)
 {
   /*if(flag){
-    db_->AnalysisTableKeys(leveldb::ReadOptions());
+    db_->AnalysisTableKeys(unikv::ReadOptions());
     }*/
     
   if(strncmp(thing_str,"adjust_filter",strlen("adjust_filter")) == 0){

@@ -41,7 +41,7 @@ public :
   virtual void analysisTableKey();
   void Close();
 private:
-    leveldb::DB *db_;
+    unikv::DB *db_;
     std::ofstream outW; 
     static bool hasRead;
     void printFilterCount();

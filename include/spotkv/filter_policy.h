@@ -13,8 +13,8 @@
 // Most people will want to use the builtin bloom filter support (see
 // NewBloomFilterPolicy() below).
 
-#ifndef STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
-#define STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_FILTER_POLICY_H_
+#define STORAGE_SPOTKV_INCLUDE_FILTER_POLICY_H_
 
 #include <string>
 

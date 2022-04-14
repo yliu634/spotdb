@@ -4,8 +4,8 @@
 //
 // File names used by DB code
 
-#ifndef STORAGE_LEVELDB_DB_FILENAME_H_
-#define STORAGE_LEVELDB_DB_FILENAME_H_
+#ifndef STORAGE_SPOTKV_DB_FILENAME_H_
+#define STORAGE_SPOTKV_DB_FILENAME_H_
 
 #include <stdint.h>
 #include <string>

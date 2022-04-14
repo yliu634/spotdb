@@ -5,8 +5,8 @@
 // Logger implementation that can be shared by all environments
 // where enough posix functionality is available.
 
-#ifndef STORAGE_LEVELDB_UTIL_POSIX_LOGGER_H_
-#define STORAGE_LEVELDB_UTIL_POSIX_LOGGER_H_
+#ifndef STORAGE_SPOTKV_UTIL_POSIX_LOGGER_H_
+#define STORAGE_SPOTKV_UTIL_POSIX_LOGGER_H_
 
 #include <algorithm>
 #include <stdio.h>

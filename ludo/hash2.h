@@ -3,8 +3,8 @@
  Describes hash functions used in this project.
  */
 
-#ifndef STORAGE_LEVELDB_LUDO_HASH2_H_
-#define STORAGE_LEVELDB_LUDO_HASH2_H_
+#ifndef STORAGE_SPOTKV_LUDO_HASH2_H_
+#define STORAGE_SPOTKV_LUDO_HASH2_H_
 
 #include <functional>
 #include <type_traits>

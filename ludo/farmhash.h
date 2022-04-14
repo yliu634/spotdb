@@ -40,8 +40,8 @@
 // of a+b is easily derived from the hashes of a and b.  This property
 // doesn't hold for any hash functions in this file.
 
-#ifndef STORAGE_LEVELDB_LUDO_FARM_HASH_H_
-#define STORAGE_LEVELDB_LUDO_FARM_HASH_H_
+#ifndef STORAGE_SPOTKV_LUDO_FARM_HASH_H_
+#define STORAGE_SPOTKV_LUDO_FARM_HASH_H_
 
 #include <assert.h>
 #include <stdint.h>

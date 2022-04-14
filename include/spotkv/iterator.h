@@ -12,8 +12,8 @@
 // non-const method, all threads accessing the same Iterator must use
 // external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_ITERATOR_H_
-#define STORAGE_LEVELDB_INCLUDE_ITERATOR_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_ITERATOR_H_
+#define STORAGE_SPOTKV_INCLUDE_ITERATOR_H_
 
 #include "spotkv/slice.h"
 #include "spotkv/status.h"

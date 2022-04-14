@@ -13,8 +13,8 @@
  limitations under the License.
  ==============================================================================*/
 
-#ifndef STORAGE_LEVELDB_CUCKOO_HT_H_
-#define STORAGE_LEVELDB_CUCKOO_HT_H_
+#ifndef STORAGE_SPOTKV_CUCKOO_HT_H_
+#define STORAGE_SPOTKV_CUCKOO_HT_H_
 #pragma once
 
 #include "ludo/hash2.h"

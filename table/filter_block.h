@@ -6,8 +6,8 @@
 // filters (e.g., bloom filters) for all data blocks in the table combined
 // into a single filter block.
 
-#ifndef STORAGE_LEVELDB_TABLE_FILTER_BLOCK_H_
-#define STORAGE_LEVELDB_TABLE_FILTER_BLOCK_H_
+#ifndef STORAGE_SPOTKV_TABLE_FILTER_BLOCK_H_
+#define STORAGE_SPOTKV_TABLE_FILTER_BLOCK_H_
 
 #include <stddef.h>
 #include <stdint.h>

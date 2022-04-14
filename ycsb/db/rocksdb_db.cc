@@ -41,7 +41,7 @@ RocksDB::RocksDB(const char* dbfilename,const char* configPath)
     options.table_factory.reset(
       rocksdb::NewBlockBasedTableFactory(table_options));
 
-    fprintf(stderr, "********* RocksDB **********");
+    fprintf(stderr, "********* RocksDB **********\n");
     // if(LevelDB_ConfigMod::getInstance().getStatisticsOpen()){
     //  options.opEp_.stats_ = rocksdb::CreateDBStatistics();
     // }

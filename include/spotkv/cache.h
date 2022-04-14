@@ -15,8 +15,8 @@
 // they want something more sophisticated (like scan-resistance, a
 // custom eviction policy, variable cache sizing, etc.)
 
-#ifndef STORAGE_LEVELDB_INCLUDE_CACHE_H_
-#define STORAGE_LEVELDB_INCLUDE_CACHE_H_
+#ifndef STORAGE_SPOTKV_INCLUDE_CACHE_H_
+#define STORAGE_SPOTKV_INCLUDE_CACHE_H_
 
 #include <stdint.h>
 #include "spotkv/slice.h"

@@ -1,5 +1,5 @@
-#ifndef STORAGE_LEVELDB_OTHELLO_CP_DP_H_
-#define STORAGE_LEVELDB_OTHELLO_CP_DP_H_
+#ifndef STORAGE_SPOTKV_OTHELLO_CP_DP_H_
+#define STORAGE_SPOTKV_OTHELLO_CP_DP_H_
 #pragma once
 
 #include "ludo/common.h"
