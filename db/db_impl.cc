@@ -135,6 +135,8 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
       logfile_number_(0),
       log_(NULL),
       seed_(0),
+      spotcompact(0),
+      totalcompact(0),
       tmp_batch_(new WriteBatch),
       bg_compaction_scheduled_(false),
       manual_compaction_(NULL) {
@@ -760,25 +762,31 @@ void DBImpl::BackgroundCompaction() {
         versions_->LevelSummary(&tmp));
   } else {
     CompactionState* compact = new CompactionState(c);
-
+    
     if (compact->compaction->level() > 0) {
       bool NeedSelfCompaction = false;
       FileMetaData* LastSpotTable = NULL;
       FileMetaData tmp;
-      //Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
-      //status = DoCompactionWork(compact);
+
+      Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
       status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+      
       LastSpotTable = &tmp;
-      //Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+      if (compact->compaction->SpotCompaction())
+        totalcompact ++;
+      
       //DeleteObsoleteFiles();
       if (NeedSelfCompaction) {
         //TODO: 
+        assert(compact->compaction->SpotCompaction());
+        spotcompact ++;
         Compaction* c2 = versions_->PickSelfLevelCompaction(compact->compaction, LastSpotTable);
         CompactionState* compact2 = new CompactionState(c2);
         //assert(c2->compaction->num_input_files(0) > 1);
-        Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
+        //Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
         Status status2 = DoCompactionWorkSelfLevel(compact2);
-        Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+        //Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
         if (status2.ok()) {
           CleanupCompaction(compact2);
           c2->ReleaseInputs();
@@ -797,6 +805,10 @@ void DBImpl::BackgroundCompaction() {
     CleanupCompaction(compact);
     c->ReleaseInputs();
     DeleteObsoleteFiles();
+
+    Log(options_.info_log, "Now the Spot compact ratio is:%d / %d.\n", 
+        spotcompact, totalcompact);
+
   }
   delete c;
 
@@ -1148,11 +1160,17 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
   Slice StartingKeyCurrentTable;
-  Log(options_.info_log,  "SpotKV Compacting %d@%d + %d@%d files",
+  Log(options_.info_log,  "SpotKV Compaction: %d@%d + %d@%d, instead of %d@%d files",
       compact->compaction->num_input_files(0),
       compact->compaction->level(),
       compact->compaction->num_input_real(),
+      compact->compaction->level() + 1,
+      compact->compaction->num_input_files(1),
       compact->compaction->level() + 1);
+
+  VersionSet::LevelSummaryStorage tmp;
+  //Log(options_.info_log,
+  //    "compacted to: %s", versions_->LevelSummary(&tmp));
 
   assert(versions_->NumLevelFiles(compact->compaction->level()) > 0);
   assert(compact->compaction->level() > 0);
@@ -1188,13 +1206,13 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     }
 
     Slice key = input->key();
-    if (compact->compaction->ShouldStopBefore(key) &&
+    /*if (compact->compaction->ShouldStopBefore(key) &&
         compact->builder != NULL) {
       status = FinishCompactionOutputFile(compact, input);
       if (!status.ok()) {
         break;
       }
-    }
+    }*/
 
     // Handle key/value, add to state, etc.
     bool drop = false;
@@ -1301,27 +1319,30 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     RecordBackgroundError(status);
   }
 
-  VersionSet::LevelSummaryStorage tmp;
-  Log(options_.info_log,
-      "compacted to: %s", versions_->LevelSummary(&tmp));
+  //Log(options_.info_log,
+  //    "compacted to: %s", versions_->LevelSummary(&tmp));
 
   if (status.ok()) {
     if (compact->compaction->SpotCompaction()) {
       //ParseInternalKey(StartingKeyCurrentTable, &ikey);
       InternalKey jkey = compact->compaction->input(1, 
                             compact->compaction->num_input_real())->smallest;
-      if (user_comparator()->Compare(LastSpotTable.smallest.user_key(),
-                                      jkey.user_key()) <= 0) {
+      //if (user_comparator()->Compare(LastSpotTable.smallest.user_key(),
+      //                                jkey.user_key()) < 0) {
+      if (strtoul(LastSpotTable.smallest.user_key().ToString().substr(4,16).c_str(), 
+                  NULL, 10) < strtoul(jkey.user_key().ToString().substr(4,16).c_str(), 
+                  NULL, 10)) {  
         NeedSelfCompaction = false;                        
       } else {
         //TODO:
         NeedSelfCompaction = true;
-        Log(options_.info_log,  
-            "LastSpotTable starts from: %lu and the first Un-compaction table starts from: %lu.",
-            strtoul(LastSpotTable.smallest.user_key().ToString().substr(0,16).c_str(), NULL, 10),
-            //strtoul(ikey.user_key.ToString().substr(0,16).c_str(), NULL, 10),
-            strtoul(jkey.user_key().ToString().substr(0,16).c_str(), NULL, 10));
       }
+    
+    Log(options_.info_log,  
+            "LastSpotTable starts from: %s and the first Un-compaction table starts from: %lu.",
+            LastSpotTable.smallest.user_key().ToString().substr(4,16).c_str(),
+            //strtoul(ikey.user_key.ToString().substr(4,16).c_str(), NULL, 10),
+            strtoul(jkey.user_key().ToString().substr(4,16).c_str(), NULL, 10));
     }
   }
 

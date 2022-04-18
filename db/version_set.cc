@@ -42,7 +42,8 @@ static double MaxBytesForLevel(const Options* options, int level) {
   // the level-0 compaction threshold based on number of files.
 
   // Result for both level-0 and level-1
-  double result = 10. * 1048576.0;
+  //double result = 10. * 1048576.0;
+  double result = config::kL0_CompactionTrigger * 2. * 1024.0 * 1024.0;
   while (level > 1) {
     result *= 10;
     level--;
@@ -810,9 +811,9 @@ std::string Version::DebugString() const {
       r.push_back(':');
       AppendNumberTo(&r, files[i]->file_size);
       r.append("[");
-      r.append(files[i]->smallest.DebugString());
+      r.append(files[i]->smallest.user_key().ToString().substr(0,16).c_str());//DebugString());
       r.append(" .. ");
-      r.append(files[i]->largest.DebugString());
+      r.append(files[i]->largest.user_key().ToString().substr(0,16).c_str());//DebugString());
       r.append("]\n");
     }
   }
@@ -1361,7 +1362,7 @@ const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
   // Update code if kNumLevels changes
   //assert(config::kNumLevels == 7);
   snprintf(scratch->buffer, sizeof(scratch->buffer),
-           "files[ %d %d %d %d %d %d %d ]",
+           "files[ %d %d %d ]",
            int(current_->files_[0].size()),
            int(current_->files_[1].size()),
            int(current_->files_[2].size()));/*
@@ -1632,10 +1633,12 @@ Compaction* VersionSet::PickCompaction() {
       if (compact_pointer_[level].empty() ||
           icmp_.Compare(f->largest.Encode(), compact_pointer_[level]) > 0) {
         c->inputs_[0].push_back(f);
+        //c->NoSpotCompaction_ = true;
         break;
       }
     }
     #endif
+    //if (c->num_input_files(0) > 1)
 
     if (c->inputs_[0].empty()) {
       // Wrap-around to the beginning of the key space
@@ -1671,7 +1674,7 @@ Compaction* VersionSet::PickCompaction() {
   SetupOtherInputsSpot(c);
   
   size_t tmpn = c->num_input_files(1);
-  if (tmpn > 0) { 
+  if (tmpn > 0) {
     /*Log(options_->info_log, "Compaction inputs_[1] starting keys are: %lu\t%lu\n", 
                               strtoul(c->inputs_[1][0]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10),
                               strtoul(c->inputs_[1][1]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10));*/
@@ -1846,7 +1849,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.7),
+      WAdeduction_(0.3),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
@@ -1952,6 +1955,8 @@ void Compaction::UpdateInputReal() {
     if (tmp > config::kNumSpotTables) {
       tmp = (int)(ceil(tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { SpotCompaction_ = true; }
+    } else {
+      SpotCompaction_ = false;
     }
     //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }

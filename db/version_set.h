@@ -358,7 +358,7 @@ class Compaction {
   FileMetaData* inputReal(int i) const { return inputReal_[i]; }
   void UpdateInputReal();
   bool SpotCompaction() { return SpotCompaction_; };
-
+  
   // Maximum size of files to build during this compaction.
   uint64_t MaxOutputFileSize() const { return max_output_file_size_; }
 
@@ -398,7 +398,7 @@ class Compaction {
   std::vector<FileMetaData*> inputReal_;
   double WAdeduction_; 
   bool SpotCompaction_;
-
+  
   // State used to check for number of of overlapping grandparent files
   // (parent == level_ + 1, grandparent == level_ + 2)
   std::vector<FileMetaData*> grandparents_;

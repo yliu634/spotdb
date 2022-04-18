@@ -12,7 +12,7 @@
 # workload here (which we believe is more typical of how people build systems.)
 
 recordcount=1000000
-operationcount=5000
+operationcount=500000
 workload=com.yahoo.ycsb.workloads.CoreWorkload
 
 readallfields=true

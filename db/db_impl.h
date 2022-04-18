@@ -152,6 +152,8 @@ class DBImpl : public DB {
   ControlPlaneLudo<uint32_t, uint64_t>* cp_; 
   CountMinSketch<uint16_t>* ctm_;
   Cache* cmc_;
+  int spotcompact;
+  int totalcompact;
   // Lock over the persistent DB state.  Non-NULL iff successfully acquired.
   FileLock* db_lock_;
 
