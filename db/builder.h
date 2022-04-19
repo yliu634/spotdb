@@ -37,7 +37,7 @@ extern Status BuildLudoTable(const std::string& dbname,
                          TableCache* table_cache,
                          Iterator* iter,
                          FileMetaData* meta,
-                         ControlPlaneLudo<uint32_t, uint64_t>* cp);             
+                         ControlPlaneLudo<uint64_t, uint64_t>* cp);             
 
 }  // namespace spotkv
 

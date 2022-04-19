@@ -149,7 +149,7 @@ DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
   versions_ = new VersionSet(dbname_, &options_, table_cache_,
                              &internal_comparator_);
   
-  cp_ = new ControlPlaneLudo<uint32_t, uint64_t> (1024);
+  cp_ = new ControlPlaneLudo<uint64_t, uint64_t> (1024);
   ctm_ = new CountMinSketch<uint16_t> (3, 80, true);
   cmc_ = NewLRUCache(1024);
 }
@@ -768,9 +768,11 @@ void DBImpl::BackgroundCompaction() {
       FileMetaData* LastSpotTable = NULL;
       FileMetaData tmp;
 
-      Log(options_.info_log, "Before:\n %s", versions_->current()->DebugString().c_str());
+      //Log(options_.info_log, "Before:\n %s", 
+      //    versions_->current()->DebugString().c_str());
       status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
-      Log(options_.info_log, "After:\n %s", versions_->current()->DebugString().c_str());
+      //Log(options_.info_log, "After:\n %s", 
+      //    versions_->current()->DebugString().c_str());
       
       LastSpotTable = &tmp;
       if (compact->compaction->SpotCompaction())
@@ -1329,9 +1331,9 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
                             compact->compaction->num_input_real())->smallest;
       //if (user_comparator()->Compare(LastSpotTable.smallest.user_key(),
       //                                jkey.user_key()) < 0) {
-      if (strtoul(LastSpotTable.smallest.user_key().ToString().substr(4,16).c_str(), 
-                  NULL, 10) < strtoul(jkey.user_key().ToString().substr(4,16).c_str(), 
-                  NULL, 10)) {  
+      if (strtoul(LastSpotTable.smallest.user_key().ToString().substr(4,20).c_str(), 
+                  NULL, 10) < strtoul(jkey.user_key().ToString().substr(4,20).c_str(), 
+                  NULL, 10)) { 
         NeedSelfCompaction = false;                        
       } else {
         //TODO:
@@ -1340,9 +1342,9 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     
     Log(options_.info_log,  
             "LastSpotTable starts from: %s and the first Un-compaction table starts from: %lu.",
-            LastSpotTable.smallest.user_key().ToString().substr(4,16).c_str(),
+            LastSpotTable.smallest.user_key().ToString().substr(0,20).c_str(),
             //strtoul(ikey.user_key.ToString().substr(4,16).c_str(), NULL, 10),
-            strtoul(jkey.user_key().ToString().substr(4,16).c_str(), NULL, 10));
+            strtoul(jkey.user_key().ToString().substr(0,20).c_str(), NULL, 10));
     }
   }
 
@@ -1621,8 +1623,9 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
     }
 
     // uint32_t cpsize = cp_->size();
-    cp_->remove(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10));
-    // Log(options_.info_log, "Cp removed the key: %lu and the size from %u to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
+    cp_->remove(strtoul(key.ToString().substr(4,20).c_str(), NULL, 10));
+    Log(options_.info_log, "Cp removed the key: %s.", 
+      key.ToString().substr(0, 20).c_str());
    
     input->Next();
   }
@@ -1773,14 +1776,14 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != NULL && imm->Get(lkey, value, &s)) {
       // Done
 
-    } else if (cp_->lookUp(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), file_number)) {
+    } else if (cp_->lookUp(strtoul(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
         /*if (!s.ok())
           s = current->GetSpot(options, lkey, value, &stats);
         */// have_stat_update = true;
-        /* Log(options_.info_log, "From the Cache the key: %lu's value is: %s.", 
-            strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
-            (*value).substr(0, 8).c_str()); */
+        Log(options_.info_log, "From the Cache the key: %s's value is: %s.", 
+            key.ToString().substr(0, 20).c_str(), 
+            (*value).substr(0, 8).c_str()); 
         // Done
     } else {
 

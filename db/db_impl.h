@@ -149,7 +149,7 @@ class DBImpl : public DB {
   TableCache* table_cache_;
 
 
-  ControlPlaneLudo<uint32_t, uint64_t>* cp_; 
+  ControlPlaneLudo<uint64_t, uint64_t>* cp_; 
   CountMinSketch<uint16_t>* ctm_;
   Cache* cmc_;
   int spotcompact;

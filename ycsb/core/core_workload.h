@@ -253,6 +253,7 @@ inline std::string CoreWorkload::BuildKeyName(uint64_t key_num) {
 //  key_num %= insert_key_sequence_.Last();/////////////////////////////
   snprintf(key, sizeof(key), "%020lu", key_num);
   return std::string("user").append(std::string(key,20));
+  //return std::string(key,20);
 }
 
 inline std::string CoreWorkload::NextFieldName() {

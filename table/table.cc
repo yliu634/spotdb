@@ -239,7 +239,7 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
       // Not found
     } else {
       Iterator* block_iter = BlockReader(this, options, iiter->value());
-       Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
+      Log(rep_->options.info_log, "Find the: %lu is iterated in block: %lu", 
              strtoul(k.ToString().substr(0,16).c_str(), NULL, 10), 
              handle.offset());
       block_iter->Seek(k);

@@ -3,22 +3,22 @@ function __runGLSM(){
 
 #rm -rf ../persitentIndexDir/B_TreeStore.txt
 #rm -rf ../persitentIndexDir/hashTableStore.txt
-rm -rf $dbfilename/*
+rm -r $dbfilename/*
 
 echo "" > result.txt
 
 echo "************* LevelDB *************" >> result.txt
-./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -rf $dbfilename/*
+#./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+rm -r $dbfilename/*
 echo "************* RocksDB *************" >> result.txt
 #./ycsbc -db rocksdb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -rf $dbfilename/*
+rm -r $dbfilename/*
 echo "************** UniKV **************" >> result.txt
 #./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -rf $dbfilename/*
+rm -r $dbfilename/*
 echo "************* SpotKV **************" >> result.txt
 ./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -rf $dbfilename/*
+#rm -r $dbfilename/*
 
 #./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad false > leveldb-load-100G-read-10M.txt
 #./ycsbc -db leveldb -threads 1 -P $workload_name1 -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad true > leveldb-load-100G-scan-1M.txt
@@ -34,7 +34,7 @@ rm -rf $dbfilename/*
 
 }
 
-workload_name=./workloads/workloadd.spec
+workload_name=./workloads/workloada.spec
 workload_name1=./workloads/workloadb.spec
 workload_name2=./workloads/workloadc.spec
 workload_name3=./workloads/workloadd.spec
