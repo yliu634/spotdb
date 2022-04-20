@@ -450,6 +450,7 @@ Status Version::GetSpot(const ReadOptions& options,
   // levels.  Therefore we are guaranteed that if we find data
   // in an smaller level, later levels are irrelevant.
   std::vector<FileMetaData*> tmp;
+  FileMetaData* tmp1;
   std::vector<FileMetaData*> tmp2;
   // for (int level = 0; level < config::kNumLevels; level++) {
   for (int level = 1; level < config::kNumLevels; level++) {
@@ -481,6 +482,22 @@ Status Version::GetSpot(const ReadOptions& options,
       std::sort(tmp.begin(), tmp.end(), NewestFirst);
       files = &tmp[0];
       num_files = tmp.size();
+    } else if (level == 1) {
+      uint32_t index = FindFile(vset_->icmp_, files_[level], ikey);
+      if (index >= num_files) {
+        files = NULL;
+        num_files = 0;
+      } else {
+        tmp1 = files[index];
+        if (ucmp->Compare(user_key, tmp1->smallest.user_key()) < 0) {
+          // All of "tmp1" is past any data for user_key
+          files = NULL;
+          num_files = 0;
+        } else {
+          files = &tmp1;
+          num_files = 1;
+        }
+      }
     } else {
       // Binary search to find earliest index whose largest key >= ikey.
       // TODO DEBUG: Check if this files_ is sorted increasingly.

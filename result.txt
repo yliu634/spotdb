@@ -1,8 +1,15 @@
 Keys:       16 bytes each
 Values:     1024 bytes each (1024 bytes after compression)
-Entries:    2000000
-RawSize:    1983.6 MB (estimated)
-FileSize:   1983.6 MB (estimated)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
 ------------------------------------------------
-Try #4 human(nKeysInOthello) Keys, ma/mb = human(ma) / human(mb) key length: 32b  value length: 8b VDL=1
-fillrandom   :      28.845 micros/op;   34.4 MB/s
+fillrandom   :      17.532 micros/op;   56.6 MB/s
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        1       63         7        0       938
+  1      216      421         8      893       709
+  2      138      278         0       35        31
+
