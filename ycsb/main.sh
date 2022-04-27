@@ -8,7 +8,7 @@ rm -r $dbfilename/*
 echo "" > result.txt
 
 echo "************* LevelDB *************" >> result.txt
-#./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -r $dbfilename/*
 echo "************* RocksDB *************" >> result.txt
 #./ycsbc -db rocksdb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
@@ -34,7 +34,7 @@ echo "************* SpotKV **************" >> result.txt
 
 }
 
-workload_name=./workloads/workloada.spec
+workload_name=./workloads/workloada-1.spec
 workload_name1=./workloads/workloadb.spec
 workload_name2=./workloads/workloadc.spec
 workload_name3=./workloads/workloadd.spec

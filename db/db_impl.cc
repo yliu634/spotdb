@@ -779,6 +779,7 @@ void DBImpl::BackgroundCompaction() {
         totalcompact ++;
       
       //DeleteObsoleteFiles();
+      //if (false) {
       if (NeedSelfCompaction) {
         //TODO: 
         assert(compact->compaction->SpotCompaction());
@@ -1208,13 +1209,13 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     }
 
     Slice key = input->key();
-    /*if (compact->compaction->ShouldStopBefore(key) &&
+    if (compact->compaction->ShouldStopBefore(key) &&
         compact->builder != NULL) {
       status = FinishCompactionOutputFile(compact, input);
       if (!status.ok()) {
         break;
       }
-    }*/
+    }
 
     // Handle key/value, add to state, etc.
     bool drop = false;
@@ -1323,16 +1324,16 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
 
   //Log(options_.info_log,
   //    "compacted to: %s", versions_->LevelSummary(&tmp));
-
+  
   if (status.ok()) {
     if (compact->compaction->SpotCompaction()) {
       //ParseInternalKey(StartingKeyCurrentTable, &ikey);
       InternalKey jkey = compact->compaction->input(1, 
                             compact->compaction->num_input_real())->smallest;
       //if (user_comparator()->Compare(LastSpotTable.smallest.user_key(),
-      //                                jkey.user_key()) < 0) {
-      if (strtoul(LastSpotTable.smallest.user_key().ToString().substr(4,20).c_str(), 
-                  NULL, 10) < strtoul(jkey.user_key().ToString().substr(4,20).c_str(), 
+      //                                Slice(jkey.user_key())) < 0) {
+      if (strtoull(LastSpotTable.smallest.user_key().ToString().substr(4,20).c_str(), 
+                  NULL, 10) < strtoull(jkey.user_key().ToString().substr(4,20).c_str(), 
                   NULL, 10)) { 
         NeedSelfCompaction = false;                        
       } else {
@@ -1341,10 +1342,11 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
       }
     
     Log(options_.info_log,  
-            "LastSpotTable starts from: %s and the first Un-compaction table starts from: %lu.",
+            "LastSpotTable starts from: %s and the first Un-compaction table starts from: %s.",
             LastSpotTable.smallest.user_key().ToString().substr(0,20).c_str(),
             //strtoul(ikey.user_key.ToString().substr(4,16).c_str(), NULL, 10),
-            strtoul(jkey.user_key().ToString().substr(0,20).c_str(), NULL, 10));
+            //strtoul(jkey.user_key().ToString().substr(0,20).c_str(), NULL, 10),
+            jkey.user_key().ToString().substr(0,20).c_str());
     }
   }
 
@@ -1623,9 +1625,9 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
     }
 
     // uint32_t cpsize = cp_->size();
-    cp_->remove(strtoul(key.ToString().substr(4,20).c_str(), NULL, 10));
-    Log(options_.info_log, "Cp removed the key: %s.", 
-      key.ToString().substr(0, 20).c_str());
+    cp_->remove(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10));
+    //Log(options_.info_log, "Cp removed the key: %s.", 
+    //  key.ToString().substr(0, 20).c_str());
    
     input->Next();
   }
@@ -1776,7 +1778,7 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != NULL && imm->Get(lkey, value, &s)) {
       // Done
 
-    } else if (cp_->lookUp(strtoul(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
+    } else if (cp_->lookUp(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
         /*if (!s.ok())
           s = current->GetSpot(options, lkey, value, &stats);

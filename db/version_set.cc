@@ -1694,7 +1694,7 @@ Compaction* VersionSet::PickCompaction() {
   if (tmpn > 0) {
     /*Log(options_->info_log, "Compaction inputs_[1] starting keys are: %lu\t%lu\n", 
                               strtoul(c->inputs_[1][0]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10),
-                              strtoul(c->inputs_[1][1]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10));*/
+                              strtoul(c->inputs_[1][1]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10));
     for (size_t i = 0; i < tmpn - 1; i ++) {
       for (size_t j = 0; j < tmpn-i-1; j ++) {
         if (icmp_.Compare(c->inputs_[1][j]->smallest, c->inputs_[1][j+1]->smallest) > 0) {
@@ -1702,13 +1702,13 @@ Compaction* VersionSet::PickCompaction() {
         }
       }
     }
-    /*Log(options_->info_log, "Compaction inputs_[1] starting keys are: %lu\t%lu\n", 
+    Log(options_->info_log, "Compaction inputs_[1] starting keys are: %lu\t%lu\n", 
                               strtoul(c->inputs_[1][0]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10),
                               strtoul(c->inputs_[1][1]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10));*/
-  }
   c->UpdateInputReal();
+  }
+  //c->UpdateInputReal();
   
-
   return c;
 }
 
@@ -1977,6 +1977,7 @@ void Compaction::UpdateInputReal() {
     }
     //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }
+  
   inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
 }
 
