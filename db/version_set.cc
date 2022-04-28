@@ -44,9 +44,11 @@ static double MaxBytesForLevel(const Options* options, int level) {
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
   double result = config::kL0_CompactionTrigger * 2. * 1024.0 * 1024.0;
-  while (level > 1) {
-    result *= 10;
-    level--;
+  if (config::kNumLevels < 3) {
+    while (level > 1) {
+      result *= 10;
+      level--;
+    }
   }
   return result;
 }
@@ -1003,8 +1005,8 @@ class VersionSet::Builder {
       std::vector<FileMetaData*>* files = &v->files_[level];
       if (level > 0 && !files->empty()) {
         // Must not overlap
-        assert(vset_->icmp_.Compare((*files)[files->size()-1]->largest,
-                                    f->smallest) < 0);
+        //assert(vset_->icmp_.Compare((*files)[files->size()-1]->largest,
+        //                            f->smallest) < 0);
       }
       f->refs++;
       files->push_back(f);
@@ -1961,6 +1963,10 @@ void Compaction::ReleaseInputs() {
     input_version_->Unref();
     input_version_ = NULL;
   }
+}
+
+void Compaction::ClearInputReal() {
+  inputReal_.clear();
 }
 
 void Compaction::UpdateInputReal() {

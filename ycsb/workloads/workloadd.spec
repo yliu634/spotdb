@@ -22,7 +22,5 @@ updateproportion=0
 scanproportion=0
 insertproportion=0.05
 
-fieldlength=1000
-
 requestdistribution=latest
 

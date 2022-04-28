@@ -711,6 +711,21 @@ void DBImpl::BackgroundCall() {
   bg_cv_.SignalAll();
 }
 
+bool DBImpl::DirectCompaction(CompactionState* compact) {
+  if (compact->compaction->num_input_files(0) == 1 &&
+      compact->compaction->num_input_files(1) == 1) {
+    uint64_t ismall = strtoull(compact->compaction->input(0,0)->smallest.user_key().ToString().substr(4,20).c_str(), nullptr, 10);
+    uint64_t jsmall = strtoull(compact->compaction->input(1,0)->smallest.user_key().ToString().substr(4,20).c_str(), nullptr, 10);
+    if (ismall < jsmall && rand()%100 < 30) {
+      //TODO:
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return false;
+}
+
 void DBImpl::BackgroundCompaction() {
   mutex_.AssertHeld();
 
@@ -770,7 +785,18 @@ void DBImpl::BackgroundCompaction() {
 
       //Log(options_.info_log, "Before:\n %s", 
       //    versions_->current()->DebugString().c_str());
-      status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      //if (compact->compaction->num_input_files(1) > 1)
+      //for one overlapping compaction, open for when kNumConfig = 1;
+      #if 1
+        status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      #else
+        if (DirectCompaction(compact)) {
+          //DirectlyInstallCompactionResults(compact);
+          //else {
+          compact->compaction->ClearInputReal();
+        }
+        status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      #endif
       //Log(options_.info_log, "After:\n %s", 
       //    versions_->current()->DebugString().c_str());
       
@@ -951,6 +977,43 @@ Status DBImpl::InstallCompactionResults(CompactionState* compact) {
         level + 1,
         out.number, out.file_size, out.smallest, out.largest);
   }
+  return versions_->LogAndApply(compact->compaction->edit(), &mutex_);
+}
+
+Status DBImpl::DirectlyInstallCompactionResults(CompactionState* compact) {
+  mutex_.AssertHeld();
+  Log(options_.info_log,  "Directly Compacted %d@%d + %d@%d files => %lld bytes",
+      compact->compaction->num_input_files(0),
+      compact->compaction->level(),
+      compact->compaction->num_input_files(1),
+      compact->compaction->level() + 1,
+      static_cast<long long>(compact->total_bytes));
+  // put the files in [0] down to [1] directly.
+  assert(compact->compaction->num_input_files(0) == 1);
+  assert(compact->compaction->num_input_files(1) == 1);
+  // Add compaction outputs
+  //compact->compaction->AddInputDeletions(compact->compaction->edit());
+  const int level = compact->compaction->level();
+  /*
+  for (size_t i = 0; i < compact->outputs.size(); i++) {
+    const CompactionState::Output& out = compact->outputs[i];
+    compact->compaction->edit()->AddFile(
+        level + 1,
+        out.number, out.file_size, out.smallest, out.largest);
+  }*/
+  //Version* base = versions_->current();
+  //base->Ref();
+  compact->compaction->edit()->AddFile(
+        level + 1,
+        versions_->NewFileNumber(), 
+        compact->compaction->input(0,0)->file_size, 
+        compact->compaction->input(0,0)->smallest, 
+        compact->compaction->input(0,0)->largest);
+  //base->Unref();
+  versions_->LogAndApply(compact->compaction->edit(), &mutex_);
+
+  compact->compaction->AddInputDeletions(compact->compaction->edit());
+  compact->compaction->edit()->ClearAddFile();
   return versions_->LogAndApply(compact->compaction->edit(), &mutex_);
 }
 
@@ -1491,27 +1554,6 @@ Status DBImpl::DoCompactionWorkSelfLevel(CompactionState* compact) {
 }
 
 
-/*
-void* DBImpl::RemoveLudoCache(Iterator* input) {
-  input->SeekToFirst();
-  Status status;
-  ParsedInternalKey ikey;
-  std::string current_user_key;
-  bool has_current_user_key = false;
-  SequenceNumber last_sequence_for_key = kMaxSequenceNumber;   
-  for (; input->Valid() && !shutting_down_.Acquire_Load(); ) {
-    
-    Slice key = input->key();
-    // uint32_t cpsize = cp_->size();
-    cp_->remove(strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10));
-    // Log(options_.info_log, "Cp removed the key: %lu and the size from %u to %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cpsize, cp_->size());
-   
-    input->Next();
-  }
-
-}
-*/
-
 Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
@@ -1765,6 +1807,7 @@ Status DBImpl::Get(const ReadOptions& options,
   bool have_stat_update = false;
   Version::GetStats stats;
   uint64_t file_number(0);
+  
   // Unlock while reading from files and memtables
   {
     mutex_.Unlock();
@@ -1800,6 +1843,7 @@ Status DBImpl::Get(const ReadOptions& options,
           s = current->GetSpot(options, lkey, value, &stats);
           have_stat_update = true;
         } else {
+          Log(options_.info_log, "Count-Min sketch boy."); 
           *value = reinterpret_cast<char*>(cmc_->Value(handle));
           s = Status::OK();
         }
@@ -1858,6 +1902,8 @@ void DBImpl::ReleaseSnapshot(const Snapshot* s) {
 
 // Convenience methods
 Status DBImpl::Put(const WriteOptions& o, const Slice& key, const Slice& val) {
+  //Log(options_.info_log, "Update the key %s ing...", 
+  //          key.ToString().substr(0, 20).c_str()); 
   return DB::Put(o, key, val);
 }
 

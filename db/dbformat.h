@@ -20,10 +20,10 @@ namespace spotkv {
 // parameters set via options.
 namespace config {
 static const int kNumLevels = 3;
-static const int kNumSpotTables = 2;
+static const int kNumSpotTables = 1;
 // Level-0 compaction is started when we hit this many files.
 static const int kL0_CompactionTrigger = 4;//4
-
+// rocksdb/options/option.cc
 // Soft limit on number of level-0 files.  We slow down writes at this point.
 static const int kL0_SlowdownWritesTrigger = 8;//8
 

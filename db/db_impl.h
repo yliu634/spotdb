@@ -114,6 +114,7 @@ class DBImpl : public DB {
   void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   static void BGWork(void* db);
   void BackgroundCall();
+  bool DirectCompaction(CompactionState* compact);
   void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   void CleanupCompaction(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
@@ -130,6 +131,8 @@ class DBImpl : public DB {
   Status OpenCompactionOutputFile(CompactionState* compact);
   Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
   Status InstallCompactionResults(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DirectlyInstallCompactionResults(CompactionState* compact)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);
   Status InstallCompactionResultsSpot(CompactionState* compact, FileMetaData& LastSpotTable)
       EXCLUSIVE_LOCKS_REQUIRED(mutex_);

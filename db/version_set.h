@@ -357,6 +357,7 @@ class Compaction {
 
   FileMetaData* inputReal(int i) const { return inputReal_[i]; }
   void UpdateInputReal();
+  void ClearInputReal();
   bool SpotCompaction() { return SpotCompaction_; };
   
   // Maximum size of files to build during this compaction.
