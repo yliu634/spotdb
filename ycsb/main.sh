@@ -8,7 +8,7 @@ rm -r $dbfilename/*
 echo "" > result.txt
 
 echo "************* LevelDB *************" >> result.txt
-./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+#./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -r $dbfilename/*
 #./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 rm -r $dbfilename/*

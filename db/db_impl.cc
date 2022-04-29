@@ -1280,13 +1280,13 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     }
 
     Slice key = input->key();
-    if (compact->compaction->ShouldStopBefore(key) &&
+    /*if (compact->compaction->ShouldStopBefore(key) &&
         compact->builder != NULL) {
       status = FinishCompactionOutputFile(compact, input);
       if (!status.ok()) {
         break;
       }
-    }
+    }*/
 
     // Handle key/value, add to state, etc.
     bool drop = false;
@@ -1806,8 +1806,6 @@ Status DBImpl::Get(const ReadOptions& options,
   } else {
     snapshot = versions_->LastSequence();
   }
-  Log(options_.info_log, "Lookup the key %s ing...", 
-            key.ToString().substr(0, 20).c_str()); 
   MemTable* mem = mem_;
   MemTable* imm = imm_;
   Version* current = versions_->current();
@@ -1824,8 +1822,7 @@ Status DBImpl::Get(const ReadOptions& options,
     mutex_.Unlock();
     // First look in the memtable, then in the immutable memtable (if any).
     LookupKey lkey(key, snapshot);
-    // Log(options_.info_log, "Look up of key: %s and its size is: %zu", key.data(), key.size());
-    // Log(options_.info_log, "Size if Internal key is %zu and userkey: %zu", lkey.internal_key().size(), lkey.user_key().size());
+    
     if (mem->Get(lkey, value, &s)) {
       // Done
 
@@ -1844,7 +1841,7 @@ Status DBImpl::Get(const ReadOptions& options,
     } else {
 
       #if 0
-        //s = current->GetSpot(options, lkey, value, &stats);
+        //s = current->Get(options, lkey, value, &stats);
         s = current->GetSpot(options, lkey, value, &stats);
         have_stat_update = true;
       #else
@@ -1854,21 +1851,13 @@ Status DBImpl::Get(const ReadOptions& options,
           s = current->GetSpot(options, lkey, value, &stats);
           have_stat_update = true;
         } else {
-          Log(options_.info_log, "Count-Min sketch boy."); 
+          //Log(options_.info_log, "Count-Min sketch boy."); 
           *value = reinterpret_cast<char*>(cmc_->Value(handle));
           s = Status::OK();
         }
         current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
       #endif
 
-      /* before single-side compaction:
-      s = current->Get(options, lkey, value, &stats);
-      have_stat_update = true;
-      current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
-      Log(options_.info_log, "From the SSTable the key: %lu's value is: %s.", 
-          strtoul(key.ToString().substr(0, 16).c_str(), NULL, 10), 
-          (*value).substr(0, 8).c_str());
-      */
     }
     mutex_.Lock();
   }
@@ -1913,8 +1902,6 @@ void DBImpl::ReleaseSnapshot(const Snapshot* s) {
 
 // Convenience methods
 Status DBImpl::Put(const WriteOptions& o, const Slice& key, const Slice& val) {
-  Log(options_.info_log, "Update the key %s ing...", 
-            key.ToString().substr(0, 20).c_str()); 
   return DB::Put(o, key, val);
 }
 
