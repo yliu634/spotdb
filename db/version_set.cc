@@ -44,12 +44,12 @@ static double MaxBytesForLevel(const Options* options, int level) {
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
   double result = config::kL0_CompactionTrigger * 2. * 1024.0 * 1024.0;
-  if (config::kNumLevels < 3) {
+  //if (config::kNumLevels < 3) {
     while (level > 1) {
       result *= 10;
       level--;
     }
-  }
+  //}
   return result;
 }
 
@@ -1707,9 +1707,9 @@ Compaction* VersionSet::PickCompaction() {
     Log(options_->info_log, "Compaction inputs_[1] starting keys are: %lu\t%lu\n", 
                               strtoul(c->inputs_[1][0]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10),
                               strtoul(c->inputs_[1][1]->smallest.user_key().ToString().substr(0, 16).c_str(), NULL, 10));*/
-  c->UpdateInputReal();
-  }
   //c->UpdateInputReal();
+  }
+  c->UpdateInputReal();
   
   return c;
 }
@@ -1892,20 +1892,20 @@ bool Compaction::IsTrivialMove() const {
 }
 
 void Compaction::AddInputDeletions(VersionEdit* edit) {
-  /*if (!SpotCompaction_) {
+  if (!SpotCompaction_) {
     for (int which = 0; which < 2; which++) {
       for (size_t i = 0; i < inputs_[which].size(); i++) {
         edit->DeleteFile(level_ + which, inputs_[which][i]->number);
       }
     }
-  } else {*/
+  } else {
     for (size_t i = 0; i < inputs_[0].size(); i++) {
       edit->DeleteFile(level_, inputs_[0][i]->number);
     }
     for (size_t i = 0; i < inputReal_.size(); i++) {
       edit->DeleteFile(level_ + 1, inputReal_[i]->number);
     }
-  //}
+  }
 }
 
 void Compaction::AddInputDeletionsSelfLevel(VersionEdit* edit) {
@@ -1974,17 +1974,17 @@ void Compaction::UpdateInputReal() {
   int tmp = num_input_files(1);
   if (tmp < 1) {
     return;
-  } else {
-    if (tmp > config::kNumSpotTables) {
-      tmp = (int)(ceil(tmp * WAdeduction_));
-      if (tmp < num_input_files(1)) { SpotCompaction_ = true; }
-    } else {
-      SpotCompaction_ = false;
-    }
+  } else if (tmp > config::kNumSpotTables) {
+      tmp = (int)(ceil((double)tmp * WAdeduction_));
+      if (tmp < num_input_files(1)) { 
+        SpotCompaction_ = true; 
+      } 
     //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }
-  
-  inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
+  for (size_t i = 0; i < num_input_files(1); i++) {
+    inputReal_.push_back(inputs_[1][i]);
+  }
+  //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
 }
 
 }  // namespace spotkv

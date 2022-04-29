@@ -113,7 +113,7 @@ Status BuildLudoTable(const std::string& dbname,
       builder->Add(key, iter->value());
       cp->insert(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), 
                   meta->number, 
-                  false);
+                 false);
       // cp->insert(strtoul(key.ToString().substr(4,16).c_str(), NULL, 10), 
       //            (meta->number<<32) + (blockCacheOffset&0xffffffff), 
       //            false);

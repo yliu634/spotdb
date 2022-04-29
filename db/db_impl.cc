@@ -513,20 +513,27 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   iter->SeekToFirst();
   meta.smallest.DecodeFrom(iter->key());
   iter->SeekToLast();
-  meta.smallest.DecodeFrom(iter->key());
+  meta.largest.DecodeFrom(iter->key());
   if (base != NULL) {
-      //level = base->PickLevelForMemTableOutput(meta.smallest.user_key(), meta.smallest.user_key());
+      level = base->PickLevelForMemTableOutput(meta.smallest.user_key(), meta.smallest.user_key());
 
   }
   // Log(options_.info_log, "This SSTbale would be stored in the level of %d.",
   //     level);
   Status s;
 
-  
-  {
-    mutex_.Unlock();
-    s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
-    mutex_.Lock();
+  if (level == 0) {
+    {
+      mutex_.Unlock();
+      s = BuildLudoTable(dbname_, env_, options_, table_cache_, iter, &meta, cp_);
+      mutex_.Lock();
+    }
+  } else {
+    {
+      mutex_.Unlock();
+      s = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
+      mutex_.Lock();
+    }
   }
   
   //std::future <void*> res = Env::Default()->threadPool->addTask(DBImpl::buildLudoCache, (void *) &iter);
@@ -543,11 +550,11 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   // should not be added to the manifest.
   // int level = 0;
   if (s.ok() && meta.file_size > 0) {
-    /*const Slice min_user_key = meta.smallest.user_key();
+    const Slice min_user_key = meta.smallest.user_key();
     const Slice max_user_key = meta.largest.user_key();
     if (base != NULL) {
-      level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
-    }*/
+      //level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
+    }
     edit->AddFile(level, meta.number, meta.file_size,
                   meta.smallest, meta.largest);
   }
@@ -788,7 +795,8 @@ void DBImpl::BackgroundCompaction() {
       //if (compact->compaction->num_input_files(1) > 1)
       //for one overlapping compaction, open for when kNumConfig = 1;
       #if 1
-        status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+        status = DoCompactionWork(compact);
+        //status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
       #else
         if (DirectCompaction(compact)) {
           //DirectlyInstallCompactionResults(compact);
@@ -801,15 +809,15 @@ void DBImpl::BackgroundCompaction() {
       //    versions_->current()->DebugString().c_str());
       
       LastSpotTable = &tmp;
-      if (compact->compaction->SpotCompaction())
-        totalcompact ++;
+      //if (compact->compaction->SpotCompaction())
+      //  totalcompact ++;
       
       //DeleteObsoleteFiles();
       //if (false) {
       if (NeedSelfCompaction) {
         //TODO: 
         assert(compact->compaction->SpotCompaction());
-        spotcompact ++;
+        //spotcompact ++;
         Compaction* c2 = versions_->PickSelfLevelCompaction(compact->compaction, LastSpotTable);
         CompactionState* compact2 = new CompactionState(c2);
         //assert(c2->compaction->num_input_files(0) > 1);
@@ -827,7 +835,7 @@ void DBImpl::BackgroundCompaction() {
     else {
       status = DoCompactionWorkforLudoCache(compact); //remove cuckoo key-value pairs;
     }
-
+    
     if (!status.ok()) {
       RecordBackgroundError(status);
     }
@@ -835,8 +843,8 @@ void DBImpl::BackgroundCompaction() {
     c->ReleaseInputs();
     DeleteObsoleteFiles();
 
-    Log(options_.info_log, "Now the Spot compact ratio is:%d / %d.\n", 
-        spotcompact, totalcompact);
+    //Log(options_.info_log, "Now the Spot compact ratio is:%d / %d.\n", 
+    //    spotcompact, totalcompact);
 
   }
   delete c;
@@ -1036,9 +1044,9 @@ Status DBImpl::InstallCompactionResultsSpot(CompactionState* compact, FileMetaDa
         out.number, out.file_size, out.smallest, out.largest);
   }
   LastSpotTable = compact->compaction->edit()->LastSpotTable();
-  Log(options_.info_log, "LastSpotTable's numner is: %lu and smallest key is: %lu",
+  Log(options_.info_log, "LastSpotTable's numner is: %lu and smallest key is: %s",
             LastSpotTable.number,
-            strtoul(LastSpotTable.smallest.user_key().ToString().substr(0,16).c_str(), NULL, 10));
+            LastSpotTable.smallest.user_key().ToString().substr(0,16).c_str());
   return versions_->LogAndApply(compact->compaction->edit(), &mutex_);
 }
 
@@ -1225,7 +1233,7 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
 Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfCompaction, FileMetaData& LastSpotTable) {
   const uint64_t start_micros = env_->NowMicros();
   int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
-  Slice StartingKeyCurrentTable;
+  //Slice StartingKeyCurrentTable;
   Log(options_.info_log,  "SpotKV Compaction: %d@%d + %d@%d, instead of %d@%d files",
       compact->compaction->num_input_files(0),
       compact->compaction->level(),
@@ -1239,7 +1247,7 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
   //    "compacted to: %s", versions_->LevelSummary(&tmp));
 
   assert(versions_->NumLevelFiles(compact->compaction->level()) > 0);
-  assert(compact->compaction->level() > 0);
+  //assert(compact->compaction->level() > 0);
   assert(compact->builder == NULL);
   assert(compact->outfile == NULL);
   if (snapshots_.empty()) {
@@ -1365,6 +1373,7 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
       stats.bytes_read += compact->compaction->input(which, i)->file_size;
     }
   }*/
+  
   for (int i = 0; i < compact->compaction->num_input_files(0); i++) {
     stats.bytes_read += compact->compaction->input(0, i)->file_size;
   }
@@ -1374,12 +1383,13 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
   for (size_t i = 0; i < compact->outputs.size(); i++) {
     stats.bytes_written += compact->outputs[i].file_size;
   }
-
+  
   mutex_.Lock();
   stats_[compact->compaction->level() + 1].Add(stats);
 
   if (status.ok()) {
-    status = InstallCompactionResultsSpot(compact, LastSpotTable);   
+    status = InstallCompactionResultsSpot(compact, LastSpotTable); 
+    //status = InstallCompactionResults(compact);     
   }
   if (!status.ok()) {
     RecordBackgroundError(status);
@@ -1388,8 +1398,8 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
   //Log(options_.info_log,
   //    "compacted to: %s", versions_->LevelSummary(&tmp));
   
-  if (status.ok()) {
-    if (compact->compaction->SpotCompaction()) {
+  /*if (status.ok()) {
+    if (compact->compaction->SpotCompaction() && LastSpotTable.file_size > 0) {
       //ParseInternalKey(StartingKeyCurrentTable, &ikey);
       InternalKey jkey = compact->compaction->input(1, 
                             compact->compaction->num_input_real())->smallest;
@@ -1411,7 +1421,7 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
             //strtoul(jkey.user_key().ToString().substr(0,20).c_str(), NULL, 10),
             jkey.user_key().ToString().substr(0,20).c_str());
     }
-  }
+  }*/
 
   return status;
 }
@@ -1796,7 +1806,8 @@ Status DBImpl::Get(const ReadOptions& options,
   } else {
     snapshot = versions_->LastSequence();
   }
-
+  Log(options_.info_log, "Lookup the key %s ing...", 
+            key.ToString().substr(0, 20).c_str()); 
   MemTable* mem = mem_;
   MemTable* imm = imm_;
   Version* current = versions_->current();
@@ -1823,9 +1834,9 @@ Status DBImpl::Get(const ReadOptions& options,
 
     } else if (cp_->lookUp(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
-        /*if (!s.ok())
-          s = current->GetSpot(options, lkey, value, &stats);
-        */// have_stat_update = true;
+        //if (!s.ok())
+        //  s = current->GetSpot(options, lkey, value, &stats);
+        // have_stat_update = true;
         Log(options_.info_log, "From the Cache the key: %s's value is: %s.", 
             key.ToString().substr(0, 20).c_str(), 
             (*value).substr(0, 8).c_str()); 
@@ -1833,9 +1844,9 @@ Status DBImpl::Get(const ReadOptions& options,
     } else {
 
       #if 0
+        //s = current->GetSpot(options, lkey, value, &stats);
         s = current->GetSpot(options, lkey, value, &stats);
-        //s = current->Get(options, lkey, value, &stats);
-        //have_stat_update = true;
+        have_stat_update = true;
       #else
         Cache::Handle* handle = NULL;
         handle = cmc_->Lookup(key);
@@ -1902,8 +1913,8 @@ void DBImpl::ReleaseSnapshot(const Snapshot* s) {
 
 // Convenience methods
 Status DBImpl::Put(const WriteOptions& o, const Slice& key, const Slice& val) {
-  //Log(options_.info_log, "Update the key %s ing...", 
-  //          key.ToString().substr(0, 20).c_str()); 
+  Log(options_.info_log, "Update the key %s ing...", 
+            key.ToString().substr(0, 20).c_str()); 
   return DB::Put(o, key, val);
 }
 
