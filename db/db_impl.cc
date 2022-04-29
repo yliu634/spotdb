@@ -1398,7 +1398,7 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
   //Log(options_.info_log,
   //    "compacted to: %s", versions_->LevelSummary(&tmp));
   
-  /*if (status.ok()) {
+  if (status.ok()) {
     if (compact->compaction->SpotCompaction() && LastSpotTable.file_size > 0) {
       //ParseInternalKey(StartingKeyCurrentTable, &ikey);
       InternalKey jkey = compact->compaction->input(1, 
@@ -1421,7 +1421,7 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
             //strtoul(jkey.user_key().ToString().substr(0,20).c_str(), NULL, 10),
             jkey.user_key().ToString().substr(0,20).c_str());
     }
-  }*/
+  }
 
   return status;
 }
