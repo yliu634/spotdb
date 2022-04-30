@@ -794,9 +794,9 @@ void DBImpl::BackgroundCompaction() {
       //    versions_->current()->DebugString().c_str());
       //if (compact->compaction->num_input_files(1) > 1)
       //for one overlapping compaction, open for when kNumConfig = 1;
-      #if 1
-        status = DoCompactionWork(compact);
-        //status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+      #if 1 
+        //status = DoCompactionWork(compact);
+        status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
       #else
         if (DirectCompaction(compact)) {
           //DirectlyInstallCompactionResults(compact);
@@ -1280,13 +1280,16 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
     }
 
     Slice key = input->key();
-    /*if (compact->compaction->ShouldStopBefore(key) &&
+    
+    #if 0
+    if (compact->compaction->ShouldStopBefore(key) &&
         compact->builder != NULL) {
       status = FinishCompactionOutputFile(compact, input);
       if (!status.ok()) {
         break;
       }
-    }*/
+    }
+    #endif
 
     // Handle key/value, add to state, etc.
     bool drop = false;

@@ -44,12 +44,17 @@ static double MaxBytesForLevel(const Options* options, int level) {
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
   double result = config::kL0_CompactionTrigger * 2. * 1024.0 * 1024.0;
-  //if (config::kNumLevels < 3) {
+  #if 1
     while (level > 1) {
       result *= 10;
       level--;
     }
-  //}
+  #else 
+  while (level > 1) {
+      result *= 10;
+      level--;
+    }
+  #endif
   return result;
 }
 
@@ -1868,7 +1873,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.3),
+      WAdeduction_(0.9),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
@@ -1981,7 +1986,7 @@ void Compaction::UpdateInputReal() {
       } 
     //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }
-  for (size_t i = 0; i < num_input_files(1); i++) {
+  for (size_t i = 0; i < tmp; i++) {
     inputReal_.push_back(inputs_[1][i]);
   }
   //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);

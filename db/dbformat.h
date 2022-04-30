@@ -20,7 +20,7 @@ namespace spotkv {
 // parameters set via options.
 namespace config {
 static const int kNumLevels = 3;
-static const int kNumSpotTables = 1;
+static const int kNumSpotTables = 4;
 // Level-0 compaction is started when we hit this many files.
 static const int kL0_CompactionTrigger = 5;//4
 // rocksdb/options/option.cc
