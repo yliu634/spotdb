@@ -117,9 +117,7 @@ Status BuildLudoTable(const std::string& dbname,
       // cp->insert(strtoul(key.ToString().substr(4,16).c_str(), NULL, 10), 
       //            (meta->number<<32) + (blockCacheOffset&0xffffffff), 
       //            false);
-       Log(options.info_log, "The key: %s is stored in data block: %ld", 
-           key.ToString().substr(0,20).c_str(), 
-           blockCacheOffset);
+      
       // Log(options.info_log, "Cp insert key: %lu and cp size: %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cp->size());
     }
 

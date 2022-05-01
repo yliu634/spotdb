@@ -790,7 +790,7 @@ void DBImpl::BackgroundCompaction() {
       FileMetaData* LastSpotTable = NULL;
       FileMetaData tmp;
 
-      //Log(options_.info_log, "Before:\n %s", 
+      //Log(options_.info_log, "BeforeSpotCompaction:\n %s", 
       //    versions_->current()->DebugString().c_str());
       //if (compact->compaction->num_input_files(1) > 1)
       //for one overlapping compaction, open for when kNumConfig = 1;
@@ -805,19 +805,19 @@ void DBImpl::BackgroundCompaction() {
         }
         status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
       #endif
-      //Log(options_.info_log, "After:\n %s", 
+      //Log(options_.info_log, "AfterSpotCompaction:\n %s", 
       //    versions_->current()->DebugString().c_str());
       
       LastSpotTable = &tmp;
-      //if (compact->compaction->SpotCompaction())
-      //  totalcompact ++;
+      if (compact->compaction->SpotCompaction())
+        totalcompact ++;
       
       //DeleteObsoleteFiles();
       //if (false) {
       if (NeedSelfCompaction) {
         //TODO: 
         assert(compact->compaction->SpotCompaction());
-        //spotcompact ++;
+        spotcompact ++;
         Compaction* c2 = versions_->PickSelfLevelCompaction(compact->compaction, LastSpotTable);
         CompactionState* compact2 = new CompactionState(c2);
         //assert(c2->compaction->num_input_files(0) > 1);
@@ -830,7 +830,10 @@ void DBImpl::BackgroundCompaction() {
         }
         //DeleteObsoleteFiles();
         delete c2;
+        //Log(options_.info_log, "After SelfCompaction:\n %s", 
+        //  versions_->current()->DebugString().c_str());
       }
+      
     }
     else {
       status = DoCompactionWorkforLudoCache(compact); //remove cuckoo key-value pairs;
@@ -843,8 +846,8 @@ void DBImpl::BackgroundCompaction() {
     c->ReleaseInputs();
     DeleteObsoleteFiles();
 
-    //Log(options_.info_log, "Now the Spot compact ratio is:%d / %d.\n", 
-    //    spotcompact, totalcompact);
+    Log(options_.info_log, "Now the Spot compact ratio is:%d / %d.\n", 
+        spotcompact, totalcompact);
 
   }
   delete c;
@@ -1241,6 +1244,15 @@ Status DBImpl::DoCompactionWorkSpot(CompactionState* compact, bool& NeedSelfComp
       compact->compaction->level() + 1,
       compact->compaction->num_input_files(1),
       compact->compaction->level() + 1);
+  #if 0
+  if (compact->compaction->num_input_files(1) > 10) {
+    for (size_t i = 0; i < compact->compaction->num_input_files(1); i++) {
+      Log(options_.info_log, "bbi:[%s %s]",
+      compact->compaction->input(1,i)->smallest.user_key().ToString().substr(0,20).c_str(),
+      compact->compaction->input(1,i)->largest.user_key().ToString().substr(0,20).c_str()); 
+    }
+  }
+  #endif
 
   VersionSet::LevelSummaryStorage tmp;
   //Log(options_.info_log,
@@ -1611,13 +1623,15 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
     }
 
     Slice key = input->key();
-    if (compact->compaction->ShouldStopBefore(key) &&
-        compact->builder != NULL) {
-      status = FinishCompactionOutputFile(compact, input);
-      if (!status.ok()) {
-        break;
+    #if 0
+      if (compact->compaction->ShouldStopBefore(key) &&
+          compact->builder != NULL) {
+        status = FinishCompactionOutputFile(compact, input);
+        if (!status.ok()) {
+          break;
+        }
       }
-    }
+    #endif
 
     // Handle key/value, add to state, etc.
     bool drop = false;

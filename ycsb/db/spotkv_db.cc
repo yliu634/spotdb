@@ -23,7 +23,7 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
     int bloom_bits = LevelDB_ConfigMod::getInstance().getBloom_bits();
     int max_File_sizes = LevelDB_ConfigMod::getInstance().getMax_file_size();
     int max_open_files = LevelDB_ConfigMod::getInstance().getMax_open_files();
-    size_t memTableSize=LevelDB_ConfigMod::getInstance().getMemTableSize();
+    size_t memTableSize = LevelDB_ConfigMod::getInstance().getMemTableSize();
     int bloom_type = LevelDB_ConfigMod::getInstance().getBloomType();
     size_t block_cache_size = LevelDB_ConfigMod::getInstance().getBlockCacheSize();
     //int size_ratio = LevelDB_ConfigMod::getInstance().getSizeRatio();

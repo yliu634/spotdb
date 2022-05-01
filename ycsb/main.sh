@@ -9,27 +9,27 @@ echo "" > result.txt
 
 echo "************* LevelDB *************" >> result.txt
 #./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 #./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 #./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 echo "************* RocksDB *************" >> result.txt
 #./ycsbc -db rocksdb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 echo "************** UniKV **************" >> result.txt
 #./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 #./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 #./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
+#rm -r $dbfilename/*
 echo "************* SpotKV **************" >> result.txt
-#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
-#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
-rm -r $dbfilename/*
 ./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+#rm -r $dbfilename/*
+#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+#rm -r $dbfilename/*
+#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
 
 #./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad false > leveldb-load-100G-read-10M.txt
@@ -56,6 +56,7 @@ workload_name6=./workloads/workloade.spec
 
 configpath=./configDir/leveldb_config.ini
 dbfilename=../temp
+#dbfilename=/home/yiliu/projs/database/leveldb
 thread=1
 #section=basic
 #key=hierarchicalBoomflag

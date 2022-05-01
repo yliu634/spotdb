@@ -50,7 +50,7 @@ static double MaxBytesForLevel(const Options* options, int level) {
       level--;
     }
   #else 
-  while (level > 1) {
+  while (level > 0) {
       result *= 10;
       level--;
     }
@@ -835,9 +835,9 @@ std::string Version::DebugString() const {
       r.push_back(':');
       AppendNumberTo(&r, files[i]->file_size);
       r.append("[");
-      r.append(files[i]->smallest.user_key().ToString().substr(0,16).c_str());//DebugString());
+      r.append(files[i]->smallest.user_key().ToString().substr(0,20).c_str());//DebugString());
       r.append(" .. ");
-      r.append(files[i]->largest.user_key().ToString().substr(0,16).c_str());//DebugString());
+      r.append(files[i]->largest.user_key().ToString().substr(0,20).c_str());//DebugString());
       r.append("]\n");
     }
   }
@@ -1873,7 +1873,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.9),
+      WAdeduction_(0.3),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
@@ -1979,11 +1979,11 @@ void Compaction::UpdateInputReal() {
   int tmp = num_input_files(1);
   if (tmp < 1) {
     return;
-  } else if (tmp > config::kNumSpotTables) {
+  } else if (tmp < config::kNumSpotTables && input_version_->NumFiles(2) > 800) {
       tmp = (int)(ceil((double)tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { 
         SpotCompaction_ = true; 
-      } 
+      }
     //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
   }
   for (size_t i = 0; i < tmp; i++) {

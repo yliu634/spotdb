@@ -7,14 +7,14 @@ Try #4 human(nKeysInOthello) Keys, ma/mb = human(ma) / human(mb) key length: 64b
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        5      263        35        0       736
-  1      186      429        13      473       890
-  2      225      459        13     1774      1771
+  0       27       89        23        0      1242
+  1       80      163        36     1790      1776
+  2      476      970        57     3472      3467
 
                                Compactions
 Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
 --------------------------------------------------
-  0        2       98        76        0      1819
-  1       60      152        30     1767      1594
-  2      635     1241       132     7367      7210
+  0        8       25        42        0      2424
+  1       40       80        66     3817      2922
+  2      598     1224       135     7708      7507
 

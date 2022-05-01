@@ -20,15 +20,15 @@ namespace spotkv {
 // parameters set via options.
 namespace config {
 static const int kNumLevels = 3;
-static const int kNumSpotTables = 4;
+static const int kNumSpotTables = 3;
 // Level-0 compaction is started when we hit this many files.
-static const int kL0_CompactionTrigger = 5;//4
+static const int kL0_CompactionTrigger = 25;//4
 // rocksdb/options/option.cc
 // Soft limit on number of level-0 files.  We slow down writes at this point.
-static const int kL0_SlowdownWritesTrigger = 8;//8
+static const int kL0_SlowdownWritesTrigger = 30;//8
 
 // Maximum number of level-0 files.  We stop writes at this point.
-static const int kL0_StopWritesTrigger = 12;//12
+static const int kL0_StopWritesTrigger = 45;//12
 
 // Maximum level to which a new compacted memtable is pushed if it
 // does not create overlap.  We try to push to level 2 to avoid the
@@ -36,7 +36,7 @@ static const int kL0_StopWritesTrigger = 12;//12
 // expensive manifest file operations.  We do not push all the way to
 // the largest level since that can generate a lot of wasted disk
 // space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 1;
+static const int kMaxMemCompactLevel = 0;
 
 // Approximate gap in bytes between samples of data read during iteration.
 static const int kReadBytesPeriod = 1048576;
