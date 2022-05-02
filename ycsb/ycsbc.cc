@@ -54,22 +54,30 @@ int main(const int argc, const char *argv[]) {
   wl.Init(props);
 
   const int num_threads = stoi(props.GetProperty("threadcount", "1"));
-
-  // Loads data
+  bool skipLoad = utils::StrToBool(props.GetProperty("skipLoad",
+						   "false"));
+  
+  int sum(0), total_ops(0);
   vector<future<int>> actual_ops;
-  int total_ops = stoi(props[ycsbc::CoreWorkload::RECORD_COUNT_PROPERTY]);
-  for (int i = 0; i < num_threads; ++i) {
-    actual_ops.emplace_back(async(launch::async,
-        DelegateClient, db, &wl, total_ops / num_threads, true));
-  }
-  assert((int)actual_ops.size() == num_threads);
+  
+  if (!skipLoad) {
+    // Loads data
+    total_ops = stoi(props[ycsbc::CoreWorkload::RECORD_COUNT_PROPERTY]);
+    for (int i = 0; i < num_threads; ++i) {
+      actual_ops.emplace_back(async(launch::async,
+          DelegateClient, db, &wl, total_ops / num_threads, true));
+    }
+    assert((int)actual_ops.size() == num_threads);
 
-  int sum = 0;
-  for (auto &n : actual_ops) {
-    assert(n.valid());
-    sum += n.get();
+    sum = 0;
+    for (auto &n : actual_ops) {
+      assert(n.valid());
+      sum += n.get();
+    }
+    cerr << "# Loading records:\t" << sum << endl;
+  } else {
+    cerr << "Loading records jumped." << endl;
   }
-  cerr << "# Loading records:\t" << sum << endl;
 
   // Peforms transactions
   actual_ops.clear();
@@ -152,7 +160,7 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         exit(0);
       }
       input.close();
-      props.SetProperty(string("recordcount"), string("10000000"));
+      props.SetProperty(string("recordcount"), string("1000000"));
       props.SetProperty(string("operationcount"), string("10000000"));
       argindex++;
     } else if (strcmp(argv[argindex], "-dbfilename") == 0) {

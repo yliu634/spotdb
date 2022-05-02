@@ -1979,7 +1979,7 @@ void Compaction::UpdateInputReal() {
   int tmp = num_input_files(1);
   if (tmp < 1) {
     return;
-  } else if (tmp < config::kNumSpotTables && input_version_->NumFiles(2) > 800) {
+  } else if (tmp < config::kNumSpotTables && input_version_->NumFiles(2) > 1200) {
       tmp = (int)(ceil((double)tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { 
         SpotCompaction_ = true; 

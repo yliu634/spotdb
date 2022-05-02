@@ -25,7 +25,7 @@ updateproportion=0
 scanproportion=0.95
 insertproportion=0.05
 
-fieldlength=1000
+fieldlength=64
 requestdistribution=zipfian
 
 maxscanlength=100

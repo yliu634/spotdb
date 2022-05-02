@@ -8,9 +8,9 @@ rm -r $dbfilename/*
 echo "" > result.txt
 
 echo "************* LevelDB *************" >> result.txt
-#./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
-#./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad true >> result.txt
 #rm -r $dbfilename/*
 #./ycsbc -db leveldb -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
@@ -25,7 +25,7 @@ echo "************** UniKV **************" >> result.txt
 #./ycsbc -db unikv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
 echo "************* SpotKV **************" >> result.txt
-./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
+#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
 #./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename" -configpath "$configpath" -skipLoad false >> result.txt
 #rm -r $dbfilename/*
@@ -46,7 +46,7 @@ echo "************* SpotKV **************" >> result.txt
 
 }
 
-workload_name=./workloads/workloada-1.spec
+workload_name=./workloads/workloade.spec
 workload_name1=./workloads/workloadb.spec
 workload_name2=./workloads/workloadc.spec
 workload_name3=./workloads/workloadd.spec

@@ -18,7 +18,7 @@ scanproportion=0
 insertproportion=0
 readmodifywriteproportion=0.5
 
-fieldlength=1000
+fieldlength=64
 
 requestdistribution=zipfian
 
