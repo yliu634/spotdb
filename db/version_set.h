@@ -23,6 +23,8 @@
 #include "port/port.h"
 #include "port/thread_annotations.h"
 #include "ludo/count_min.h"
+#include "ludo/ludo_cp_dp.h"
+#include "ludo/cuckoo_ht.h"
 
 namespace spotkv {
 
@@ -259,7 +261,8 @@ class VersionSet {
   Iterator* MakeInputIteratorSelfLevel(Compaction* c);
   Iterator* MakeLudoCacheIterator(Compaction* c);
   bool FileMetaDataCmp (const FileMetaData** f1, const FileMetaData** f2);
-
+  void ControlPlaneFill(ControlPlaneLudo<uint64_t, uint64_t>* cp);
+  
   // Returns true iff some level needs a compaction.
   bool NeedsCompaction() const {
     Version* v = current_;

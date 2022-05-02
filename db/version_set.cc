@@ -43,7 +43,7 @@ static double MaxBytesForLevel(const Options* options, int level) {
 
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
-  double result = config::kL0_CompactionTrigger * 2. * 1024.0 * 1024.0;
+  double result = config::kL0_CompactionTrigger * 10. * 1024.0 * 1024.0;
   #if 1
     while (level > 1) {
       result *= 10;
@@ -1535,6 +1535,45 @@ Iterator* VersionSet::MakeInputIterator(Compaction* c) {
   return result;
 }
 
+void VersionSet::ControlPlaneFill(ControlPlaneLudo<uint64_t, uint64_t>* cp) {
+  ReadOptions options;
+  options.verify_checksums = options_->paranoid_checks;
+  options.fill_cache = false;
+
+  if (current_->NumFiles(0) > 0) {
+    size_t NumL0 = current_->NumFiles(0);
+    for (size_t i = 0; i < NumL0; i++) {
+
+      uint64_t num = current_->files_[0][i]->number;
+      Iterator** list = new Iterator*[1];
+      list[0] = table_cache_->NewIterator(
+                options, current_->files_[0][i]->number, current_->files_[0][i]->file_size);
+
+      Iterator* input = NewMergingIterator(&icmp_, list, 1);
+      delete[] list;
+      list = nullptr;
+      
+      input->SeekToFirst();
+      //Status status;
+      ParsedInternalKey ikey;
+      std::string current_user_key;
+
+      for (; input->Valid(); ) {
+        Slice key = input->key();
+        //if (ParseInternalKey(key, &ikey)) {
+        cp->insert(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), 
+                num, 
+                false);
+        Log(options_->info_log, "Memtable update the key: %s.", 
+          key.ToString().substr(0, 20).c_str());
+        //}
+
+        input->Next();
+      }
+    }
+  }
+}
+
 Iterator* VersionSet::MakeInputIteratorSpot(Compaction* c) {
   ReadOptions options;
   options.verify_checksums = options_->paranoid_checks;
@@ -1873,7 +1912,7 @@ Compaction::Compaction(const Options* options, int level)
       grandparent_index_(0),
       seen_key_(false),
       overlapped_bytes_(0),
-      WAdeduction_(0.3),
+      WAdeduction_(0.5),
       SpotCompaction_(false) {
   for (int i = 0; i < config::kNumLevels; i++) {
     level_ptrs_[i] = 0;
@@ -1979,13 +2018,20 @@ void Compaction::UpdateInputReal() {
   int tmp = num_input_files(1);
   if (tmp < 1) {
     return;
-  } else if (tmp < config::kNumSpotTables && input_version_->NumFiles(2) > 1200) {
+  } else if (tmp > 3 && tmp < 14 && input_version_->NumFiles(2) > 80) {
+      //tmp = (int)(ceil((double)tmp * WAdeduction_));
+      tmp -= 2;
+      if (tmp < num_input_files(1)) { 
+        SpotCompaction_ = true; 
+      }
+      //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
+  } /*else if (input_version_->NumFiles(2) > 90) {
       tmp = (int)(ceil((double)tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { 
         SpotCompaction_ = true; 
       }
-    //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
-  }
+  }*/
+
   for (size_t i = 0; i < tmp; i++) {
     inputReal_.push_back(inputs_[1][i]);
   }

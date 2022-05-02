@@ -17,7 +17,7 @@ using std::endl;
 namespace ycsbc {
 class SpotkvDB : public DB{
 public :
-    SpotkvDB(const char *dbfilename,const char* configPath);
+    SpotkvDB(const char *dbfilename, const char* configPath);
     int Read(const std::string &table, const std::string &key,
            const std::vector<std::string> *fields,
            std::vector<KVPair> &result);

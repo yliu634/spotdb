@@ -40,8 +40,8 @@ LevelDB::LevelDB(const char* dbfilename,const char* configPath) {
 
     options.create_if_missing = true;
     options.compression = compression_Open? leveldb::kSnappyCompression:leveldb::kNoCompression;  //compression is disabled.
-    options.write_buffer_size = memTableSize;//67108864;8388608
-    options.max_file_size = max_File_sizes;
+    options.write_buffer_size = 67108864;//memTableSize;
+    options.max_file_size = 16777216;//max_File_sizes;
     options.max_open_files = max_open_files;
     options.block_size = 4096;
     // options.opEp_.seek_compaction_ = seek_compaction_flag;

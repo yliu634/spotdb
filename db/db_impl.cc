@@ -1888,6 +1888,11 @@ Status DBImpl::Get(const ReadOptions& options,
   return s;
 }
 
+Status DBImpl::MemTableUpdate() {
+  versions_->ControlPlaneFill(cp_);
+  return Status::OK();
+}
+
 Iterator* DBImpl::NewIterator(const ReadOptions& options) {
   SequenceNumber latest_snapshot;
   uint32_t seed;

@@ -118,7 +118,7 @@ Status BuildLudoTable(const std::string& dbname,
       //            (meta->number<<32) + (blockCacheOffset&0xffffffff), 
       //            false);
       
-      // Log(options.info_log, "Cp insert key: %lu and cp size: %d", strtoul(key.ToString().substr(0,16).c_str(), NULL, 10), cp->size());
+      //Log(options.info_log, "Cp insert key: %s and cp size: %d", key.ToString().substr(0,20).c_str(), cp->size());
     }
 
     // Finish and check for builder errors

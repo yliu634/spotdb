@@ -59,7 +59,7 @@ int main(const int argc, const char *argv[]) {
   
   int sum(0), total_ops(0);
   vector<future<int>> actual_ops;
-  
+
   if (!skipLoad) {
     // Loads data
     total_ops = stoi(props[ycsbc::CoreWorkload::RECORD_COUNT_PROPERTY]);
@@ -79,26 +79,28 @@ int main(const int argc, const char *argv[]) {
     cerr << "Loading records jumped." << endl;
   }
 
-  // Peforms transactions
-  actual_ops.clear();
-  total_ops = stoi(props[ycsbc::CoreWorkload::OPERATION_COUNT_PROPERTY]);
-  utils::Timer<double> timer;
-  timer.Start();
-  for (int i = 0; i < num_threads; ++i) {
-    actual_ops.emplace_back(async(launch::async,
-        DelegateClient, db, &wl, total_ops / num_threads, false));
-  }
-  assert((int)actual_ops.size() == num_threads);
+  for (size_t iloop = 0; iloop < 3; iloop++) {
+    // Peforms transactions
+    actual_ops.clear();
+    total_ops = stoi(props[ycsbc::CoreWorkload::OPERATION_COUNT_PROPERTY]);
+    utils::Timer<double> timer;
+    timer.Start();
+    for (int i = 0; i < num_threads; ++i) {
+      actual_ops.emplace_back(async(launch::async,
+          DelegateClient, db, &wl, total_ops / num_threads, false));
+    }
+    assert((int)actual_ops.size() == num_threads);
 
-  sum = 0;
-  for (auto &n : actual_ops) {
-    assert(n.valid());
-    sum += n.get();
+    sum = 0;
+    for (auto &n : actual_ops) {
+      assert(n.valid());
+      sum += n.get();
+    }
+    double duration = timer.End();
+    cerr << "# Transaction throughput (KTPS)" << endl;
+    cerr << props["dbname"] << '\t' << file_name << '\t' << num_threads << '\t';
+    cerr << total_ops / duration / 1000 << endl;
   }
-  double duration = timer.End();
-  cerr << "# Transaction throughput (KTPS)" << endl;
-  cerr << props["dbname"] << '\t' << file_name << '\t' << num_threads << '\t';
-  cerr << total_ops / duration / 1000 << endl;
 }
 
 string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) {
@@ -160,7 +162,7 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         exit(0);
       }
       input.close();
-      props.SetProperty(string("recordcount"), string("1000000"));
+      props.SetProperty(string("recordcount"), string("64000000"));
       props.SetProperty(string("operationcount"), string("10000000"));
       argindex++;
     } else if (strcmp(argv[argindex], "-dbfilename") == 0) {

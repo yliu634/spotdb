@@ -1,28 +1,6 @@
 
 ************* LevelDB *************
-                               Compactions
-Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
---------------------------------------------------
-  0        5       15         1        0        81
-  1        5        8         1       99       101
-  2       32       63         1      148       151
-
-                               Compactions
-Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
---------------------------------------------------
-  0        0        0         1        0       127
-  1        1        1         2      183       185
-  2       51       99        17     1716      1718
-  3       16       31         2      173       173
-
-                               Compactions
-Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
---------------------------------------------------
-  0        0        0         0        0        44
-  1        0        0         1       44        44
-  2       45       91        15     1437      1407
-  3       21       41         6      605       593
-
 ************* RocksDB *************
 ************** UniKV **************
 ************* SpotKV **************
+Try #4 human(nKeysInOthello) Keys, ma/mb = human(ma) / human(mb) key length: 64b  value length: 8b VDL=1

@@ -44,11 +44,10 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
             fprintf(stderr,"Wrong filter type!\n");
     }
 
-
     options.create_if_missing = true;
     options.compression = compression_Open? spotkv::kSnappyCompression:spotkv::kNoCompression;  //compression is disabled.
-    options.write_buffer_size = memTableSize;//67108864;8388608
-    options.max_file_size = max_File_sizes;
+    options.write_buffer_size = 67108864;//67108864;8388608
+    options.max_file_size = 16777216;
     options.max_open_files = max_open_files;
     options.block_size = 4096;
     // options.opEp_.seek_compaction_ = seek_compaction_flag;
@@ -61,6 +60,10 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
     //  options.opEp_.stats_ = spotkv::CreateDBStatistics();
     // }
     spotkv::Status status = spotkv::DB::Open(options, dbfilename, &db_);
+    //cerr << "Start to restore..." << endl;
+    //spotkv::Status status2 = db_->MemTableUpdate();
+    //cerr << "End restore." << endl;
+    
     if (!status.ok()) {
         fprintf(stderr, "can't open leveldb\n");
         cerr << status.ToString() << endl;

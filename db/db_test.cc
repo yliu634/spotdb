@@ -1872,6 +1872,9 @@ class ModelDB: public DB {
   virtual Status Delete(const WriteOptions& o, const Slice& key) {
     return DB::Delete(o, key);
   }
+  Status MemTableUpdate() {
+
+  };
   virtual Status Get(const ReadOptions& options,
                      const Slice& key, std::string* value) {
     assert(false);      // Not implemented
