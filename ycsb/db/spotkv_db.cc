@@ -46,8 +46,8 @@ SpotkvDB::SpotkvDB(const char* dbfilename,const char* configPath) {
 
     options.create_if_missing = true;
     options.compression = compression_Open? spotkv::kSnappyCompression:spotkv::kNoCompression;  //compression is disabled.
-    options.write_buffer_size = 67108864;//67108864;8388608
-    options.max_file_size = 16777216;
+    options.write_buffer_size = memTableSize;//67108864 //8388608
+    options.max_file_size = max_File_sizes;//16777216;
     options.max_open_files = max_open_files;
     options.block_size = 4096;
     // options.opEp_.seek_compaction_ = seek_compaction_flag;

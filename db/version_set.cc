@@ -43,14 +43,14 @@ static double MaxBytesForLevel(const Options* options, int level) {
 
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
-  double result = config::kL0_CompactionTrigger * 10. * 1024.0 * 1024.0;
-  #if 1
+  double result = config::kL0_CompactionTrigger * 16. * 1024.0 * 1024.0;
+  #if 0
     while (level > 1) {
       result *= 10;
       level--;
     }
   #else 
-  while (level > 0) {
+    while (level > 0) {
       result *= 10;
       level--;
     }
@@ -1564,8 +1564,8 @@ void VersionSet::ControlPlaneFill(ControlPlaneLudo<uint64_t, uint64_t>* cp) {
         cp->insert(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), 
                 num, 
                 false);
-        Log(options_->info_log, "Memtable update the key: %s.", 
-          key.ToString().substr(0, 20).c_str());
+        //fprintf(stderr, "Memtable update the key: %s.", 
+        //  key.ToString().substr(0, 20).c_str());
         //}
 
         input->Next();
@@ -2018,14 +2018,18 @@ void Compaction::UpdateInputReal() {
   int tmp = num_input_files(1);
   if (tmp < 1) {
     return;
-  } else if (tmp > 3 && tmp < 14 && input_version_->NumFiles(2) > 80) {
+  } 
+  #if 1
+  else if (tmp < 11 && tmp > 1 && input_version_->NumFiles(2) > 160) {
       //tmp = (int)(ceil((double)tmp * WAdeduction_));
-      tmp -= 2;
+      tmp -= 1;
       if (tmp < num_input_files(1)) { 
         SpotCompaction_ = true; 
       }
       //inputReal_.assign(inputs_[1].begin(), inputs_[1].begin() + tmp);
-  } /*else if (input_version_->NumFiles(2) > 90) {
+  }
+  #endif
+   /*else if (input_version_->NumFiles(2) > 90) {
       tmp = (int)(ceil((double)tmp * WAdeduction_));
       if (tmp < num_input_files(1)) { 
         SpotCompaction_ = true; 

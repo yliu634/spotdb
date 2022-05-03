@@ -308,6 +308,7 @@ Status DBImpl::Recover(VersionEdit* edit, bool *save_manifest) {
           dbname_, "does not exist (create_if_missing is false)");
     }
   } else {
+    //Status s2 = MemTableUpdate();
     if (options_.error_if_exists) {
       return Status::InvalidArgument(
           dbname_, "exists (error_if_exists is true)");
@@ -315,6 +316,7 @@ Status DBImpl::Recover(VersionEdit* edit, bool *save_manifest) {
   }
 
   s = versions_->Recover(save_manifest);
+  
   if (!s.ok()) {
     return s;
   }
@@ -371,6 +373,8 @@ Status DBImpl::Recover(VersionEdit* edit, bool *save_manifest) {
   if (versions_->LastSequence() < max_sequence) {
     versions_->SetLastSequence(max_sequence);
   }
+
+  Status s2 = MemTableUpdate();
 
   return Status::OK();
 }
@@ -1848,8 +1852,8 @@ Status DBImpl::Get(const ReadOptions& options,
 
     } else if (cp_->lookUp(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
-        //if (!s.ok())
-        //  s = current->GetSpot(options, lkey, value, &stats);
+        if (!s.ok())
+          s = current->GetSpot(options, lkey, value, &stats);
         // have_stat_update = true;
         Log(options_.info_log, "From the Cache the key: %s's value is: %s.", 
             key.ToString().substr(0, 20).c_str(), 
@@ -1889,7 +1893,16 @@ Status DBImpl::Get(const ReadOptions& options,
 }
 
 Status DBImpl::MemTableUpdate() {
+  fprintf(stderr, "Start filling control plane...\n");
+  Version* current = versions_->current();
+  current->Ref();
+  //mutex_.Unlock();
+  
   versions_->ControlPlaneFill(cp_);
+
+  //mutex_.Lock();
+  current->Unref();
+  fprintf(stderr, "Done, the size of Control plane is %d.\n", cp_->size());
   return Status::OK();
 }
 

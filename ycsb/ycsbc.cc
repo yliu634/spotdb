@@ -79,7 +79,7 @@ int main(const int argc, const char *argv[]) {
     cerr << "Loading records jumped." << endl;
   }
 
-  for (size_t iloop = 0; iloop < 3; iloop++) {
+  for (size_t iloop = 0; iloop < 2; iloop++) {
     // Peforms transactions
     actual_ops.clear();
     total_ops = stoi(props[ycsbc::CoreWorkload::OPERATION_COUNT_PROPERTY]);
