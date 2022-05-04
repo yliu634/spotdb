@@ -1861,7 +1861,7 @@ Status DBImpl::Get(const ReadOptions& options,
         // Done
     } else {
 
-      #if 0
+      #if 1
         //s = current->Get(options, lkey, value, &stats);
         s = current->GetSpot(options, lkey, value, &stats);
         have_stat_update = true;

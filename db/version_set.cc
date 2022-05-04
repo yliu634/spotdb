@@ -43,8 +43,8 @@ static double MaxBytesForLevel(const Options* options, int level) {
 
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
-  double result = config::kL0_CompactionTrigger * 16. * 1024.0 * 1024.0;
-  #if 0
+  double result = config::kL0_CompactionTrigger * (32. * 1024.0 * 1024.0);
+  #if 1
     while (level > 1) {
       result *= 10;
       level--;
@@ -2019,8 +2019,8 @@ void Compaction::UpdateInputReal() {
   if (tmp < 1) {
     return;
   } 
-  #if 1
-  else if (tmp < 11 && tmp > 1 && input_version_->NumFiles(2) > 160) {
+  #if 0
+  else if (tmp < 11 && tmp > 1 && input_version_->NumFiles(2) > 150) {
       //tmp = (int)(ceil((double)tmp * WAdeduction_));
       tmp -= 1;
       if (tmp < num_input_files(1)) { 
