@@ -799,8 +799,8 @@ void DBImpl::BackgroundCompaction() {
       //if (compact->compaction->num_input_files(1) > 1)
       //for one overlapping compaction, open for when kNumConfig = 1;
       #if 1 
-        //status = DoCompactionWork(compact);
-        status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
+        status = DoCompactionWork(compact);
+        //status = DoCompactionWorkSpot(compact, NeedSelfCompaction, tmp);
       #else
         if (DirectCompaction(compact)) {
           //DirectlyInstallCompactionResults(compact);
@@ -1850,7 +1850,7 @@ Status DBImpl::Get(const ReadOptions& options,
     } else if (imm != NULL && imm->Get(lkey, value, &s)) {
       // Done
 
-    } else if (cp_->lookUp(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
+    } /*else if (cp_->lookUp(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10), file_number)) {
         s = current->GetLudoCache(options, &options_, lkey, value, &stats, file_number);
         if (!s.ok())
           s = current->GetSpot(options, lkey, value, &stats);
@@ -1859,24 +1859,26 @@ Status DBImpl::Get(const ReadOptions& options,
             key.ToString().substr(0, 20).c_str(), 
             (*value).substr(0, 8).c_str()); 
         // Done
-    } else {
+    } */else {
 
-      #if 1
+      #if 0
         //s = current->Get(options, lkey, value, &stats);
         s = current->GetSpot(options, lkey, value, &stats);
         have_stat_update = true;
       #else
         Cache::Handle* handle = NULL;
         handle = cmc_->Lookup(key);
+        uint layer = 0;
         if (handle == NULL) {
-          s = current->GetSpot(options, lkey, value, &stats);
+          s = current->GetCountMin(options, lkey, value, layer, &stats);
+          //s = current->GetSpot(options, lkey, value, &stats);
           have_stat_update = true;
         } else {
           //Log(options_.info_log, "Count-Min sketch boy."); 
           *value = reinterpret_cast<char*>(cmc_->Value(handle));
           s = Status::OK();
         }
-        current->CountMinUpdate(options, &options_, key, value, ctm_, cmc_);
+        current->CountMinUpdate(options, &options_, key, value, layer, ctm_, cmc_);
       #endif
 
     }

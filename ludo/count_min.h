@@ -49,8 +49,9 @@ public:
     uint32_t h = hashstr(item, n);
     const uint32_t delta = (h >> 17) | (h << 15);  // Rotate right 17 bits
     for (size_t j = 0; j < d_; j ++) {
+        Counter tmp = Cnt_[j][h % w_];
         Cnt_[j][h % w_] += c;
-        if (Cnt_[j][h % w_] == 0) {
+        if (Cnt_[j][h % w_] < tmp) {
           Reset();
           Cnt_[j][h % w_] = 1;
           break;  

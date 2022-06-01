@@ -75,6 +75,8 @@ class Version {
   };
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
+  Status GetCountMin(const ReadOptions&, const LookupKey& key, std::string* val,
+             uint & layer, GetStats* stats);
   Status GetSpot(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
   Status GetLudoCache(const ReadOptions&, const Options* options_tmp, const LookupKey& key, std::string* val,
@@ -86,7 +88,8 @@ class Version {
   bool UpdateStats(const GetStats& stats);
 
   bool CountMinUpdate(const ReadOptions& options, const Options* options_tmp,
-                    const Slice& k, std::string* value, CountMinSketch<uint16_t>* ctm, Cache* cmc);
+                    const Slice& k, std::string* value, const uint& layer,
+                    CountMinSketch<uint16_t>* ctm, Cache* cmc);
 
   // Record a sample of bytes read at the specified internal key.
   // Samples are taken approximately once every config::kReadBytesPeriod

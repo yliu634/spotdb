@@ -1,0 +1,453 @@
+2022/05/30-23:28:11.227322 7f7f29401780 Delete type=3 #1
+2022/05/30-23:28:11.235692 7f7f0dfba700 Level-0 table #5: started
+2022/05/30-23:28:11.236192 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.239032 7f7f0dfba700 Level-0 table #5: 119315 bytes OK
+2022/05/30-23:28:11.241972 7f7f0dfba700 Delete type=0 #3
+2022/05/30-23:28:11.242055 7f7f0dfba700 Level-0 table #7: started
+2022/05/30-23:28:11.242559 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.245505 7f7f0dfba700 Level-0 table #7: 119358 bytes OK
+2022/05/30-23:28:11.248381 7f7f0dfba700 Delete type=0 #4
+2022/05/30-23:28:11.248470 7f7f0dfba700 Level-0 table #9: started
+2022/05/30-23:28:11.248980 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.251856 7f7f0dfba700 Level-0 table #9: 119324 bytes OK
+2022/05/30-23:28:11.254542 7f7f0dfba700 Delete type=0 #6
+2022/05/30-23:28:11.254632 7f7f0dfba700 Level-0 table #11: started
+2022/05/30-23:28:11.255221 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.257797 7f7f0dfba700 Level-0 table #11: 119340 bytes OK
+2022/05/30-23:28:11.264067 7f7f0dfba700 Delete type=0 #8
+2022/05/30-23:28:11.264143 7f7f0dfba700 Compacting 4@0 + 0@1 files
+2022/05/30-23:28:11.264189 7f7f0dfba700 Level-0 table #13: started
+2022/05/30-23:28:11.264874 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.273799 7f7f0dfba700 Level-0 table #13: 119360 bytes OK
+2022/05/30-23:28:11.282967 7f7f0dfba700 Delete type=0 #10
+2022/05/30-23:28:11.283159 7f7f0dfba700 Level-0 table #16: started
+2022/05/30-23:28:11.284481 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.287354 7f7f0dfba700 Level-0 table #16: 119334 bytes OK
+2022/05/30-23:28:11.290872 7f7f0dfba700 Delete type=0 #12
+2022/05/30-23:28:11.291153 7f7f0dfba700 Level-0 table #18: started
+2022/05/30-23:28:11.293280 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.296271 7f7f0dfba700 Level-0 table #18: 119349 bytes OK
+2022/05/30-23:28:11.299578 7f7f0dfba700 Delete type=0 #15
+2022/05/30-23:28:11.299879 7f7f0dfba700 Level-0 table #20: started
+2022/05/30-23:28:11.302036 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.305155 7f7f0dfba700 Level-0 table #20: 119308 bytes OK
+2022/05/30-23:28:11.308446 7f7f0dfba700 Delete type=0 #17
+2022/05/30-23:28:11.309840 7f7f0dfba700 Level-0 table #22: started
+2022/05/30-23:28:11.314086 7f7f0dfba700 Level-0 table #22: 119317 bytes OK
+2022/05/30-23:28:11.317268 7f7f0dfba700 Delete type=0 #19
+2022/05/30-23:28:11.324325 7f7f0dfba700 Generated table #14@0: 447 keys, 471275 bytes
+2022/05/30-23:28:11.324363 7f7f0dfba700 Compacted 4@0 + 0@1 files => 471275 bytes
+2022/05/30-23:28:11.327534 7f7f0dfba700 compacted to: files[ 5 1 0 ]
+2022/05/30-23:28:11.327701 7f7f0dfba700 Delete type=2 #5
+2022/05/30-23:28:11.327867 7f7f0dfba700 Delete type=2 #7
+2022/05/30-23:28:11.327999 7f7f0dfba700 Delete type=2 #9
+2022/05/30-23:28:11.328135 7f7f0dfba700 Delete type=2 #11
+2022/05/30-23:28:11.328233 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.328277 7f7f0dfba700 Compacting 5@0 + 1@1 files
+2022/05/30-23:28:11.329952 7f7f0dfba700 Level-0 table #25: started
+2022/05/30-23:28:11.331784 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.334792 7f7f0dfba700 Level-0 table #25: 119344 bytes OK
+2022/05/30-23:28:11.338249 7f7f0dfba700 Delete type=0 #21
+2022/05/30-23:28:11.338506 7f7f0dfba700 Level-0 table #27: started
+2022/05/30-23:28:11.340345 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.343381 7f7f0dfba700 Level-0 table #27: 119325 bytes OK
+2022/05/30-23:28:11.346836 7f7f0dfba700 Delete type=0 #24
+2022/05/30-23:28:11.347103 7f7f0dfba700 Level-0 table #29: started
+2022/05/30-23:28:11.348964 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.352119 7f7f0dfba700 Level-0 table #29: 119337 bytes OK
+2022/05/30-23:28:11.355424 7f7f0dfba700 Delete type=0 #26
+2022/05/30-23:28:11.356815 7f7f0dfba700 Level-0 table #31: started
+2022/05/30-23:28:11.360997 7f7f0dfba700 Level-0 table #31: 119355 bytes OK
+2022/05/30-23:28:11.364055 7f7f0dfba700 Delete type=0 #28
+2022/05/30-23:28:11.375627 7f7f0dfba700 Generated table #23@0: 992 keys, 1045330 bytes
+2022/05/30-23:28:11.375657 7f7f0dfba700 Compacted 5@0 + 1@1 files => 1045330 bytes
+2022/05/30-23:28:11.381275 7f7f0dfba700 compacted to: files[ 4 1 0 ]
+2022/05/30-23:28:11.381421 7f7f0dfba700 Delete type=2 #16
+2022/05/30-23:28:11.381579 7f7f0dfba700 Delete type=2 #14
+2022/05/30-23:28:11.381807 7f7f0dfba700 Delete type=2 #13
+2022/05/30-23:28:11.381948 7f7f0dfba700 Delete type=2 #20
+2022/05/30-23:28:11.382092 7f7f0dfba700 Delete type=2 #22
+2022/05/30-23:28:11.382214 7f7f0dfba700 Delete type=2 #18
+2022/05/30-23:28:11.382306 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.382350 7f7f0dfba700 Compacting 4@0 + 1@1 files
+2022/05/30-23:28:11.383968 7f7f0dfba700 Level-0 table #34: started
+2022/05/30-23:28:11.385779 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.388623 7f7f0dfba700 Level-0 table #34: 119334 bytes OK
+2022/05/30-23:28:11.391760 7f7f0dfba700 Delete type=0 #30
+2022/05/30-23:28:11.392007 7f7f0dfba700 Level-0 table #36: started
+2022/05/30-23:28:11.393825 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.396375 7f7f0dfba700 Level-0 table #36: 119337 bytes OK
+2022/05/30-23:28:11.399329 7f7f0dfba700 Delete type=0 #33
+2022/05/30-23:28:11.399560 7f7f0dfba700 Level-0 table #38: started
+2022/05/30-23:28:11.401395 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.404367 7f7f0dfba700 Level-0 table #38: 119343 bytes OK
+2022/05/30-23:28:11.407647 7f7f0dfba700 Delete type=0 #35
+2022/05/30-23:28:11.407921 7f7f0dfba700 Level-0 table #40: started
+2022/05/30-23:28:11.409766 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.413219 7f7f0dfba700 Level-0 table #40: 119312 bytes OK
+2022/05/30-23:28:11.416686 7f7f0dfba700 Delete type=0 #37
+2022/05/30-23:28:11.418028 7f7f0dfba700 Level-0 table #42: started
+2022/05/30-23:28:11.422074 7f7f0dfba700 Level-0 table #42: 119337 bytes OK
+2022/05/30-23:28:11.425217 7f7f0dfba700 Delete type=0 #39
+2022/05/30-23:28:11.440751 7f7f0dfba700 Generated table #32@0: 1411 keys, 1486697 bytes
+2022/05/30-23:28:11.440779 7f7f0dfba700 Compacted 4@0 + 1@1 files => 1486697 bytes
+2022/05/30-23:28:11.443459 7f7f0dfba700 compacted to: files[ 5 1 0 ]
+2022/05/30-23:28:11.443599 7f7f0dfba700 Delete type=2 #29
+2022/05/30-23:28:11.443773 7f7f0dfba700 Delete type=2 #25
+2022/05/30-23:28:11.443905 7f7f0dfba700 Delete type=2 #31
+2022/05/30-23:28:11.444027 7f7f0dfba700 Delete type=2 #27
+2022/05/30-23:28:11.444184 7f7f0dfba700 Delete type=2 #23
+2022/05/30-23:28:11.444553 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.444599 7f7f0dfba700 Compacting 5@0 + 1@1 files
+2022/05/30-23:28:11.446215 7f7f0dfba700 Level-0 table #45: started
+2022/05/30-23:28:11.448003 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.450992 7f7f0dfba700 Level-0 table #45: 119339 bytes OK
+2022/05/30-23:28:11.454432 7f7f0dfba700 Delete type=0 #41
+2022/05/30-23:28:11.454701 7f7f0dfba700 Level-0 table #47: started
+2022/05/30-23:28:11.456513 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.459539 7f7f0dfba700 Level-0 table #47: 119323 bytes OK
+2022/05/30-23:28:11.462917 7f7f0dfba700 Delete type=0 #44
+2022/05/30-23:28:11.463181 7f7f0dfba700 Level-0 table #49: started
+2022/05/30-23:28:11.464993 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.468143 7f7f0dfba700 Level-0 table #49: 119322 bytes OK
+2022/05/30-23:28:11.471300 7f7f0dfba700 Delete type=0 #46
+2022/05/30-23:28:11.472633 7f7f0dfba700 Level-0 table #51: started
+2022/05/30-23:28:11.476513 7f7f0dfba700 Level-0 table #51: 119342 bytes OK
+2022/05/30-23:28:11.479602 7f7f0dfba700 Delete type=0 #48
+2022/05/30-23:28:11.500500 7f7f0dfba700 Generated table #43@0: 1923 keys, 2025918 bytes
+2022/05/30-23:28:11.500529 7f7f0dfba700 Compacted 5@0 + 1@1 files => 2025918 bytes
+2022/05/30-23:28:11.503159 7f7f0dfba700 compacted to: files[ 4 1 0 ]
+2022/05/30-23:28:11.503298 7f7f0dfba700 Delete type=2 #38
+2022/05/30-23:28:11.503454 7f7f0dfba700 Delete type=2 #42
+2022/05/30-23:28:11.503599 7f7f0dfba700 Delete type=2 #40
+2022/05/30-23:28:11.503808 7f7f0dfba700 Delete type=2 #32
+2022/05/30-23:28:11.504348 7f7f0dfba700 Delete type=2 #34
+2022/05/30-23:28:11.504486 7f7f0dfba700 Delete type=2 #36
+2022/05/30-23:28:11.504570 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.504617 7f7f0dfba700 Compacting 4@0 + 1@1 files
+2022/05/30-23:28:11.506110 7f7f0dfba700 Level-0 table #54: started
+2022/05/30-23:28:11.507886 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.510863 7f7f0dfba700 Level-0 table #54: 119329 bytes OK
+2022/05/30-23:28:11.514249 7f7f0dfba700 Delete type=0 #50
+2022/05/30-23:28:11.514525 7f7f0dfba700 Level-0 table #56: started
+2022/05/30-23:28:11.516342 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.519304 7f7f0dfba700 Level-0 table #56: 119339 bytes OK
+2022/05/30-23:28:11.522547 7f7f0dfba700 Delete type=0 #53
+2022/05/30-23:28:11.522799 7f7f0dfba700 Level-0 table #58: started
+2022/05/30-23:28:11.524587 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.527380 7f7f0dfba700 Level-0 table #58: 119330 bytes OK
+2022/05/30-23:28:11.530218 7f7f0dfba700 Delete type=0 #55
+2022/05/30-23:28:11.530443 7f7f0dfba700 Level-0 table #60: started
+2022/05/30-23:28:11.532263 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.535264 7f7f0dfba700 Level-0 table #60: 119340 bytes OK
+2022/05/30-23:28:11.538692 7f7f0dfba700 Delete type=0 #57
+2022/05/30-23:28:11.540023 7f7f0dfba700 Level-0 table #62: started
+2022/05/30-23:28:11.544125 7f7f0dfba700 Level-0 table #62: 119337 bytes OK
+2022/05/30-23:28:11.547137 7f7f0dfba700 Delete type=0 #59
+2022/05/30-23:28:11.568629 7f7f0dfba700 Generated table #52@0: 2012 keys, 2118805 bytes
+2022/05/30-23:28:11.574457 7f7f0dfba700 Generated table #63@0: 304 keys, 320391 bytes
+2022/05/30-23:28:11.574491 7f7f0dfba700 Compacted 4@0 + 1@1 files => 2439196 bytes
+2022/05/30-23:28:11.577393 7f7f0dfba700 compacted to: files[ 5 2 0 ]
+2022/05/30-23:28:11.577546 7f7f0dfba700 Delete type=2 #47
+2022/05/30-23:28:11.577705 7f7f0dfba700 Delete type=2 #51
+2022/05/30-23:28:11.577836 7f7f0dfba700 Delete type=2 #45
+2022/05/30-23:28:11.577991 7f7f0dfba700 Delete type=2 #49
+2022/05/30-23:28:11.578221 7f7f0dfba700 Delete type=2 #43
+2022/05/30-23:28:11.578875 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.578923 7f7f0dfba700 Compacting 5@0 + 2@1 files
+2022/05/30-23:28:11.580304 7f7f0dfba700 Level-0 table #66: started
+2022/05/30-23:28:11.582099 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.585210 7f7f0dfba700 Level-0 table #66: 119326 bytes OK
+2022/05/30-23:28:11.588546 7f7f0dfba700 Delete type=0 #61
+2022/05/30-23:28:11.588803 7f7f0dfba700 Level-0 table #68: started
+2022/05/30-23:28:11.590654 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.593732 7f7f0dfba700 Level-0 table #68: 119331 bytes OK
+2022/05/30-23:28:11.597067 7f7f0dfba700 Delete type=0 #65
+2022/05/30-23:28:11.597316 7f7f0dfba700 Level-0 table #70: started
+2022/05/30-23:28:11.599174 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.602069 7f7f0dfba700 Level-0 table #70: 119331 bytes OK
+2022/05/30-23:28:11.605474 7f7f0dfba700 Delete type=0 #67
+2022/05/30-23:28:11.606872 7f7f0dfba700 Level-0 table #72: started
+2022/05/30-23:28:11.610914 7f7f0dfba700 Level-0 table #72: 119338 bytes OK
+2022/05/30-23:28:11.613842 7f7f0dfba700 Delete type=0 #69
+2022/05/30-23:28:11.635542 7f7f0dfba700 Generated table #64@0: 2012 keys, 2118650 bytes
+2022/05/30-23:28:11.646452 7f7f0dfba700 Generated table #73@0: 799 keys, 841839 bytes
+2022/05/30-23:28:11.646483 7f7f0dfba700 Compacted 5@0 + 2@1 files => 2960489 bytes
+2022/05/30-23:28:11.649089 7f7f0dfba700 compacted to: files[ 4 2 0 ]
+2022/05/30-23:28:11.649231 7f7f0dfba700 Delete type=2 #54
+2022/05/30-23:28:11.649404 7f7f0dfba700 Delete type=2 #58
+2022/05/30-23:28:11.649529 7f7f0dfba700 Delete type=2 #63
+2022/05/30-23:28:11.649713 7f7f0dfba700 Delete type=2 #56
+2022/05/30-23:28:11.649960 7f7f0dfba700 Delete type=2 #52
+2022/05/30-23:28:11.650708 7f7f0dfba700 Delete type=2 #62
+2022/05/30-23:28:11.650846 7f7f0dfba700 Delete type=2 #60
+2022/05/30-23:28:11.650938 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.650985 7f7f0dfba700 Compacting 4@0 + 2@1 files
+2022/05/30-23:28:11.652305 7f7f0dfba700 Level-0 table #76: started
+2022/05/30-23:28:11.654081 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.656991 7f7f0dfba700 Level-0 table #76: 119346 bytes OK
+2022/05/30-23:28:11.660359 7f7f0dfba700 Delete type=0 #71
+2022/05/30-23:28:11.660609 7f7f0dfba700 Level-0 table #78: started
+2022/05/30-23:28:11.662426 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.665314 7f7f0dfba700 Level-0 table #78: 119346 bytes OK
+2022/05/30-23:28:11.668652 7f7f0dfba700 Delete type=0 #75
+2022/05/30-23:28:11.668932 7f7f0dfba700 Level-0 table #80: started
+2022/05/30-23:28:11.670795 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.673602 7f7f0dfba700 Level-0 table #80: 119334 bytes OK
+2022/05/30-23:28:11.677444 7f7f0dfba700 Delete type=0 #77
+2022/05/30-23:28:11.677698 7f7f0dfba700 Level-0 table #82: started
+2022/05/30-23:28:11.679116 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.682083 7f7f0dfba700 Level-0 table #82: 119333 bytes OK
+2022/05/30-23:28:11.685381 7f7f0dfba700 Delete type=0 #79
+2022/05/30-23:28:11.686791 7f7f0dfba700 Level-0 table #84: started
+2022/05/30-23:28:11.690770 7f7f0dfba700 Level-0 table #84: 119334 bytes OK
+2022/05/30-23:28:11.693843 7f7f0dfba700 Delete type=0 #81
+2022/05/30-23:28:11.716160 7f7f0dfba700 Generated table #74@0: 2008 keys, 2115216 bytes
+2022/05/30-23:28:11.731776 7f7f0dfba700 Generated table #85@0: 1188 keys, 1249615 bytes
+2022/05/30-23:28:11.731809 7f7f0dfba700 Compacted 4@0 + 2@1 files => 3364831 bytes
+2022/05/30-23:28:11.734850 7f7f0dfba700 compacted to: files[ 5 2 0 ]
+2022/05/30-23:28:11.735015 7f7f0dfba700 Delete type=2 #66
+2022/05/30-23:28:11.735175 7f7f0dfba700 Delete type=2 #68
+2022/05/30-23:28:11.735328 7f7f0dfba700 Delete type=2 #73
+2022/05/30-23:28:11.735767 7f7f0dfba700 Delete type=2 #64
+2022/05/30-23:28:11.736530 7f7f0dfba700 Delete type=2 #70
+2022/05/30-23:28:11.736653 7f7f0dfba700 Delete type=2 #72
+2022/05/30-23:28:11.736747 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.736790 7f7f0dfba700 Compacting 5@0 + 2@1 files
+2022/05/30-23:28:11.737675 7f7f0dfba700 Level-0 table #88: started
+2022/05/30-23:28:11.738862 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.741895 7f7f0dfba700 Level-0 table #88: 119327 bytes OK
+2022/05/30-23:28:11.745129 7f7f0dfba700 Delete type=0 #83
+2022/05/30-23:28:11.745435 7f7f0dfba700 Level-0 table #90: started
+2022/05/30-23:28:11.746655 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.749488 7f7f0dfba700 Level-0 table #90: 119339 bytes OK
+2022/05/30-23:28:11.752576 7f7f0dfba700 Delete type=0 #87
+2022/05/30-23:28:11.752871 7f7f0dfba700 Level-0 table #92: started
+2022/05/30-23:28:11.754135 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.759828 7f7f0dfba700 Level-0 table #92: 119326 bytes OK
+2022/05/30-23:28:11.762796 7f7f0dfba700 Delete type=0 #89
+2022/05/30-23:28:11.764196 7f7f0dfba700 Level-0 table #94: started
+2022/05/30-23:28:11.768197 7f7f0dfba700 Level-0 table #94: 119326 bytes OK
+2022/05/30-23:28:11.771277 7f7f0dfba700 Delete type=0 #91
+2022/05/30-23:28:11.792209 7f7f0dfba700 Generated table #86@0: 2012 keys, 2117548 bytes
+2022/05/30-23:28:11.811389 7f7f0dfba700 Generated table #95@0: 1663 keys, 1750017 bytes
+2022/05/30-23:28:11.811413 7f7f0dfba700 Compacted 5@0 + 2@1 files => 3867565 bytes
+2022/05/30-23:28:11.814022 7f7f0dfba700 compacted to: files[ 4 2 0 ]
+2022/05/30-23:28:11.814134 7f7f0dfba700 Delete type=2 #84
+2022/05/30-23:28:11.814248 7f7f0dfba700 Delete type=2 #76
+2022/05/30-23:28:11.814339 7f7f0dfba700 Delete type=2 #80
+2022/05/30-23:28:11.814425 7f7f0dfba700 Delete type=2 #78
+2022/05/30-23:28:11.814542 7f7f0dfba700 Delete type=2 #85
+2022/05/30-23:28:11.814953 7f7f0dfba700 Delete type=2 #74
+2022/05/30-23:28:11.815486 7f7f0dfba700 Delete type=2 #82
+2022/05/30-23:28:11.815563 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.815594 7f7f0dfba700 Compacting 4@0 + 2@1 files
+2022/05/30-23:28:11.816192 7f7f0dfba700 Level-0 table #98: started
+2022/05/30-23:28:11.816993 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.819884 7f7f0dfba700 Level-0 table #98: 119350 bytes OK
+2022/05/30-23:28:11.824366 7f7f0dfba700 Delete type=0 #93
+2022/05/30-23:28:11.824590 7f7f0dfba700 Level-0 table #100: started
+2022/05/30-23:28:11.825434 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.828221 7f7f0dfba700 Level-0 table #100: 119346 bytes OK
+2022/05/30-23:28:11.831093 7f7f0dfba700 Delete type=0 #97
+2022/05/30-23:28:11.831297 7f7f0dfba700 Level-0 table #102: started
+2022/05/30-23:28:11.832119 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.834905 7f7f0dfba700 Level-0 table #102: 119329 bytes OK
+2022/05/30-23:28:11.837787 7f7f0dfba700 Delete type=0 #99
+2022/05/30-23:28:11.838018 7f7f0dfba700 Level-0 table #104: started
+2022/05/30-23:28:11.838889 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.841681 7f7f0dfba700 Level-0 table #104: 119345 bytes OK
+2022/05/30-23:28:11.844607 7f7f0dfba700 Delete type=0 #101
+2022/05/30-23:28:11.845939 7f7f0dfba700 Level-0 table #106: started
+2022/05/30-23:28:11.849299 7f7f0dfba700 Level-0 table #106: 119340 bytes OK
+2022/05/30-23:28:11.852155 7f7f0dfba700 Delete type=0 #103
+2022/05/30-23:28:11.868202 7f7f0dfba700 Generated table #96@0: 2012 keys, 2118337 bytes
+2022/05/30-23:28:11.890526 7f7f0dfba700 Generated table #107@0: 2012 keys, 2118298 bytes
+2022/05/30-23:28:11.893565 7f7f0dfba700 Generated table #108@0: 24 keys, 25418 bytes
+2022/05/30-23:28:11.893598 7f7f0dfba700 Compacted 4@0 + 2@1 files => 4262053 bytes
+2022/05/30-23:28:11.896515 7f7f0dfba700 compacted to: files[ 5 3 0 ]
+2022/05/30-23:28:11.896755 7f7f0dfba700 Delete type=2 #95
+2022/05/30-23:28:11.897410 7f7f0dfba700 Delete type=2 #92
+2022/05/30-23:28:11.897545 7f7f0dfba700 Delete type=2 #90
+2022/05/30-23:28:11.897687 7f7f0dfba700 Delete type=2 #88
+2022/05/30-23:28:11.897941 7f7f0dfba700 Delete type=2 #86
+2022/05/30-23:28:11.898714 7f7f0dfba700 Delete type=2 #94
+2022/05/30-23:28:11.898803 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.898843 7f7f0dfba700 Compacting 5@0 + 3@1 files
+2022/05/30-23:28:11.899700 7f7f0dfba700 Level-0 table #111: started
+2022/05/30-23:28:11.900887 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.903789 7f7f0dfba700 Level-0 table #111: 119342 bytes OK
+2022/05/30-23:28:11.906893 7f7f0dfba700 Delete type=0 #105
+2022/05/30-23:28:11.907177 7f7f0dfba700 Level-0 table #113: started
+2022/05/30-23:28:11.908345 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.911147 7f7f0dfba700 Level-0 table #113: 119345 bytes OK
+2022/05/30-23:28:11.914170 7f7f0dfba700 Delete type=0 #110
+2022/05/30-23:28:11.914434 7f7f0dfba700 Level-0 table #115: started
+2022/05/30-23:28:11.915624 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.918467 7f7f0dfba700 Level-0 table #115: 119344 bytes OK
+2022/05/30-23:28:11.921397 7f7f0dfba700 Delete type=0 #112
+2022/05/30-23:28:11.922764 7f7f0dfba700 Level-0 table #117: started
+2022/05/30-23:28:11.926785 7f7f0dfba700 Level-0 table #117: 119341 bytes OK
+2022/05/30-23:28:11.929800 7f7f0dfba700 Delete type=0 #114
+2022/05/30-23:28:11.953551 7f7f0dfba700 Generated table #109@0: 2012 keys, 2119171 bytes
+2022/05/30-23:28:11.975593 7f7f0dfba700 Generated table #118@0: 2012 keys, 2116338 bytes
+2022/05/30-23:28:11.981300 7f7f0dfba700 Generated table #119@0: 475 keys, 500454 bytes
+2022/05/30-23:28:11.981318 7f7f0dfba700 Compacted 5@0 + 3@1 files => 4735963 bytes
+2022/05/30-23:28:11.983949 7f7f0dfba700 compacted to: files[ 4 3 0 ]
+2022/05/30-23:28:11.984148 7f7f0dfba700 Delete type=2 #96
+2022/05/30-23:28:11.984691 7f7f0dfba700 Delete type=2 #106
+2022/05/30-23:28:11.984799 7f7f0dfba700 Delete type=2 #98
+2022/05/30-23:28:11.984886 7f7f0dfba700 Delete type=2 #104
+2022/05/30-23:28:11.985059 7f7f0dfba700 Delete type=2 #107
+2022/05/30-23:28:11.985596 7f7f0dfba700 Delete type=2 #102
+2022/05/30-23:28:11.985673 7f7f0dfba700 Delete type=2 #108
+2022/05/30-23:28:11.985750 7f7f0dfba700 Delete type=2 #100
+2022/05/30-23:28:11.985808 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:11.985836 7f7f0dfba700 Compacting 4@0 + 3@1 files
+2022/05/30-23:28:11.986423 7f7f0dfba700 Level-0 table #122: started
+2022/05/30-23:28:11.987256 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.989902 7f7f0dfba700 Level-0 table #122: 119327 bytes OK
+2022/05/30-23:28:11.992794 7f7f0dfba700 Delete type=0 #116
+2022/05/30-23:28:11.993014 7f7f0dfba700 Level-0 table #124: started
+2022/05/30-23:28:11.993834 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:11.996316 7f7f0dfba700 Level-0 table #124: 119348 bytes OK
+2022/05/30-23:28:11.999403 7f7f0dfba700 Delete type=0 #121
+2022/05/30-23:28:11.999620 7f7f0dfba700 Level-0 table #126: started
+2022/05/30-23:28:12.000449 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.003227 7f7f0dfba700 Level-0 table #126: 119339 bytes OK
+2022/05/30-23:28:12.006130 7f7f0dfba700 Delete type=0 #123
+2022/05/30-23:28:12.006326 7f7f0dfba700 Level-0 table #128: started
+2022/05/30-23:28:12.007171 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.009834 7f7f0dfba700 Level-0 table #128: 119349 bytes OK
+2022/05/30-23:28:12.012743 7f7f0dfba700 Delete type=0 #125
+2022/05/30-23:28:12.014016 7f7f0dfba700 Level-0 table #130: started
+2022/05/30-23:28:12.017522 7f7f0dfba700 Level-0 table #130: 119334 bytes OK
+2022/05/30-23:28:12.020258 7f7f0dfba700 Delete type=0 #127
+2022/05/30-23:28:12.040149 7f7f0dfba700 Generated table #120@0: 2012 keys, 2118174 bytes
+2022/05/30-23:28:12.063815 7f7f0dfba700 Generated table #131@0: 2012 keys, 2118286 bytes
+2022/05/30-23:28:12.074310 7f7f0dfba700 Generated table #132@0: 818 keys, 860747 bytes
+2022/05/30-23:28:12.074332 7f7f0dfba700 Compacted 4@0 + 3@1 files => 5097207 bytes
+2022/05/30-23:28:12.077102 7f7f0dfba700 compacted to: files[ 5 3 0 ]
+2022/05/30-23:28:12.077211 7f7f0dfba700 Delete type=2 #117
+2022/05/30-23:28:12.077326 7f7f0dfba700 Delete type=2 #113
+2022/05/30-23:28:12.077417 7f7f0dfba700 Delete type=2 #111
+2022/05/30-23:28:12.077505 7f7f0dfba700 Delete type=2 #119
+2022/05/30-23:28:12.077668 7f7f0dfba700 Delete type=2 #115
+2022/05/30-23:28:12.077826 7f7f0dfba700 Delete type=2 #118
+2022/05/30-23:28:12.078456 7f7f0dfba700 Delete type=2 #109
+2022/05/30-23:28:12.078966 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:12.078998 7f7f0dfba700 Compacting 5@0 + 3@1 files
+2022/05/30-23:28:12.079544 7f7f0dfba700 Level-0 table #135: started
+2022/05/30-23:28:12.080368 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.086019 7f7f0dfba700 Level-0 table #135: 119328 bytes OK
+2022/05/30-23:28:12.089190 7f7f0dfba700 Delete type=0 #129
+2022/05/30-23:28:12.089407 7f7f0dfba700 Level-0 table #137: started
+2022/05/30-23:28:12.090264 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.093004 7f7f0dfba700 Level-0 table #137: 119340 bytes OK
+2022/05/30-23:28:12.096040 7f7f0dfba700 Delete type=0 #134
+2022/05/30-23:28:12.096239 7f7f0dfba700 Level-0 table #139: started
+2022/05/30-23:28:12.097050 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.102715 7f7f0dfba700 Level-0 table #139: 119330 bytes OK
+2022/05/30-23:28:12.105713 7f7f0dfba700 Delete type=0 #136
+2022/05/30-23:28:12.107050 7f7f0dfba700 Level-0 table #141: started
+2022/05/30-23:28:12.113733 7f7f0dfba700 Level-0 table #141: 119304 bytes OK
+2022/05/30-23:28:12.116846 7f7f0dfba700 Delete type=0 #138
+2022/05/30-23:28:12.137198 7f7f0dfba700 Generated table #133@0: 2012 keys, 2117236 bytes
+2022/05/30-23:28:12.158640 7f7f0dfba700 Generated table #142@0: 2012 keys, 2117323 bytes
+2022/05/30-23:28:12.170604 7f7f0dfba700 Generated table #143@0: 1235 keys, 1299863 bytes
+2022/05/30-23:28:12.170626 7f7f0dfba700 Compacted 5@0 + 3@1 files => 5534422 bytes
+2022/05/30-23:28:12.173516 7f7f0dfba700 compacted to: files[ 4 3 0 ]
+2022/05/30-23:28:12.173653 7f7f0dfba700 Delete type=2 #132
+2022/05/30-23:28:12.173926 7f7f0dfba700 Delete type=2 #130
+2022/05/30-23:28:12.174033 7f7f0dfba700 Delete type=2 #128
+2022/05/30-23:28:12.174125 7f7f0dfba700 Delete type=2 #122
+2022/05/30-23:28:12.174218 7f7f0dfba700 Delete type=2 #124
+2022/05/30-23:28:12.174381 7f7f0dfba700 Delete type=2 #120
+2022/05/30-23:28:12.174984 7f7f0dfba700 Delete type=2 #131
+2022/05/30-23:28:12.175519 7f7f0dfba700 Delete type=2 #126
+2022/05/30-23:28:12.175580 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:12.175608 7f7f0dfba700 Compacting 4@0 + 3@1 files
+2022/05/30-23:28:12.176124 7f7f0dfba700 Level-0 table #146: started
+2022/05/30-23:28:12.176926 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.182809 7f7f0dfba700 Level-0 table #146: 119337 bytes OK
+2022/05/30-23:28:12.185977 7f7f0dfba700 Delete type=0 #140
+2022/05/30-23:28:12.186206 7f7f0dfba700 Level-0 table #148: started
+2022/05/30-23:28:12.187025 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.192682 7f7f0dfba700 Level-0 table #148: 119309 bytes OK
+2022/05/30-23:28:12.195741 7f7f0dfba700 Delete type=0 #145
+2022/05/30-23:28:12.195963 7f7f0dfba700 Level-0 table #150: started
+2022/05/30-23:28:12.196796 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.203682 7f7f0dfba700 Level-0 table #150: 119331 bytes OK
+2022/05/30-23:28:12.206761 7f7f0dfba700 Delete type=0 #147
+2022/05/30-23:28:12.207010 7f7f0dfba700 Level-0 table #152: started
+2022/05/30-23:28:12.208091 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.210950 7f7f0dfba700 Level-0 table #152: 119342 bytes OK
+2022/05/30-23:28:12.214042 7f7f0dfba700 Delete type=0 #149
+2022/05/30-23:28:12.215418 7f7f0dfba700 Level-0 table #154: started
+2022/05/30-23:28:12.219493 7f7f0dfba700 Level-0 table #154: 119340 bytes OK
+2022/05/30-23:28:12.222514 7f7f0dfba700 Delete type=0 #151
+2022/05/30-23:28:12.243919 7f7f0dfba700 Generated table #144@0: 2012 keys, 2117161 bytes
+2022/05/30-23:28:12.266312 7f7f0dfba700 Generated table #155@0: 2012 keys, 2117129 bytes
+2022/05/30-23:28:12.281629 7f7f0dfba700 Generated table #156@0: 1569 keys, 1651581 bytes
+2022/05/30-23:28:12.281651 7f7f0dfba700 Compacted 4@0 + 3@1 files => 5885871 bytes
+2022/05/30-23:28:12.284488 7f7f0dfba700 compacted to: files[ 5 3 0 ]
+2022/05/30-23:28:12.284587 7f7f0dfba700 Delete type=2 #135
+2022/05/30-23:28:12.284718 7f7f0dfba700 Delete type=2 #143
+2022/05/30-23:28:12.285067 7f7f0dfba700 Delete type=2 #142
+2022/05/30-23:28:12.285500 7f7f0dfba700 Delete type=2 #139
+2022/05/30-23:28:12.285573 7f7f0dfba700 Delete type=2 #137
+2022/05/30-23:28:12.285642 7f7f0dfba700 Delete type=2 #141
+2022/05/30-23:28:12.285800 7f7f0dfba700 Delete type=2 #133
+2022/05/30-23:28:12.286216 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:12.286250 7f7f0dfba700 Compacting 5@0 + 3@1 files
+2022/05/30-23:28:12.286803 7f7f0dfba700 Level-0 table #159: started
+2022/05/30-23:28:12.287810 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.290765 7f7f0dfba700 Level-0 table #159: 119328 bytes OK
+2022/05/30-23:28:12.293871 7f7f0dfba700 Delete type=0 #153
+2022/05/30-23:28:12.294050 7f7f0dfba700 Level-0 table #161: started
+2022/05/30-23:28:12.295077 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.298018 7f7f0dfba700 Level-0 table #161: 119325 bytes OK
+2022/05/30-23:28:12.301158 7f7f0dfba700 Delete type=0 #158
+2022/05/30-23:28:12.301322 7f7f0dfba700 Level-0 table #163: started
+2022/05/30-23:28:12.302381 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.305089 7f7f0dfba700 Level-0 table #163: 119335 bytes OK
+2022/05/30-23:28:12.308167 7f7f0dfba700 Delete type=0 #160
+2022/05/30-23:28:12.309393 7f7f0dfba700 Level-0 table #165: started
+2022/05/30-23:28:12.315839 7f7f0dfba700 Level-0 table #165: 119338 bytes OK
+2022/05/30-23:28:12.318755 7f7f0dfba700 Delete type=0 #162
+2022/05/30-23:28:12.332968 7f7f0dfba700 Generated table #157@0: 2012 keys, 2118111 bytes
+2022/05/30-23:28:12.348406 7f7f0dfba700 Generated table #166@0: 2012 keys, 2118047 bytes
+2022/05/30-23:28:12.363681 7f7f0dfba700 Generated table #167@0: 1997 keys, 2102312 bytes
+2022/05/30-23:28:12.363699 7f7f0dfba700 Compacted 5@0 + 3@1 files => 6338470 bytes
+2022/05/30-23:28:12.366567 7f7f0dfba700 compacted to: files[ 4 3 0 ]
+2022/05/30-23:28:12.366674 7f7f0dfba700 Delete type=2 #152
+2022/05/30-23:28:12.366769 7f7f0dfba700 Delete type=2 #150
+2022/05/30-23:28:12.366915 7f7f0dfba700 Delete type=2 #155
+2022/05/30-23:28:12.367339 7f7f0dfba700 Delete type=2 #146
+2022/05/30-23:28:12.367421 7f7f0dfba700 Delete type=2 #148
+2022/05/30-23:28:12.367490 7f7f0dfba700 Delete type=2 #154
+2022/05/30-23:28:12.367610 7f7f0dfba700 Delete type=2 #156
+2022/05/30-23:28:12.368024 7f7f0dfba700 Delete type=2 #144
+2022/05/30-23:28:12.368428 7f7f0dfba700 Now the Spot compact ratio is:0 / 0.
+2022/05/30-23:28:12.368458 7f7f0dfba700 Compacting 4@0 + 3@1 files
+2022/05/30-23:28:12.369092 7f7f0dfba700 Level-0 table #170: started
+2022/05/30-23:28:12.370116 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.373094 7f7f0dfba700 Level-0 table #170: 119320 bytes OK
+2022/05/30-23:28:12.376229 7f7f0dfba700 Delete type=0 #164
+2022/05/30-23:28:12.376387 7f7f0dfba700 Level-0 table #172: started
+2022/05/30-23:28:12.377395 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.380372 7f7f0dfba700 Level-0 table #172: 119318 bytes OK
+2022/05/30-23:28:12.383443 7f7f0dfba700 Delete type=0 #169
+2022/05/30-23:28:12.383601 7f7f0dfba700 Level-0 table #174: started
+2022/05/30-23:28:12.384637 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.387508 7f7f0dfba700 Level-0 table #174: 119348 bytes OK
+2022/05/30-23:28:12.390715 7f7f0dfba700 Delete type=0 #171
+2022/05/30-23:28:12.390873 7f7f0dfba700 Level-0 table #176: started
+2022/05/30-23:28:12.391883 7f7f0e7bb700 Current memtable full; waiting...
+2022/05/30-23:28:12.397644 7f7f0dfba700 Level-0 table #176: 119347 bytes OK
+2022/05/30-23:28:12.400780 7f7f0dfba700 Delete type=0 #173
+2022/05/30-23:28:12.401996 7f7f0dfba700 Level-0 table #178: started
+2022/05/30-23:28:12.405942 7f7f0dfba700 Level-0 table #178: 119337 bytes OK
+2022/05/30-23:28:12.408912 7f7f0dfba700 Delete type=0 #175
+2022/05/30-23:28:12.425125 7f7f0dfba700 Generated table #168@0: 2012 keys, 2118003 bytes
+2022/05/30-23:28:12.442525 7f7f0dfba700 Generated table #179@0: 2012 keys, 2117078 bytes
