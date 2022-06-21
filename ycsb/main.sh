@@ -26,7 +26,7 @@ echo "************** UniKV **************" >> result.txt
 echo "************* SpotKV **************" >> result.txt
 rm -r $dbfilename4/*
 ./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename4" -configpath "$configpath" -skipLoad false >> result.txt
-./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename4" -configpath "$configpath" -skipLoad true >> result.txt
+#./ycsbc -db spotkv -threads $thread -P $workload_name -dbfilename "$dbfilename4" -configpath "$configpath" -skipLoad true >> result.txt
 #rm -r $dbfilename4/*
 
 #./ycsbc -db leveldb -threads 1 -P $workload_name -dbfilename "/home/zq/SSD-e/temp1" -configpath "$configpath" -skipLoad false > leveldb-load-100G-read-10M.txt
@@ -43,7 +43,7 @@ rm -r $dbfilename4/*
 
 }
 
-workload_name=./workloads/workloadc.spec
+workload_name=./workloads/workloada-1.spec
 workload_name1=./workloads/workloadb.spec
 workload_name2=./workloads/workloadc.spec
 workload_name3=./workloads/workloadd.spec

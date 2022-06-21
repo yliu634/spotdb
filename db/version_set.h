@@ -76,7 +76,7 @@ class Version {
   Status Get(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
   Status GetCountMin(const ReadOptions&, const LookupKey& key, std::string* val,
-             uint & layer, GetStats* stats);
+             int & layer, GetStats* stats);
   Status GetSpot(const ReadOptions&, const LookupKey& key, std::string* val,
              GetStats* stats);
   Status GetLudoCache(const ReadOptions&, const Options* options_tmp, const LookupKey& key, std::string* val,

@@ -43,10 +43,10 @@ static double MaxBytesForLevel(const Options* options, int level) {
 
   // Result for both level-0 and level-1
   //double result = 10. * 1048576.0;
-  double result = config::kL0_CompactionTrigger * (32. * 1024.0 * 1024.0);
+  double result = config::kL0_CompactionTrigger * (2. * 1024.0 * 1024.0);
   #if 1
     while (level > 1) {
-      result *= 10;
+      result *= 5;
       level--;
     }
   #else 
@@ -442,7 +442,7 @@ Status Version::Get(const ReadOptions& options,
 Status Version::GetCountMin(const ReadOptions& options,
                     const LookupKey& k,
                     std::string* value,
-                    uint & layer,
+                    int & layer,
                     GetStats* stats) {
   Slice ikey = k.internal_key();
   Slice user_key = k.user_key();
@@ -520,7 +520,7 @@ Status Version::GetCountMin(const ReadOptions& options,
       saver.value = value;
       s = vset_->table_cache_->Get(options, f->number, f->file_size,
                                    ikey, &saver, SaveValue);
-      layer = i;
+      layer ++;
       if (!s.ok()) {
         return s;
       }
@@ -772,7 +772,7 @@ bool Version::CountMinUpdate(const ReadOptions& options,
                     Cache* cmc) {
   //uint32_t key = strtoul(k.ToString().substr(0, 16).c_str(), NULL, 10);
   ctm->Update(k.data(), k.size(), layer);
-  if (ctm->EstimateRate(k.data(), k.size()) > 0.35){
+  if (ctm->EstimateRate(k.data(), k.size()) > 0.20){
     //Log(options_tmp->info_log, "We found key %lu frequency is greater than value size: %zu.", 
     //    strtoul(k.ToString().substr(0, 16).c_str(), NULL, 10), value->size());
     cmc->Insert(k, value, value->size(), NULL);

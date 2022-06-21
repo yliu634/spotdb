@@ -26,12 +26,14 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props);
 int DelegateClient(ycsbc::DB *db, ycsbc::CoreWorkload *wl, const int num_ops,
     bool is_loading) {
   db->Init();
+  db->doSomeThing("printStats");
   ycsbc::Client client(*db, *wl);
   int oks = 0;
   for (int i = 0; i < num_ops; ++i) {
     if (is_loading) {
       oks += client.DoInsert();
     } else {
+      
       oks += client.DoTransaction();
     }
   }
@@ -79,7 +81,7 @@ int main(const int argc, const char *argv[]) {
     cerr << "Loading records jumped." << endl;
   }
 
-  for (size_t iloop = 0; iloop < 2; iloop++) {
+
     // Peforms transactions
     actual_ops.clear();
     total_ops = stoi(props[ycsbc::CoreWorkload::OPERATION_COUNT_PROPERTY]);
@@ -100,8 +102,9 @@ int main(const int argc, const char *argv[]) {
     cerr << "# Transaction throughput (KTPS)" << endl;
     cerr << props["dbname"] << '\t' << file_name << '\t' << num_threads << '\t';
     cerr << total_ops / duration / 1000 << endl;
-  }
+
 }
+
 
 string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) {
   int argindex = 1;
@@ -162,8 +165,8 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         exit(0);
       }
       input.close();
-      props.SetProperty(string("recordcount"), string("64000000"));
-      props.SetProperty(string("operationcount"), string("10000000"));
+      props.SetProperty(string("recordcount"), string("32000000"));
+      props.SetProperty(string("operationcount"), string("2000000"));
       argindex++;
     } else if (strcmp(argv[argindex], "-dbfilename") == 0) {
         argindex++;

@@ -813,12 +813,10 @@ void DBImpl::BackgroundCompaction() {
       //    versions_->current()->DebugString().c_str());
       
       LastSpotTable = &tmp;
-      if (compact->compaction->SpotCompaction())
-        totalcompact ++;
       
       //DeleteObsoleteFiles();
-      //if (false) {
-      if (NeedSelfCompaction) {
+      if (false) {
+      //if (NeedSelfCompaction) {
         //TODO: 
         assert(compact->compaction->SpotCompaction());
         spotcompact ++;
@@ -1698,7 +1696,7 @@ Status DBImpl::DoCompactionWorkforLudoCache(CompactionState* compact) {
     }
 
     // uint32_t cpsize = cp_->size();
-    cp_->remove(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10));
+    //cp_->remove(strtoull(key.ToString().substr(4,20).c_str(), NULL, 10));
     //Log(options_.info_log, "Cp removed the key: %s.", 
     //  key.ToString().substr(0, 20).c_str());
    
@@ -1863,22 +1861,39 @@ Status DBImpl::Get(const ReadOptions& options,
 
       #if 0
         //s = current->Get(options, lkey, value, &stats);
-        s = current->GetSpot(options, lkey, value, &stats);
-        have_stat_update = true;
-      #else
+        int layer(0);
+        s = current->GetCountMin(options, lkey, value, layer, &stats);
+        Log(options_.info_log, "Layer is :%d", layer); 
+        //have_stat_update = true;
+      #elif 1
+        // count-min based
         Cache::Handle* handle = NULL;
         handle = cmc_->Lookup(key);
-        uint layer = 0;
+        int layer(0);
         if (handle == NULL) {
           s = current->GetCountMin(options, lkey, value, layer, &stats);
           //s = current->GetSpot(options, lkey, value, &stats);
-          have_stat_update = true;
+          //have_stat_update = true;
         } else {
           //Log(options_.info_log, "Count-Min sketch boy."); 
           *value = reinterpret_cast<char*>(cmc_->Value(handle));
           s = Status::OK();
         }
+        Log(options_.info_log, "Layer is :%d", layer); 
         current->CountMinUpdate(options, &options_, key, value, layer, ctm_, cmc_);
+      #else
+        // time-based 
+        Cache::Handle* handle = NULL;
+        handle = cmc_->Lookup(key);
+        int layer(0);
+        if (handle == NULL) {
+          s = current->GetCountMin(options, lkey, value, layer, &stats);
+        } else {
+          *value = reinterpret_cast<char*>(cmc_->Value(handle));
+          s = Status::OK();
+        }
+        Log(options_.info_log, "Layer is :%d", layer); 
+        cmc_->Insert(key, value, value->size(), NULL);
       #endif
 
     }
